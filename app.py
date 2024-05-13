@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-from main import get_quote_otd
+from main import get_quote_otd, get_gif
 # from db_utils import 
 
 app = Flask(__name__)
@@ -7,8 +7,9 @@ app = Flask(__name__)
 
 @app.route('/mood')
 def mood_checkin():
-    my_mood = 'happy'
-    return render_template("mood.html", mood=my_mood)
+    mood_data = get_gif()
+    mood_gif = mood_data['data'][0]['images']['fixed_height']['webp']
+    return render_template("mood.html", mood=mood_gif)
 
 
 @app.route('/quote')

@@ -1,6 +1,15 @@
 import requests
 import json
 
+from config import GIPHY_API_KEY
+
+
+
+def get_gif():
+    mood = 'happy'
+    endpointGif = f'https://api.giphy.com/v1/gifs/search?api_key={GIPHY_API_KEY}&q={mood}&limit=1&offset=0&rating=g&lang=en&bundle=messaging_non_clips'
+    how_are_you = requests.get(endpointGif).json()
+    return how_are_you
 
 endpoint1 = 'https://zenquotes.io/api/today'
 
