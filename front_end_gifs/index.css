@@ -1,0 +1,64 @@
+h1 {
+
+    font-family: "Poetsen One", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    color: whitesmoke;
+  }
+
+body {
+    text-align: center;
+    background: linear-gradient(-45deg, #f7cac9, #92a8d1, #dec2cb, #abb1cf, #c5b9cd);
+	background-size: 400% 400%;
+	animation: gradient 15s ease infinite;
+	height: 100vh;
+}
+
+
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+
+#gif-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.gif {
+  margin: 10px;
+}
+
+/* Rounded search bar */
+
+#emotion-input {
+    border-radius: 20px; /* Adjust the value as needed */
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    width: 200px; /* Adjust the width as needed */
+  }
+  
+  button {
+    font-family: 'Poetsen One', sans-serif; /* Add the custom font */
+    border-radius: 20px; /* Adjust the value as needed */
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
