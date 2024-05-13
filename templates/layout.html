@@ -1,0 +1,28 @@
+<!-- This will have the basic layout of the app -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- TO DO add bootstrap here -->
+    
+    <!-- link to the css file for styling that is not bootstrap -->
+    <link href="/static/styles.css" rel="stylesheet">
+    
+    <!-- the jinja block will allow us to change the title for each page -->
+    <title>{% block title %}{% endblock%}</title>
+</head>
+<body>
+    <!-- TO DO add nav bar html -->
+    <nav></nav>
+
+    <!-- main block will be different for each page and dynamically added here -->
+    <main>
+        {% block main %}{% endblock %}
+    </main>
+
+    <!-- TO DO add footer if needed -->
+    <footer></footer>
+</body>
+</html>
