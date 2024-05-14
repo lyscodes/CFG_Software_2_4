@@ -1,7 +1,10 @@
-h1 {
+
+  
+  h1 {
 
     font-family: "Poetsen One", sans-serif;
     font-weight: 400;
+    margin-top: 50px;
     font-style: normal;
     color: whitesmoke;
   }
@@ -15,6 +18,8 @@ body {
 }
 
 
+/* BACKGROUND */
+
 @keyframes gradient {
 	0% {
 		background-position: 0% 50%;
@@ -27,30 +32,72 @@ body {
 	}
 }
 
+/* POSITIONING */
+/* I'm gonna cry I want it in rows*/
 
-#gif-container {
+.container-happy,
+.container-calm,
+.container-sad,
+.container-worried,
+.container-frustrated,
+.container-angry {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
+  height: auto;
 }
 
-.gif {
-  margin: 10px;
+/* GIF ADJUSTMENTS */
+.happy,
+.calm,
+.sad,
+.worried,
+.frustrated,
+.angry {
+  margin-top: 20px; /* tinker with this */
 }
 
-/* Rounded search bar */
+/* TITLES OF THE EMOTION SCALE*/
 
-#emotion-input {
-    border-radius: 20px; /* Adjust the value as needed */
+.happy-text,
+.calm-text,
+.sad-text,
+.worried-text,
+.frustrated-text,
+.angry-text {
+  font-family: "Poetsen One", sans-serif;
+  font-weight: 250;
+  font-style: normal;
+  color: whitesmoke;
+  margin-top: 10px; /* Adjust as needed */
+}
+
+
+
+/* DO NOT TOUCH BEYOND THIS POINT 
+
+the code below is for the search bar, however
+the preference was to have a scale instead which
+4-6 GIFs of different emotions appear on the page
+in teh first instance and the user selects by clicking on one
+
+*/
+
+/* Rounded search bar - not needed anymore so i'm commenting it out */
+
+
+/* #emotion-input {
+    border-radius: 20px; /* Adjust the value as needed /
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
-    width: 200px; /* Adjust the width as needed */
-  }
+    width: 200px; /* Adjust the width as needed /
+  } 
   
   button {
-    font-family: 'Poetsen One', sans-serif; /* Add the custom font */
-    border-radius: 20px; /* Adjust the value as needed */
+    font-family: 'Poetsen One', sans-serif; /* Add the custom font/
+    border-radius: 20px; /* Adjust the value as needed /
     padding: 10px 20px;
     background-color: #007bff;
     color: #fff;
@@ -61,4 +108,4 @@ body {
   
   button:hover {
     background-color: #0056b3;
-  }
+  }*/
