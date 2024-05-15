@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Giphy Emotion Search</title>
+  <title>right in the feels.</title>
   <link rel="stylesheet" type="text/css" href="index.css">
 
   <!--font-->
@@ -19,79 +19,70 @@
 
   <h1>How are you feeling today?</h1>
 
-  <!-- HAPPY -->
-  <div class="container-happy">
-
+  <div class="grid-container">
+    <!-- HAPPY -->
     <div class="happy">
       <iframe src="https://giphy.com/embed/cCOVfFwDI3awdse5A3" frameborder="0" allowfullscreen></iframe>
-    </div>
-
-    <div class="happy-text">
-      <p>happy</p>
+      <div class="happy-text">
+        <p>happy</p>
+      </div>
     </div>
 
     <!-- CALM -->
-    <div class="container-calm">
-
-      <div class="calm">
-        <iframe src="https://giphy.com/embed/ZZxSZJjeBes7VyawRM" frameBorder="0" allowFullScreen></iframe>
-      </div>
-
+    <div class="calm">
+      <iframe src="https://giphy.com/embed/ZZxSZJjeBes7VyawRM" frameBorder="0" allowFullScreen></iframe>
       <div class="calm-text">
         <p>calm</p>
       </div>
+    </div>
 
-      <!-- SAD -->
+    <!-- SAD -->
+    <div class="sad">
+      <iframe src="https://giphy.com/embed/SBtR0Y1D8IdrCy6Ao4" frameBorder="0" allowFullScreen></iframe>
+      <div class="sad-text">
+        <p>sad</p>
+      </div>
+    </div>
 
-      <div class="container-sad">
+    <!-- WORRIED -->
+    <div class="worried">
+      <iframe src="https://giphy.com/embed/VKO3FHbhQbnbeD6Bas" frameBorder="0" allowFullScreen></iframe>
+      <div class="worried-text">
+        <p>worried</p>
+      </div>
+    </div>
 
-        <div class="sad">
-          <iframe src="https://giphy.com/embed/SBtR0Y1D8IdrCy6Ao4" frameBorder="0" allowFullScreen></iframe>
-        </div>
+    <!-- FRUSTRATED -->
+    <div class="frustrated">
+      <iframe src="https://giphy.com/embed/gyLFXmO7GIZ4Q" frameBorder="0" allowFullScreen></iframe>
+      <div class="frustrated-text">
+        <p>frustrated</p>
+      </div>
+    </div>
 
-        <div class="sad-text">
-          <p>sad</p>
-        </div>
+    <!-- ANGRY -->
+    <div class="angry">
+      <iframe src="https://giphy.com/embed/ZIdLWI26SMY0qjRKQT" frameBorder="0" allowFullScreen></iframe>
+      <div class="angry-text">
+        <p>angry</p>
+      </div>
+    </div>
+  </div>
 
-        <!-- WORRIED -->
-        <div class="container-worried">
-
-          <div class="worried">
-            <iframe src="https://giphy.com/embed/VKO3FHbhQbnbeD6Bas" frameBorder="0" allowFullScreen></iframe>
-
-            <div class="worried-text">
-              <p>worried</p>
-            </div>
-
-            <!-- FRUSTRATED -->
-            <div class="container-frustrated">
-
-              <div class="frustrated">
-                <iframe src="https://giphy.com/embed/gyLFXmO7GIZ4Q" frameBorder="0" allowFullScreen></iframe>
-              </div>
-
-              <div class="frustrated-text">
-                <p>frustrated</p>
-              </div>
-
-              <!-- ANGRY -->
-              <div class="container-angry">
-                <div class="angry">
-                  <iframe src="https://giphy.com/embed/ZIdLWI26SMY0qjRKQT" frameBorder="0" allowFullScreen></iframe>
-                </div>
-
-                <div class="angry-text">
-                  <p>angry</p>
-                </div>
-
-                <!-- COMMENTED OUT SEARCH BAR-->
-                <!-- 
+  <!-- Image in the bottom left corner -->
+  <div class="giphy">
+    <img
+      src="/Users/summer/Desktop/mood tracker project/front end/CFG_Software_2_4/front_end_gifs/PoweredBy_200px-White_HorizText.png"
+      alt="Powered by GIPHY">
+  </div>
+  <!-- COMMENTED OUT SEARCH BAR-->
+  <!-- 
   <input type="text" id="emotion-input" placeholder="enter your emotion">
   <button onclick="searchGifs()">Search</button>
 
   <div id="gif-container"></div> -->
 
-                <script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 
 </html>
