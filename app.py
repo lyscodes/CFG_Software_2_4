@@ -1,14 +1,16 @@
-from flask import Flask, render_template
-from main import get_quote_otd
+from flask import Flask, render_template, request
+from main import get_quote_otd, get_moods
 # from db_utils import 
 
 app = Flask(__name__)
 
 
-@app.route('/mood')
+@app.route('/mood', methods=['GET', 'POST'])
 def mood_checkin():
-    my_mood = 'happy'
-    return render_template("mood.html", mood=my_mood)
+    if request.method == 'GET':
+        return render_template("mood.html")
+    else:
+        print("you have clicked on one of the options")
 
 
 @app.route('/quote')
