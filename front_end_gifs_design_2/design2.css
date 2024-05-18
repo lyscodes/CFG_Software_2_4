@@ -1,0 +1,168 @@
+/* HEADINGS */
+h1 {
+    font-family: "Concert One", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    color: #ffffff;
+}
+
+/* NAV BAR M*/
+.nav-item,
+.nav-link {
+    font-family: "Concert One", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    color: #000000;
+    display: block; /* Ensure nav items are displayed as block elements */
+    padding: 10px; /* Add padding to improve touchability on mobile */
+    text-align: center;
+}
+
+.nav-link:hover {
+    color: #ffffff;
+}
+
+/* NAV BAR MOBILE VIEW */
+@media screen and (max-width: 600px) {
+    .nav {
+        flex-direction: column; /* Stack nav items vertically does this even work lol*/
+        align-items: center; /* Center align nav items */
+    }
+
+    .nav-item {
+        margin-bottom: 5px; /* Add space between nav items */
+    }
+}
+
+/*BODY*/
+
+body {
+    background-color: #faebd7;
+}
+
+/* HOW ARE YOU FEELING TODAY? BOX*/
+.box {
+    border: 2px solid #000000;
+    padding: 10px; /* Reduced padding for smaller screens */
+    text-align: center;
+    margin: 20px auto;
+    width: 90%; /* Set width to 90% for smaller screens */
+    max-width: 400px; /* Limit maximum width for larger screens */
+    background-color: #000000;
+    border-radius: 8px;
+    box-shadow: 15px 15px #ffffff;
+}
+
+
+/* GRID LAYOUT */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-gap: 10px;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    padding: 10px;
+}
+
+/* GIFS AND TEXT */
+.happy,
+.calm,
+.sad,
+.worried,
+.frustrated,
+.angry {
+    margin-top: 10px;
+    /* Adjust margin for mobile view */
+}
+
+.happy iframe,
+.calm iframe,
+.sad iframe,
+.worried iframe,
+.frustrated iframe,
+.angry iframe {
+    width: 100%;
+    /* Make iframe responsive */
+}
+
+.happy-text,
+.calm-text,
+.sad-text,
+.worried-text,
+.frustrated-text,
+.angry-text {
+    font-family: "Concert One", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    color: #000000;
+    margin-top: 5px;
+    text-align: center;
+}
+
+/* GIPHY IMAGE */
+.giphy {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+}
+
+.giphy img {
+    width: 100px;
+    height: auto;
+}
+
+/* MOBILE VIEW */
+@media screen and (max-width: 600px) {
+    /* Adjustments for screens up to 600px wide */
+    .grid-container {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        height: 70vh;
+    }
+}
+
+h1 {
+    margin-top: 10px;
+}
+
+.happy-text,
+.calm-text,
+.sad-text,
+.worried-text,
+.frustrated-text,
+.angry-text {
+    font-size: 14px;
+    text-align: center;
+}
+
+/* GIPHY CREDS */
+.giphy {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    width: 50px;
+    opacity: 20%;
+    height: auto;
+}
+
+/* HOVER EFFECT */
+#happy-gif:hover,
+#calm-gif:hover,
+#sad-gif:hover,
+#worried-gif:hover,
+#frustrated-gif:hover,
+#angry-gif:hover {
+    background-color: transparent;
+    transition: background-color 0.9s ease;
+    border: 2px solid #ffffff
+}
+
+/* TEXT HOVER */
+.happy:hover .happy-text,
+.calm:hover .calm-text,
+.sad:hover .sad-text,
+.worried:hover .worried-text,
+.frustrated:hover .frustrated-text,
+.angry:hover .angry-text {
+    color: #000000;
+}
