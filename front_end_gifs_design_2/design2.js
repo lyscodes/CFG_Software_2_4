@@ -25,17 +25,17 @@ document.addEventListener("DOMContentLoaded", function() {
     calm.addEventListener('mouseleave', resetColors);
 
     sad.addEventListener('mouseenter', function() {
-        changeColors('#bdaecb');
+        changeColors('#D9E8F5');
     });
     sad.addEventListener('mouseleave', resetColors);
 
     worried.addEventListener('mouseenter', function() {
-        changeColors('#84c0e8');
+        changeColors('#D9D9D9');
     });
     worried.addEventListener('mouseleave', resetColors);
 
     frustrated.addEventListener('mouseenter', function() {
-        changeColors('#829196');
+        changeColors('#F2BDC7');
     });
     frustrated.addEventListener('mouseleave', resetColors);
 
