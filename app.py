@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-from main import get_quote_otd, get_moods
+from main import get_quote_otd, make_moods_dict
 # from db_utils import 
 
 app = Flask(__name__)
@@ -8,7 +8,8 @@ app = Flask(__name__)
 @app.route('/mood', methods=['GET', 'POST'])
 def mood_checkin():
     if request.method == 'GET':
-        return render_template("mood.html")
+        emotions = make_moods_dict()
+        return render_template("mood.html", emotions=emotions)
     else:
         print("you have clicked on one of the options")
 

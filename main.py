@@ -9,7 +9,7 @@ endpoint1 = 'https://zenquotes.io/api/today'
 
 def get_moods(mood):
     url = "http://api.giphy.com/v1/gifs/search"
-    offset = randint(0, 4999) # this means a new result will show up each time the call is made
+    offset = randint(0, 300) # this means a new result will show up each time the call is made
     params = parse.urlencode({
         "q": mood, # set up to take input of call for mood
         "api_key": key, # key in config file
@@ -21,12 +21,20 @@ def get_moods(mood):
             data = json.loads(response.read())
             list = data['data']
             item = list[0]
-            gif_url = item['url']
+            gif_url = item['images']['fixed_width']['mp4'] # this is the url needed to embed the gif
             print(gif_url)
             return gif_url
     except Exception:
         print("Opps: error")
 
+def make_moods_dict():
+    main_moods = ['happy', 'calm', 'sad', 'worried', 'frustrated', 'angry']
+    moods_dict = {}
+    for mood in main_moods:
+        gif_url = get_moods(mood)
+        moods_dict[mood] = gif_url
+    print(moods_dict)
+    return moods_dict
 
 
 def get_quote_otd():
