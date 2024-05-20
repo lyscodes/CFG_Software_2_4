@@ -5,6 +5,7 @@ from main import get_quote_otd, make_moods_dict
 app = Flask(__name__)
 
 
+@app.route('/')
 @app.route('/mood', methods=['GET', 'POST'])
 def mood_checkin():
     if request.method == 'GET':
@@ -19,12 +20,15 @@ def quote_of_the_day():
     result = get_quote_otd()
     quote = result[0]
     author = result[1]
-    return render_template("quote.html", quote=f'Quote of the day is: {quote} By {author}')
+    return render_template("quote.html", quote=quote, author=author)
 
 
 @app.route('/journal')
 def add_journal_entry():
-    return render_template("journal.html")
+    result = get_quote_otd() # This is a quick solution, but we should save the data from /quote call to the api instead
+    quote = result[0]
+    author = result[1]
+    return render_template("journal.html", quote=quote, author=author)
 
 
 

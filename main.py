@@ -27,6 +27,7 @@ def get_moods(mood):
     except Exception:
         print("Opps: error")
 
+
 def make_moods_dict():
     main_moods = ['happy', 'calm', 'sad', 'worried', 'frustrated', 'angry']
     moods_dict = {}
