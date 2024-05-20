@@ -48,7 +48,7 @@ h1 {
 }
 
 
-.emotion-container embed {
+.emotion-container video {
   width: 100%; /* Make iframe responsive */
 }
 

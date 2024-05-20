@@ -22,6 +22,11 @@ def quote_of_the_day():
     return render_template("quote.html", quote=f'Quote of the day is: {quote} By {author}')
 
 
+@app.route('/journal')
+def add_journal_entry():
+    return render_template("journal.html")
+
+
 
 
 
