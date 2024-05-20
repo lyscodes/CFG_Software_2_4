@@ -59,7 +59,8 @@ a.nav-link:hover {
 }
 
 .nav-pills .nav-link.active {
-    background: #6D9691;
+    /*background: #6D9691;*/
+    background: #7E70AA;
 }
 
 .nav-pills .nav-link.active:hover {
