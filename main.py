@@ -1,10 +1,10 @@
 import requests
-from config import key
+from config import GIPHY_API_KEY
 import json
 from urllib import parse, request
 from random import randint
 
-endpoint1 = 'https://zenquotes.io/api/today'
+
 
 
 def get_moods(mood):
@@ -12,7 +12,7 @@ def get_moods(mood):
     offset = randint(0, 4999) # this means a new result will show up each time the call is made
     params = parse.urlencode({
         "q": mood, # set up to take input of call for mood
-        "api_key": key, # key in config file
+        "api_key": GIPHY_API_KEY, # key in config file
         "limit": "1", # returns on one result
         "offset": offset
     })
@@ -28,6 +28,13 @@ def get_moods(mood):
         print("Opps: error")
 
 
+def get_joke():
+    result = requests.get('https://icanhazdadjoke.com/', headers={'accept': 'application/json'}).json()
+    joke = result['joke']
+    return joke
+
+
+endpoint1 = 'https://zenquotes.io/api/today'
 
 def get_quote_otd():
     result = requests.get(endpoint1).json()

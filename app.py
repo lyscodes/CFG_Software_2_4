@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-from main import get_quote_otd, get_moods
+from main import get_quote_otd, get_moods, get_joke
 # from db_utils import 
 
 app = Flask(__name__)
@@ -13,7 +13,7 @@ def mood_checkin():
         print("you have clicked on one of the options")
 
 
-@app.route('/quote')
+@app.route('/quote', methods=['GET'])
 def quote_of_the_day():
     result = get_quote_otd()
     quote = result[0]
@@ -21,7 +21,10 @@ def quote_of_the_day():
     return render_template("quote.html", quote=f'Quote of the day is: {quote} By {author}')
 
 
-
+@app.route('/joke', methods=['GET'])
+def joke_generator():
+    result = get_joke()
+    return result
 
 
 
