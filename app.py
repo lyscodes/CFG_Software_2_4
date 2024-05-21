@@ -21,15 +21,25 @@ def quote_of_the_day():
     return render_template("quote.html", quote=f'Quote of the day is: {quote} By {author}')
 
 
-
-# This is hardcoded to happiness at the moment... need to work out how to make it responsive to the mood entered by the user
-
+# This is hardcoded to happiness to limit api calls
 @app.route('/quote/keyword', methods=['GET'])
 def quote_for_mood():
     result = get_quote_by_mood()
     quote = result[0]
     author = result[1]
     return (f'Your quote based on your selected mood is: {quote} By {author}')
+
+
+'''
+# use this instead of hard coded function when ready to go live:
+
+@app.route('/quote/<mood>', methods=['GET'])
+def quote_for_mood(mood):
+    result = get_quote_by_mood(mood)
+    quote = result[0]
+    author = result[1]
+    return (f'Your quote based on your selected mood is: {quote} By {author}')
+'''
 
 
 @app.route('/joke', methods=['GET'])
