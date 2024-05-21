@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-from main import get_quote_otd, get_moods, get_joke
+from main import get_quote_otd, get_quote_by_mood, get_moods, get_joke
 # from db_utils import 
 
 app = Flask(__name__)
@@ -19,6 +19,17 @@ def quote_of_the_day():
     quote = result[0]
     author = result[1]
     return render_template("quote.html", quote=f'Quote of the day is: {quote} By {author}')
+
+
+
+# This is hardcoded to happiness at the moment... need to work out how to make it responsive to the mood entered by the user
+
+@app.route('/quote/keyword', methods=['GET'])
+def quote_for_mood():
+    result = get_quote_by_mood()
+    quote = result[0]
+    author = result[1]
+    return (f'Your quote based on your selected mood is: {quote} By {author}')
 
 
 @app.route('/joke', methods=['GET'])
