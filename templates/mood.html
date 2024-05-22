@@ -6,20 +6,28 @@
     Your mood
 {% endblock %}
 
+{% block styles %}
+  <link href="../static/css/mood-page.css" rel="stylesheet">
+{% endblock %}
 
 {% block main %}
       <!-- HOW ARE YOU FEELING TODAY?-->
 
   <h1>How are you feeling today?</h1>
 
-  <div class="grid-container">
-    <!-- HAPPY -->
-    <div class="happy">
-      <iframe src="https://giphy.com/embed/cCOVfFwDI3awdse5A3" frameborder="0" allowfullscreen sandbox></iframe>
-      <div class="happy-text">
-        <p>happy</p>
-      </div>
-    </div>
+    <div class="grid-container">
+
+            <!-- testing the api call -->
+        <!-- {% for emotion, url in emotions | dictsort %}
+            <div class="emotion-container">
+                <video src="{{url}}" autoplay muted loop></video>
+                <div class="gif-text">
+                    <p>{{emotion}}</p>
+                </div>
+            </div>
+        {% endfor %} -->
+
+
 
     <!-- CALM -->
     <div class="calm">
@@ -60,6 +68,7 @@
         <p>angry</p>
       </div>
     </div>
+
   </div>
 
   <!-- Image in the bottom left corner -->
@@ -75,6 +84,8 @@
 
   <div id="gif-container"></div> -->
 
-  <script src="../static/script.js"></script>
+{% endblock %}
 
+{% block script %}
+  <script src="../static/mood-page.js"></script>
 {% endblock %}

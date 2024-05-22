@@ -1,0 +1,89 @@
+.container {
+
+    margin-top: 32px;
+    display: flex;
+    /* position: fixed; */
+    top:48px;
+    left: 48px;
+    right: 48px;
+    width: 100%;
+    background-color: none;
+    overflow: auto;
+    height: auto;
+    font-family: "Outfit", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-size: 1.2rem;
+    font-style: normal; 
+  }
+
+/* aligns nav items to the left using nav class */
+.nav {
+    margin-left: auto;
+    color: #A77A01;
+    
+}
+
+
+
+a.nav-link {
+    color: #A77A01;
+    
+}
+
+a.nav-link:hover {
+    margin-left: auto;
+    color: #7a5a01;
+}
+
+.nav-pills .nav-link.active {
+    
+    background: #7E70AA;
+}
+
+.nav-pills .nav-link.active:hover {
+    
+    background: #665b8b;
+}
+
+
+/* Footer styles */
+.fa-trash-can {
+    margin-left: auto;
+}
+    
+.fa-facebook-f {
+    color: rgb(111, 111, 111);
+    font-weight: 100;
+    margin-top: 24px;
+    padding: 48px;
+}
+
+.fa-x-twitter {
+    color: rgb(111, 111, 111);
+    font-weight: 100;
+    margin-top: 24px;
+    padding: 48px;
+}
+
+.fa-heart {
+    color:#f05233;
+    float: right;
+    margin-top: 44px;
+    margin-bottom: 24px;
+    margin-right: 24px;
+    font-weight: 600;
+}
+
+.fa-heart:hover {
+    color:#f05233;
+    float: right;
+    margin-top: 44px;
+    margin-bottom: 24px;
+    margin-right: 24px;
+    font-weight: 800;
+}
+
+.icons {
+    text-align: center;
+}
