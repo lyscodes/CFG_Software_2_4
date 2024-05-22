@@ -1,6 +1,6 @@
 import requests
 from config import GIPHY_API_KEY
-from config import MOOD_API_KEY
+#from config import MOOD_API_KEY
 import json
 from urllib import parse, request
 from random import randint

@@ -1,0 +1,76 @@
+{% extends "layout.html" %}
+
+{% block title %} Overview {% endblock %}
+
+{% block styles %}
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="../static/css/overview.css">
+{% endblock %}
+
+{% block main %}
+
+    <!-- Archive Header -->
+
+    <div class="archive">
+
+        <p>ARCHIVE</p>
+
+    </div>
+
+    <!-- Calendar -->
+    <div class="calendar-container">
+        <div class="calendar-header">
+            <button id="prevMonth">❮</button>
+            <h2 id="monthYear"></h2>
+            <button id="nextMonth">❯</button>
+        </div>
+        <div class="calendar-body">
+            <div class="day-names">
+                <div>Sun</div>
+                <div>Mon</div>
+                <div>Tue</div>
+                <div>Wed</div>
+                <div>Thu</div>
+                <div>Fri</div>
+                <div>Sat</div>
+            </div>
+            <div class="days" id="days"></div>
+        </div>
+    </div>
+
+    <!-- Graph (Dummy)-->
+
+    <div class="graph-container">
+        <div class="bars" id="bars">
+            
+
+            <!-- Bars will be dynamically inserted here -->
+        </div>
+        <div class="bar-labels">
+            <div class="bar-label">Happy</div>
+            <div class="bar-label">Calm</div>
+            <div class="bar-label">Sad</div>
+            <div class="bar-label">Worried</div>
+            <div class="bar-label">Frustrated</div>
+            <div class="bar-label">Angry</div>
+
+
+
+        </div>
+    </div>
+
+    <!-- Graph Stats Title -->
+
+    <div class="stats">
+        <p>STATS FOR </p>
+    </div>
+
+{% endblock %}
+
+{% block script %}
+    <!-- Calendar JavaScript -->
+    <script src="../static/overview.js"></script>
+
+    <!-- Stats JavaScript -->
+    <script src="../overview_page/emotions.js"></script>
+{% endblock %}

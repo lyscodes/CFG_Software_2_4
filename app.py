@@ -28,7 +28,7 @@ def quote_for_mood():
     result = get_quote_by_mood()
     quote = result[0]
     author = result[1]
-    return (f'Your quote based on your selected mood is: {quote} By {author}')
+    return render_template("quote.html", quote=quote, author=author)
 
 
 '''
@@ -53,10 +53,12 @@ def add_journal_entry():
 @app.route('/joke', methods=['GET'])
 def joke_generator():
     result = get_joke()
-    return result
+    return render_template("joke.html", joke=result)
 
 
-
+@app.route('/overview', methods=['GET'])
+def show_overview():
+    return render_template("overview.html")
 
 
 
