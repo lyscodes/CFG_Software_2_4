@@ -1,6 +1,6 @@
 import requests
 from config import GIPHY_API_KEY
-#from config import MOOD_API_KEY
+from config import MOOD_API_KEY
 import json
 from urllib import parse, request
 from random import randint
@@ -47,9 +47,7 @@ def get_quote_otd():
     result = requests.get('https://zenquotes.io/api/today').json()
     quote = result[0]['q']
     author = result[0]['a']
-    print(quote, author)
     return [quote, author]
-
 
 
 # the api we are using only get 28 free calls a month...
@@ -64,17 +62,17 @@ def get_quote_by_mood():
     return [quote, author]
 
 
-
 '''
 # use this instead of hard coded function when ready to go live:
 
 def get_quote_by_mood(mood):
-    result = requests.get(f'https://mood-based-quote-api.p.rapidapi.com/{mood}', headers={'x-rapidapi-key': MOOD_API_KEY}).json()
+    result = requests.get(f'https://mood-based-quote-api.p.rapidapi.com/{mood}', headers={'x-rapidapi-key': MOOD_API_KEY, 'X-RapidAPI-Host': 'mood-based-quote-api.p.rapidapi.com'}).json()
     result_list = result['result']
     random_quote = random.choice(result_list)
     quote = random_quote['quote']
     author = random_quote['author']
     return [quote, author]
+
 '''
 
 

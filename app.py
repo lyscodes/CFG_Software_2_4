@@ -39,8 +39,10 @@ def quote_for_mood(mood):
     result = get_quote_by_mood(mood)
     quote = result[0]
     author = result[1]
-    return (f'Your quote based on your selected mood is: {quote} By {author}')
+    return render_template("quote.html", quote=quote, author=author)
+
 '''
+
 
 @app.route('/journal')
 def add_journal_entry():
