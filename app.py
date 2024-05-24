@@ -4,15 +4,21 @@ from main import get_quote_otd, get_quote_by_mood, make_moods_dict, get_joke
 
 app = Flask(__name__)
 
-
-@app.route('/')
-@app.route('/mood', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def mood_checkin():
     if request.method == 'GET':
         emotions = make_moods_dict()
         return render_template("mood.html", emotions=emotions)
-    else:
-        print("you have clicked on one of the options")
+    if request.method == 'POST':
+        # save their emotion choice to the database
+        # change page to the choice page
+        print("You have clicked on the button")
+
+
+@app.route('/choice/<id>', methods=['GET', 'POST'])
+def choice(id):
+    if request.method == 'GET':
+        return render_template("choice.html", emotion=id)
 
 
 @app.route('/quote', methods=['GET'])
@@ -61,8 +67,6 @@ def joke_generator():
 @app.route('/overview', methods=['GET'])
 def show_overview():
     return render_template("overview.html")
-
-
 
 
 if __name__ == '__main__':
