@@ -1,6 +1,6 @@
 <!-- this page contains only the html for the main block of the mood choosing page -->
-
-{% extends "layout.html" %}
+<!-- this is the same as import from  -->
+{% extends "layout.html" %}  
 
 {% block title %}
     Your mood
@@ -18,18 +18,20 @@
     <div class="grid-container">
 
             <!-- testing the api call -->
-        <!-- {% for emotion, url in emotions | dictsort %}
+        {% for emotion, url in emotions | dictsort %}
             <div class="emotion-container">
-                <video src="{{url}}" autoplay muted loop></video>
+                <video width="200" autoplay muted loop>
+                  <source src="{{url}}" type="video/mp4">
+                </video>
                 <div class="gif-text">
                     <p>{{emotion}}</p>
                 </div>
             </div>
-        {% endfor %} -->
+        {% endfor %}
 
 
 
-    <!-- CALM -->
+    <!-- CALM
     <div class="calm">
       <iframe src="https://giphy.com/embed/ZZxSZJjeBes7VyawRM" frameBorder="0" allowFullScreen sandbox></iframe>
       <div class="calm-text">
@@ -37,39 +39,39 @@
       </div>
     </div>
 
-    <!-- SAD -->
-    <div class="sad">
+    SAD -->
+    <!-- <div class="sad">
       <iframe src="https://giphy.com/embed/SBtR0Y1D8IdrCy6Ao4" frameBorder="0" allowFullScreen sandbox></iframe>
       <div class="sad-text">
         <p>sad</p>
       </div>
-    </div>
+    </div> -->
 
     <!-- WORRIED -->
-    <div class="worried">
+    <!-- <div class="worried">
       <iframe src="https://giphy.com/embed/VKO3FHbhQbnbeD6Bas" frameBorder="0" allowFullScreen sandbox></iframe>
       <div class="worried-text">
         <p>worried</p>
       </div>
-    </div>
+    </div> -->
 
     <!-- FRUSTRATED -->
-    <div class="frustrated">
+    <!-- <div class="frustrated">
       <iframe src="https://giphy.com/embed/gyLFXmO7GIZ4Q" frameBorder="0" allowFullScreen sandbox></iframe>
       <div class="frustrated-text">
         <p>frustrated</p>
       </div>
-    </div>
+    </div> -->
 
     <!-- ANGRY -->
-    <div class="angry">
+    <!-- <div class="angry">
       <iframe src="https://giphy.com/embed/ZIdLWI26SMY0qjRKQT" frameBorder="0" allowFullScreen sandbox></iframe>
       <div class="angry-text">
         <p>angry</p>
       </div>
     </div>
 
-  </div>
+  </div> --> 
 
   <!-- Image in the bottom left corner -->
   <div class="giphy">

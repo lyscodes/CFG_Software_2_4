@@ -1,6 +1,6 @@
 import requests
-from config import GIPHY_API_KEY
-from config import MOOD_API_KEY
+from config import GIPHY_API_KEY, MOOD_API_KEY
+from default import default_gifs
 import json
 from urllib import parse, request
 from random import randint
@@ -22,19 +22,25 @@ def get_moods(mood):
             list = data['data']
             item = list[0]
             gif_url = item['images']['fixed_width']['mp4'] # this is the url needed to embed the gif
-            print(gif_url)
             return gif_url
     except Exception:
         print("Opps: error")
+        return None
 
 
 def make_moods_dict():
-    main_moods = ['happy', 'calm', 'sad', 'worried', 'frustrated', 'angry']
+    main_moods = ['happy' , 'calm', 'sad', 'worried', 'frustrated', 'angry']
     moods_dict = {}
+
+    # check if session has expired (if not use available data)
+    
     for mood in main_moods:
         gif_url = get_moods(mood)
-        moods_dict[mood] = gif_url
-    print(moods_dict)
+        # If the api calls doesn't work for any of the gifs, the default gif will show instead
+        if gif_url:
+            moods_dict[mood] = gif_url
+        else:
+            moods_dict[mood] = default_gifs[mood]
     return moods_dict
 
 def get_joke():
