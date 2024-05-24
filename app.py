@@ -1,24 +1,22 @@
-from flask import Flask, render_template, request
-from main import get_quote_otd, get_quote_by_mood, make_moods_dict, get_joke
-from db_utils import today_emotion
+from flask import Flask, render_template, request, flash
+from main import get_quote_otd, get_quote_by_mood, make_moods_dict, get_joke, choice_joke_quote, submit_entry
+from config import SECRET_KEY
+
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = SECRET_KEY
 
 @app.route('/', methods=['GET', 'POST'])
 def mood_checkin():
     if request.method == 'GET':
         emotions = make_moods_dict()
         return render_template("mood.html", emotions=emotions)
-    if request.method == 'POST':
-        # save their emotion choice to the database
-        # change page to the choice page
-        print("You have clicked on the button")
 
 
 @app.route('/choice/<id>', methods=['GET', 'POST'])
 def choice(id):
     if request.method == 'GET':
-        today_emotion(id) # save their emotional choice to the database
+        choice_joke_quote(id)
         return render_template("choice.html", emotion=id)
 
 
@@ -51,11 +49,21 @@ def quote_for_mood(mood):
 '''
 
 
-@app.route('/journal')
+@app.route('/journal', methods=['GET', 'POST'])
 def add_journal_entry():
     result = get_quote_otd() # This is a quick solution, but we should save the data from /quote call to the api instead
     quote = result[0]
     author = result[1]
+    if request.method == 'POST':
+        content = request.form.get('textarea')
+        if not content:
+            flash('Journal is empty')
+        else:
+            response = submit_entry(content)
+            if response == True:
+                flash('Entry submitted')
+            elif response == False:
+                flash('You have already submitted a diary entry for this date')
     return render_template("journal.html", quote=quote, author=author)
 
 

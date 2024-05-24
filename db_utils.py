@@ -14,5 +14,10 @@ def _connect_to_db(db_name):
     )
     return connection
 
-def today_emotion(emotion):
+def today_emotion(emotion, date):
     pass
+
+def journal_entry(entry, date):
+    # It should check if the user has already submitted a journal entry for that date
+    pass
+
