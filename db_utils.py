@@ -14,3 +14,5 @@ def _connect_to_db(db_name):
     )
     return connection
 
+def today_emotion(emotion):
+    pass

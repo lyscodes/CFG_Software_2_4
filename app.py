@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 from main import get_quote_otd, get_quote_by_mood, make_moods_dict, get_joke
-# from db_utils import 
+from db_utils import today_emotion
 
 app = Flask(__name__)
 
@@ -18,6 +18,7 @@ def mood_checkin():
 @app.route('/choice/<id>', methods=['GET', 'POST'])
 def choice(id):
     if request.method == 'GET':
+        today_emotion(id) # save their emotional choice to the database
         return render_template("choice.html", emotion=id)
 
 
