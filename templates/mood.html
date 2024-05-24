@@ -2,31 +2,31 @@
 <!-- this is the same as import from  -->
 {% extends "layout.html" %}
 
-{% block title %}
+{% block title %} <!-- this block allows to change the title of the page-->
     Your mood
 {% endblock %}
 
-{% block styles %}
+{% block styles %} <!-- this block is to add specific css styles for this page -->
   <link href="../static/css/mood-page.css" rel="stylesheet">
 {% endblock %}
 
-{% block main %}
-      <!-- HOW ARE YOU FEELING TODAY?-->
+{% block main %}        <!-- beginning of the main block which gives content to the <main> from the layout.html template -->
+
 
   <h1>How are you feeling today?</h1>
 
     <div class="grid-container">
 
-            <!-- testing the api call -->
-        {% for emotion, url in emotions | dictsort %}
+        {% for emotion, url in emotions | dictsort %} <!-- This loops the following html code through the emotions dict passed through the http -->
             <div class="emotion-container">
                 <video id={{emotion}} width="200" autoplay muted loop onclick="location.href = '/choice/{{emotion}}';">
-                  <source src="{{url}}" type="video/mp4">
+                  <source src="{{url}}" type="video/mp4"> <!-- the double curly brackets {{url}} is how jinja understands "url" is a variable -->
                 </video>
                 <div class="gif-text">
-                    <p>{{emotion}}</p>
+                    h<p>{{emotion}}</p> <!-- the emotion variable is just how I called the keys in the dictionary we are looping through-->
                 </div>
             </div>
+      
         {% endfor %}
 
 
@@ -46,31 +46,6 @@
       </div>
     </div> -->
 
-    <!-- WORRIED -->
-    <!-- <div class="worried">
-      <iframe src="https://giphy.com/embed/VKO3FHbhQbnbeD6Bas" frameBorder="0" allowFullScreen sandbox></iframe>
-      <div class="worried-text">
-        <p>worried</p>
-      </div>
-    </div> -->
-
-    <!-- FRUSTRATED -->
-    <!-- <div class="frustrated">
-      <iframe src="https://giphy.com/embed/gyLFXmO7GIZ4Q" frameBorder="0" allowFullScreen sandbox></iframe>
-      <div class="frustrated-text">
-        <p>frustrated</p>
-      </div>
-    </div> -->
-
-    <!-- ANGRY -->
-    <!-- <div class="angry">
-      <iframe src="https://giphy.com/embed/ZIdLWI26SMY0qjRKQT" frameBorder="0" allowFullScreen sandbox></iframe>
-      <div class="angry-text">
-        <p>angry</p>
-      </div>
-    </div>
-
-  </div> --> 
 
   <!-- Image in the bottom left corner -->
   <div class="giphy">
@@ -85,8 +60,10 @@
 
   <div id="gif-container"></div> -->
 
-{% endblock %}
 
-{% block script %}
+{% endblock %} <!-- end of the main block-->
+
+
+{% block script %} <!-- this block contains js scripts that are specific to this template -->
   <script src="../static/mood-page.js"></script>
 {% endblock %}
