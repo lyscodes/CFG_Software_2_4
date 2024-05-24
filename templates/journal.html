@@ -9,14 +9,24 @@
 {% block main %}
       <!-- hero section -->
       <div class="hero-section">
+          <div>
+              {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                {% for message in messages %}
+                    <strong>{{ message }}</strong>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+          </div>
           <div class="quote-journal-div">
-           
               <h2 class="quote-journal"><i class="fa-solid fa-lightbulb fa-lg center"></i>{{quote}} - {{author}} </h2>
-              
               <p id="reflection-text">How does this change your perception?</p>
           </div>
-        <div class="form-floating">
-            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100%"></textarea>
-            <label for="floatingTextarea2" class="form-label">Your journal entry</label>
-          </div>
+          <div class="form-floating">
+        <form method="POST">
+                <textarea name="textarea" class="form-control" id="floatingTextarea2" placeholder='Your journal entry' style="height: 100%"></textarea>
+            <button type="submit" value="submit">Save entry</button>
+        </form>
+      </div>
+      </div>
 {% endblock %}
