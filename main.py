@@ -8,6 +8,8 @@ import datetime
 import json
 import random
 
+
+
 def get_moods(mood):
     url = "http://api.giphy.com/v1/gifs/search"
     offset = randint(0, 300) # this means a new result will show up each time the call is made
