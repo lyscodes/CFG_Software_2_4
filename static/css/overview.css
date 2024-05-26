@@ -1,7 +1,6 @@
 /* NAV BAR */
 
 .container {
-
     margin-top: auto;
     display: flex;
     position: fixed;
@@ -36,6 +35,18 @@ body::before {
     /* Ensure the strip appears behind the navigation bar */
 }
 
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 150px;
+    background-color: #ffffff;
+    box-sizing: border-box;
+    display: block;
+    unicode-bidi: isolate;
+    width: 100%;
+}
 
 /* aligns nav items to the left using nav class */
 .nav {
@@ -65,9 +76,9 @@ a.nav-link:hover {
 @media screen and (max-width: 600px) {
     .nav {
         flex-direction: column;
-        /* Stack nav items vertically does this even work lol*/
+        /* Stack nav items vertically */
         align-items: center;
-        /* Center align nav items*/
+        /* Center align nav items */
     }
 
     .nav-item {
@@ -98,13 +109,11 @@ body {
     font-family: "Outfit", sans-serif;
     color: #A77A01;
     margin-bottom: 470px;
-    margin-left: -625px;
-    margin-top: -10px;
+    margin-left: -555px;
+    margin-top: -280px;
     position: fixed;
-    z-index: 1;
+    z-index: 0;
     font-size: 75px;
-    
-
 }
 
 /* STATS TEXT */
@@ -112,13 +121,13 @@ body {
     font-family: "Outfit", sans-serif;
     color: #A77A01;
     margin-bottom: 470px;
-    margin-right: -500px;
+    margin-right: -400px;
+    margin-left: -20px;
     margin-bottom: -370px;
+    margin-top: -260px;
     position: fixed;
-    z-index: 1;
+    z-index: 0;
     font-size: 55px;
-    
-
 }
 
 /* CALENDAR */
@@ -135,17 +144,18 @@ body {
 
 .calendar-container {
     width: 100%;
-    max-width: 500px;
+    max-width: 400px; /* Adjusted width */
     background: #fff;
     border-radius: 10px;
     box-shadow: 0 0 10px #0000001a;
     overflow: hidden;
-    margin-left: -800px;
-    margin-top: 100px;
-    margin-right: auto;
+    margin: 0 auto; /* Center horizontally */
     position: fixed;
+    top: 50%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-150%, -50%); /* Offset to center */
     z-index: 1;
-    height: 540px; /* Set a fixed height for the calendar */
+    height: 400px; /* Adjusted height */
 }
 
 /* Ensure calendar does not exceed fixed height */
@@ -165,13 +175,14 @@ body {
 
 .calendar-header h2 {
     margin: 0;
+    font-size: 1rem; /* Adjust font size */
 }
 
 .calendar-header button {
     background: none;
     border: none;
     color: #fff;
-    font-size: 20px;
+    font-size: 1rem; /* Adjust font size */
     cursor: pointer;
 }
 
@@ -183,13 +194,13 @@ body {
 }
 
 .day-names div {
-    padding: 10px 0;
+    padding: 5px 0; /* Adjust padding */
     background: #f7f7f7;
     border-bottom: 1px solid #ddd;
 }
 
 .days div {
-    padding: 20px 0;
+    padding: 10px 0; /* Adjust padding */
     border-bottom: 1px solid #f0f0f0;
     cursor: pointer;
     transition: background 0.3s;
@@ -221,14 +232,14 @@ body {
     box-shadow: 0 0 10px #0000001a;
     padding: 20px;
     z-index: 1;
-    margin-left: 500px;
+    margin-left: -50px;
+    margin-top: -200px;
     position: fixed;
-    margin-bottom: 55px;
+  
     display: flex;
     flex-direction: column;
     align-items: center;
 }
-
 
 .bars {
     display: flex;
@@ -269,6 +280,29 @@ body {
     font-size: 15px;
     color: #333;
     text-align: center;
-        margin-top: 10px;
+    margin-top: 10px;
     width: 20%; /* Match the width of the bar */
+}
+
+/* MOBILE VIEW SPECIFIC ADJUSTMENTS */
+@media screen and (max-width: 600px) {
+    .calendar-container {
+        position: static;
+        margin: 20px auto 0 auto;
+        height: auto; /* Allows calendar to adjust height naturally */
+        max-width: 90%; /* Ensure it fits within the mobile view */
+    }
+
+    .graph-container {
+        position: static;
+        margin: 20px auto 55px auto;
+        width: 90%;
+    }
+
+    .archive, .stats {
+        font-size: 45px;
+        margin: 0;
+        position: static;
+        text-align: center;
+    }
 }

@@ -49,7 +49,7 @@ body::before {
 
 footer {
   position: fixed;
-  margin-top: 160px;
+  bottom: 0;
   left: 0;
   right: 0;
   height: 150px;
@@ -57,6 +57,7 @@ footer {
   box-sizing: border-box;
   display: block;
   unicode-bidi: isolate;
+  width: 100%;
 }
 
 
