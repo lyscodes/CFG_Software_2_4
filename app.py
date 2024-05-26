@@ -1,18 +1,18 @@
-from flask import Flask, render_template, request
-from main import get_quote_otd, get_quote_by_mood, make_moods_dict, get_joke
 from db_utils import today_emotion
+from flask import Flask, render_template, request, flash, redirect
+from helper import get_quote_otd, get_quote_by_mood, make_moods_dict, get_joke, choice_joke_quote, submit_entry
+from config import SECRET_KEY
+
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = SECRET_KEY
+
 
 @app.route('/', methods=['GET', 'POST'])
 def mood_checkin():
     if request.method == 'GET':
         emotions = make_moods_dict()
         return render_template("mood.html", emotions=emotions)
-    if request.method == 'POST':
-        # save their emotion choice to the database
-        # change page to the choice page
-        print("You have clicked on the button")
 
 
 @app.route('/choice/<id>', methods=['GET', 'POST'])
@@ -51,11 +51,22 @@ def quote_for_mood(mood):
 '''
 
 
-@app.route('/journal')
+@app.route('/journal', methods=['GET', 'POST'])
 def add_journal_entry():
     result = get_quote_otd() # This is a quick solution, but we should save the data from /quote call to the api instead
     quote = result[0]
     author = result[1]
+    if request.method == 'POST':
+        content = request.form.get('textarea')
+        if not content:
+            flash('Journal is empty')
+        else:
+            response = submit_entry(content)
+            if response == True:
+                flash('Entry submitted')
+                # use fetch here to dynamically take away the form? With an offer to visit overview?
+            elif response == False:
+                flash('You have already submitted a diary entry for this date')
     return render_template("journal.html", quote=quote, author=author)
 
 
@@ -68,6 +79,34 @@ def joke_generator():
 @app.route('/overview', methods=['GET'])
 def show_overview():
     return render_template("overview.html")
+
+
+# Register a new user
+@app.route('/register', methods=['GET', 'POST'])
+def register_user():
+    if request.method == 'GET':
+        return render_template("register.html")
+    else:
+        # to do: save the user data in db
+        return redirect(
+            '/')  # seems like good practice to use redirect for POST request (for more info: https://stackoverflow.com/questions/21668481/difference-between-render-template-and-redirect)
+
+
+# Log in with credentials
+@app.route('/login', methods=['GET', 'POST'])
+def user_login():
+    if request.method == 'GET':
+        return render_template("login.html")
+    else:
+        # to do: implement login logic to check user credentials and save session
+        return redirect('/')
+
+
+# Log out user
+@app.route('/logout')
+def user_logout():
+    # to do: clear user session
+    return redirect('/')
 
 
 if __name__ == '__main__':
