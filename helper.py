@@ -1,10 +1,13 @@
 import requests
 from config import GIPHY_API_KEY, MOOD_API_KEY
 from default import default_gifs
-import json
 from urllib import parse, request
 from random import randint
+from db_utils import today_emotion, journal_entry
+import datetime
+import json
 import random
+
 
 
 def get_moods(mood):
@@ -28,6 +31,7 @@ def get_moods(mood):
         return None
 
 
+
 def make_moods_dict():
     main_moods = ['happy' , 'calm', 'sad', 'worried', 'frustrated', 'angry']
     moods_dict = {}
@@ -42,6 +46,12 @@ def make_moods_dict():
         else:
             moods_dict[mood] = default_gifs[mood]
     return moods_dict
+
+
+def choice_joke_quote(id):
+    date = datetime.datetime.now().date()
+    today_emotion(id, date)  # save their emotional choice to the database
+
 
 def get_joke():
     result = requests.get('https://icanhazdadjoke.com/', headers={'accept': 'application/json'}).json()
@@ -82,9 +92,6 @@ def get_quote_by_mood(mood):
 '''
 
 
-
-
-
 '''
 # this endpoint returns a list of dictionaries with author as key and quote as value
 # its not being used currently but could be in future. You can uncomment and run if curious (results in terminal)
@@ -102,7 +109,10 @@ def get_quotes_by_keyword():
 get_quotes_by_keyword()
 '''
 
-
+def submit_entry(entry):
+    date = datetime.datetime.now().date()
+    journal_entry(entry, date)
+    return False
 
 
 if __name__ == '__main__':
