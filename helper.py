@@ -1,4 +1,3 @@
-
 from config import GIPHY_API_KEY, MOOD_API_KEY
 from default import default_gifs
 from urllib import parse, request

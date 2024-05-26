@@ -8,7 +8,6 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = SECRET_KEY
 
 
-
 # Choose how you feel
 @app.route('/', methods=['GET', 'POST'])
 def mood_checkin():

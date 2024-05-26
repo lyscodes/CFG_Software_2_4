@@ -1,5 +1,27 @@
-{% extends "layout.html"%}
+{% extends "layout.html" %}
 
-{% block main%}
-<p>Your emotion today is {{emotion}}</p>
+{% block title %} Choice {% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="../static/css/journal-page.css" />
 {% endblock %}
+
+{% block main %}
+<!-- hero section -->
+<div class=“hero-section”>
+  <div class=“card” style=“width: 48rem; height: 18rem”>
+    <div class=“card-body”>
+      <i class=“fa-regular fa-heart fa-xl”></i>
+      <p class=“card-text”>{{quote}}</p>
+    </div>
+    <!-- <i class=“fa-regular fa-heart”></i> -->
+    <!-- <i class=“fa-regular fa-trash-can”></i> -->
+    <!-- <br> -->
+    <h6 class=“card-subtitle mb-2 text-muted”>- {{author}}</h6>
+    <br />
+    <a href=“/journal” class=“card-link”>Go to Journal</a>
+    <a href=“/overview” class=“card-link-2”>Overview</a>
+  </div>
+</div>
+{% endblock %}
+
