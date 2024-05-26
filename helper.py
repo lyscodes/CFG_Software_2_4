@@ -3,7 +3,7 @@ from config import GIPHY_API_KEY, MOOD_API_KEY
 from default import default_gifs
 from urllib import parse, request
 from random import randint
-from db_utils import today_emotion, journal_entry
+from db_utils import today_emotion, add_journal_entry
 import datetime
 import json
 import random
@@ -83,8 +83,7 @@ def get_quote_by_mood():
 
 def submit_entry(entry): # maybe don't need to separate out to db_utils and this
     date = datetime.datetime.now().date()
-    journal_entry(entry, date)
-    return True
+    return add_journal_entry(entry, date)
 
 def choice_joke_quote(id):
     date = datetime.datetime.now().date()
