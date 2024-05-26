@@ -23,7 +23,7 @@ def get_user_id():
 
 
 # Record mood choice in db
-def today_emotion(emotion, date):
+def today_emotion(emotion):
     pass
 
 
