@@ -2,29 +2,28 @@
 <!-- this is the same as import from  -->
 {% extends "layout.html" %}
 
-{% block title %} <!-- this block allows to change the title of the page-->
-    Your mood
+<!--title-->
+{% block title %} GIFeels 
 {% endblock %}
 
 {% block styles %} <!-- this block is to add specific css styles for this page -->
   <link href="../static/css/mood-page.css" rel="stylesheet">
 {% endblock %}
 
-{% block main %}        <!-- beginning of the main block which gives content to the <main> from the layout.html template -->
+{% block main %} <!-- beginning of the main block which gives content to the <main> from the layout.html template -->
 
-
+<div class="box">
   <h1>How are you feeling today?</h1>
+</div>
 
-    <div class="grid-container">
-
-        {% for emotion, url in emotions | dictsort %} <!-- This loops the following html code through the emotions dict passed through the http -->
-            <div class="emotion-container">
-                <video id={{emotion}} width="200" autoplay muted loop onclick="location.href = '/choice/{{emotion}}';">
-                  <source src="{{url}}" type="video/mp4"> <!-- the double curly brackets {{url}} is how jinja understands "url" is a variable -->
-                </video>
-                <div class="gif-text">
-                    <p>{{emotion}}</p> <!-- the emotion variable is just how I called the keys in the dictionary we are looping through-->
-                </div>
+<div class="grid-container">
+    {% for emotion, url in emotions | dictsort %}
+        <div class="emotion-container">
+            <video id="{{ emotion }}-gif" width="200" autoplay muted loop onclick="location.href = '/choice/{{ emotion }}';">
+                <source src="{{ url }}" type="video/mp4">
+            </video>
+            <div class="gif-text">
+                <p>{{ emotion }}</p>
             </div>
       
         {% endfor %}
@@ -44,9 +43,11 @@
   <div id="gif-container"></div> -->
 
 
-{% endblock %} <!-- end of the main block-->
-
+{% endblock %} <!-- end of the main block -->
 
 {% block script %} <!-- this block contains js scripts that are specific to this template -->
-  <script src="../static/mood-page.js"></script>
+<script src="../static/mood-page.js"></script>
+<script src="../static/mood-page-color.js"></script>
+
+
 {% endblock %}
