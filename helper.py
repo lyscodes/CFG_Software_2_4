@@ -1,3 +1,4 @@
+
 from config import GIPHY_API_KEY, MOOD_API_KEY
 from default import default_gifs
 from urllib import parse, request
@@ -34,8 +35,11 @@ def get_moods(mood):
 
 
 def make_moods_dict():
-    main_moods = ['happy', 'calm', 'sad', 'worried', 'frustrated', 'angry']
+    main_moods = ['happy' , 'calm', 'sad', 'worried', 'frustrated', 'angry']
     moods_dict = {}
+
+    # check if session has expired (if not use available data)
+    
     for mood in main_moods:
         gif_url = get_moods(mood)
         # If the api calls doesn't work for any of the gifs, the default gif will show instead
@@ -44,6 +48,12 @@ def make_moods_dict():
         else:
             moods_dict[mood] = default_gifs[mood]
     return moods_dict
+
+
+def choice_joke_quote(id):
+    date = datetime.datetime.now().date()
+    today_emotion(id, date)  # save their emotional choice to the database
+
 
 
 def get_joke():
@@ -70,6 +80,7 @@ def get_quote_by_mood():
     quote = random_quote['quote']
     return [quote, author]
 
+
 def submit_entry(entry): # maybe don't need to separate out to db_utils and this
     date = datetime.datetime.now().date()
     journal_entry(entry, date)
@@ -78,7 +89,6 @@ def submit_entry(entry): # maybe don't need to separate out to db_utils and this
 def choice_joke_quote(id):
     date = datetime.datetime.now().date()
     today_emotion(id, date) # maybe don't need to separate out to db_utils and this
-
 
 '''
 # use this instead of hard coded function when ready to go live:
@@ -112,3 +122,4 @@ get_quotes_by_keyword()
 
 if __name__ == '__main__':
     pass
+
