@@ -1,11 +1,12 @@
-from db_utils import today_emotion
 from helper import get_quote_otd, get_quote_by_mood, make_moods_dict, get_joke, choice_joke_quote, submit_entry
+from db_utils import today_emotion
 from flask import Flask, render_template, request, flash, redirect
 from config import SECRET_KEY
 
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = SECRET_KEY
+
 
 
 # Choose how you feel
