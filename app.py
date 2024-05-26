@@ -1,10 +1,12 @@
+from helper import get_quote_otd, get_quote_by_mood, make_moods_dict, get_joke, choice_joke_quote, submit_entry
+from db_utils import today_emotion
 from flask import Flask, render_template, request, flash, redirect
-from main import get_quote_otd, get_quote_by_mood, make_moods_dict, get_joke, choice_joke_quote, submit_entry
 from config import SECRET_KEY
 
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = SECRET_KEY
+
 
 
 # Choose how you feel
@@ -19,7 +21,7 @@ def mood_checkin():
 @app.route('/choice/<id>', methods=['GET', 'POST'])
 def choice(id):
     if request.method == 'GET':
-        choice_joke_quote(id)
+        today_emotion(id) # save their emotional choice to the database
         return render_template("choice.html", emotion=id)
 
 
@@ -67,6 +69,7 @@ def add_journal_entry():
             response = submit_entry(content)
             if response == True:
                 flash('Entry submitted')
+                # use fetch here to dynamically take away the form? With an offer to visit overview?
             elif response == False:
                 flash('You have already submitted a diary entry for this date')
     return render_template("journal.html", quote=quote, author=author)
@@ -104,7 +107,7 @@ def user_login():
     else:
         # to do: implement login logic to check user credentials and save session
         return redirect('/')
-    
+
 
 # Log out user
 @app.route('/logout')
