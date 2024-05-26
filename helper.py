@@ -1,4 +1,3 @@
-import requests
 from config import GIPHY_API_KEY, MOOD_API_KEY
 from default import default_gifs
 from urllib import parse, request
@@ -7,6 +6,11 @@ from db_utils import today_emotion, journal_entry
 import datetime
 import json
 import random
+import requests
+
+class APIException(Exception):
+    pass
+
 
 def get_moods(mood):
     url = "http://api.giphy.com/v1/gifs/search"
@@ -14,7 +18,7 @@ def get_moods(mood):
     params = parse.urlencode({
         "q": mood, # set up to take input of call for mood
         "api_key": GIPHY_API_KEY, # key in config file
-        "limit": "1", # returns on one result
+        "limit": "1", # returns only one result
         "offset": offset
     })
     try:
@@ -22,20 +26,16 @@ def get_moods(mood):
             data = json.loads(response.read())
             list = data['data']
             item = list[0]
-            gif_url = item['images']['fixed_width']['mp4'] # this is the url needed to embed the gif
+            gif_url = item['images']['fixed_width']['mp4']
             return gif_url
-    except Exception:
-        print("Opps: error")
+    except APIException as e:
+        print(f'Error: {e}')
         return None
 
 
-
 def make_moods_dict():
-    main_moods = ['happy' , 'calm', 'sad', 'worried', 'frustrated', 'angry']
+    main_moods = ['happy', 'calm', 'sad', 'worried', 'frustrated', 'angry']
     moods_dict = {}
-
-    # check if session has expired (if not use available data)
-    
     for mood in main_moods:
         gif_url = get_moods(mood)
         # If the api calls doesn't work for any of the gifs, the default gif will show instead
@@ -44,11 +44,6 @@ def make_moods_dict():
         else:
             moods_dict[mood] = default_gifs[mood]
     return moods_dict
-
-
-def choice_joke_quote(id):
-    date = datetime.datetime.now().date()
-    today_emotion(id, date)  # save their emotional choice to the database
 
 
 def get_joke():
@@ -75,6 +70,15 @@ def get_quote_by_mood():
     quote = random_quote['quote']
     return [quote, author]
 
+def submit_entry(entry): # maybe don't need to separate out to db_utils and this
+    date = datetime.datetime.now().date()
+    journal_entry(entry, date)
+    return True
+
+def choice_joke_quote(id):
+    date = datetime.datetime.now().date()
+    today_emotion(id, date) # maybe don't need to separate out to db_utils and this
+
 
 '''
 # use this instead of hard coded function when ready to go live:
@@ -88,7 +92,6 @@ def get_quote_by_mood(mood):
     return [quote, author]
 
 '''
-
 
 '''
 # this endpoint returns a list of dictionaries with author as key and quote as value
@@ -107,12 +110,5 @@ def get_quotes_by_keyword():
 get_quotes_by_keyword()
 '''
 
-def submit_entry(entry):
-    date = datetime.datetime.now().date()
-    journal_entry(entry, date)
-    return False
-
-
 if __name__ == '__main__':
-     mood = "sad"
-     get_moods(mood)
+    pass
