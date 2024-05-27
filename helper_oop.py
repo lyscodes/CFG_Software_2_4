@@ -2,9 +2,10 @@ from config import GIPHY_API_KEY
 from default import default_gifs
 from random import randint
 import requests
+from abc import ABC, abstractmethod
 
 
-class APIRequest(object):
+class APIRequest(ABC):
     def __init__(self, url, params=None, headers=None):
         self.url = url
 
@@ -22,10 +23,15 @@ class APIRequest(object):
         response = requests.get(self.url, params=self.params, headers=self.headers).json()
         return response
 
+    @abstractmethod
+    def unpack(self):
+        pass
+
 
 class QuoteAPI(APIRequest):
-    def __init__(self, url, params=None, headers=None):
-        super().__init__(url, params, headers)
+    def __init__(self, params=None, headers=None):
+        super().__init__(params, headers)
+        self.url = 'https://zenquotes.io/api/today'
 
     def unpack(self):
         response = self.__call__()
@@ -34,8 +40,9 @@ class QuoteAPI(APIRequest):
         return [quote, author]
 
 class JokeAPI(APIRequest):
-    def __init__(self, url, params=None, headers=None):
-        super().__init__(url, params, headers)
+    def __init__(self, params=None, headers=None):
+        super().__init__(params, headers)
+        self.url = 'https://icanhazdadjoke.com/'
 
     def unpack(self):
         response = self.__call__()
@@ -44,8 +51,13 @@ class JokeAPI(APIRequest):
 
 
 class MoodAPI(APIRequest):
-    def __init__(self, url, params=None, headers=None):
-        super().__init__(url, params, headers)
+    def __init__(self, mood, headers=None):
+        super().__init__(headers)
+        self.url = "http://api.giphy.com/v1/gifs/search"
+        self.params = {"q": mood,
+            "api_key": GIPHY_API_KEY,
+            "limit": "1",
+            "offset": randint(0, 300)}
 
     def unpack(self):
         response = self.__call__()
@@ -54,43 +66,31 @@ class MoodAPI(APIRequest):
         gif_url = item['images']['fixed_width']['mp4']
         return gif_url
 
-    def make_mood_dict(self, list):
-        moods_dict = {}
 
-        for mood in list:
-            self.params['q'] = mood
-            self.params["offset"] = randint(0, 300)
-            gif_url = self.unpack()
+class MoodDict(object):
+
+    def __init__(self):
+        self.dict = {}
+        self.list = ['happy', 'calm', 'sad', 'worried', 'frustrated', 'angry']
+
+    def make_dict(self):
+        for mood in self.list:
+            gif_url = MoodAPI(mood).unpack()
             if gif_url:
-                moods_dict[mood] = gif_url
+                self.dict[mood] = gif_url
             else:
-                moods_dict[mood] = default_gifs[mood]
-        return moods_dict
+                self.dict[mood] = default_gifs[mood]
+        return self.dict
 
 
+# tests of API endpoints
 
-url_quote = 'https://zenquotes.io/api/today'
-getquote = QuoteAPI(url_quote)
+getquote = QuoteAPI()
 print(getquote.unpack())
 
-
-url_joke = 'https://icanhazdadjoke.com/'
-getjoke = JokeAPI(url_joke)
+getjoke = JokeAPI()
 print(getjoke.unpack())
 
-url = "http://api.giphy.com/v1/gifs/search"
-params = {
-        "q": "happy",
-        "api_key": GIPHY_API_KEY,
-        "limit": "1",
-        "offset": 1
-    }
-
-getmood = MoodAPI(url, params=params, headers=None)
-main_moods = ['happy', 'calm', 'sad', 'worried', 'frustrated', 'angry']
-mood_dict = getmood.make_mood_dict(main_moods)
+mood_dict = MoodDict().make_dict()
 
 print(mood_dict)
-
-
-
