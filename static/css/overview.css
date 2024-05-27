@@ -110,7 +110,7 @@ body {
     color: #A77A01;
     margin-bottom: 470px;
     margin-left: -555px;
-    margin-top: -280px;
+    margin-top: -290px;
     position: fixed;
     z-index: 0;
     font-size: 75px;
@@ -124,7 +124,7 @@ body {
     margin-right: -400px;
     margin-left: -20px;
     margin-bottom: -370px;
-    margin-top: -260px;
+    margin-top: -270px;
     position: fixed;
     z-index: 0;
     font-size: 55px;
@@ -235,10 +235,10 @@ body {
     margin-left: -50px;
     margin-top: -200px;
     position: fixed;
-  
     display: flex;
     flex-direction: column;
     align-items: center;
+    height: 400px;
 }
 
 .bars {
