@@ -19,7 +19,7 @@ def mood_checkin():
 @app.route('/choice/<id>', methods=['GET', 'POST'])
 def choice(id):
     if request.method == 'GET':
-        choice_joke_quote(id)
+        choice_joke_quote(id)                                                                                       
         return render_template("choice.html", emotion=id)
 
 

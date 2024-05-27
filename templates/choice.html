@@ -1,5 +1,51 @@
-{% extends "layout.html"%}
+{% extends "layout.html" %} {% block title %} Choice {% endblock %} {% block
+styles %}
+<link rel="stylesheet" href="../static/css/choices.css" />
+{% endblock %} {% block main %}
+<!-- hero section -->
+<div class="hero-section">
 
-{% block main%}
-<p>Your emotion today is {{emotion}}</p>
+  <section>
+    <div class="heading-container">
+      <h3>Today, you feel <span id="chosen-feeling">{{emotion}}</span></h3>
+      <h1>How can I help?</h1>
+    </div>
+  </section>
+
+  <div class="container">
+    <div class="row text-center mx-auto gx-5">
+      <div class="col-lg-6">
+        <div class="card" style="width: 24rem">
+          <img class="card-img-top .img-thumbnail mt-5 mb-4" src="../static/css/icons/girl (1).png" alt="Card image cap" />
+          <div class="card-body">
+            <p class="card-text">
+              It's all about that mindset<br>
+            
+            </p>
+            <a href="#" class="btn btn-primary">Inspire me</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6  text-center">
+        <div class="card" style="width: 24rem">
+          <img class="card-img-top .img-thumbnail mt-5 mb-4" src="../static/css/icons/girl.png" alt="Card image cap" />
+          <div class="card-body">
+            <p class="card-text">
+              Let's make you snort laugh
+            </p>
+            <a href="#" class="btn btn-primary">Tell me a joke</a>
+          </div>
+        </div>
+        
+       
+      </div>
+    </div>
+    </div>
+    
+  </div>
+</div>
+<!-- <div class="flaticon-attribute">
+  <a href="https://www.flaticon.com/free-icons/laugh" title="laugh icons" class="flaticon">Laugh icons created by Freepik - Flaticon</a>
+</div> -->
 {% endblock %}
+
