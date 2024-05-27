@@ -23,20 +23,44 @@ class APIRequest(object):
         return response
 
 
+class QuoteAPI(APIRequest):
+    def __init__(self, url, params=None, headers=None):
+        super().__init__(url, params, headers)
+
+    def unpack(self):
+        response = self.__call__()
+        quote = response[0]['q']
+        author = response[0]['a']
+        return [quote, author]
+
+class JokeAPI(APIRequest):
+    def __init__(self, url, params=None, headers=None):
+        super().__init__(url, params, headers)
+
+    def unpack(self):
+        response = self.__call__()
+        joke = response['joke']
+        return joke
+
+
 class MoodAPI(APIRequest):
     def __init__(self, url, params=None, headers=None):
         super().__init__(url, params, headers)
 
-    def __call__(self):
-        response = requests.get(self.url, params=self.params, headers=self.headers).json()
-        return response
+    def unpack(self):
+        response = self.__call__()
+        list = response['data']
+        item = list[0]
+        gif_url = item['images']['fixed_width']['mp4']
+        return gif_url
 
     def make_mood_dict(self, list):
         moods_dict = {}
 
         for mood in list:
             self.params['q'] = mood
-            gif_url = self.__call__()
+            self.params["offset"] = randint(0, 300)
+            gif_url = self.unpack()
             if gif_url:
                 moods_dict[mood] = gif_url
             else:
@@ -46,13 +70,13 @@ class MoodAPI(APIRequest):
 
 
 url_quote = 'https://zenquotes.io/api/today'
-getquote = APIRequest(url_quote)
-print(getquote.__call__())
+getquote = QuoteAPI(url_quote)
+print(getquote.unpack())
 
 
 url_joke = 'https://icanhazdadjoke.com/'
-getjoke = APIRequest(url_joke)
-print(getjoke.__call__())
+getjoke = JokeAPI(url_joke)
+print(getjoke.unpack())
 
 url = "http://api.giphy.com/v1/gifs/search"
 params = {
@@ -61,10 +85,9 @@ params = {
         "limit": "1",
         "offset": 1
     }
-getmood = MoodAPI(url, params=params, headers=None)
-print(getmood.__call__())
-main_moods = ['happy', 'calm', 'sad', 'worried', 'frustrated', 'angry']
 
+getmood = MoodAPI(url, params=params, headers=None)
+main_moods = ['happy', 'calm', 'sad', 'worried', 'frustrated', 'angry']
 mood_dict = getmood.make_mood_dict(main_moods)
 
 print(mood_dict)
