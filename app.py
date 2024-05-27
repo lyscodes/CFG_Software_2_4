@@ -1,6 +1,7 @@
+import werkzeug
 from helper import get_quote_otd, get_quote_by_mood, make_moods_dict, get_joke, choice_joke_quote, submit_entry
 from db_utils import today_emotion
-from flask import Flask, render_template, request, flash, redirect
+from flask import Flask, render_template, request, flash, redirect, abort
 from config import SECRET_KEY
 
 
@@ -40,7 +41,6 @@ def quote_for_mood():
     author = result[1]
     return render_template("quote.html", quote=quote, author=author)
 
-
 '''
 # use this instead of hard coded function when ready to go live:
 
@@ -50,7 +50,6 @@ def quote_for_mood(mood):
     quote = result[0]
     author = result[1]
     return render_template("quote.html", quote=quote, author=author)
-
 '''
 
 
@@ -87,7 +86,6 @@ def show_overview():
     return render_template("overview.html")
 
 
-
 # Register a new user
 @app.route('/register', methods=['GET', 'POST'])
 def register_user():
@@ -115,5 +113,7 @@ def user_logout():
     return redirect('/')
 
 
+
 if __name__ == '__main__':
     app.run(debug=True, port=5500)
+
