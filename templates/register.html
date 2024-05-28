@@ -1,4 +1,6 @@
-<title>Register</title>
+{% extends "layout.html" %}
+
+{% block title%} Register {% endblock %}
 
 
 {% block style %}
@@ -12,11 +14,7 @@
 {% endblock %}
 
 
-
-
 {% block main %}
-
-<!-- to do: add html for user to register here -->
 
 <div class="wrapper">
     <form action="">
@@ -64,9 +62,6 @@
     </form>
 </div>
 
-
-
-
 {% endblock %}
 
 
@@ -74,6 +69,4 @@
 {% block script %}
 <!-- to do: add any script for the register page here (if needed) -->
 <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-
-
 {% endblock %}

@@ -1,8 +1,12 @@
-{% extends "layout.html" %} {% block title %} Joke {% endblock %} {% block
-styles %}
+{% extends "layout.html" %} 
+{% block title %} Joke {% endblock %} 
+
+{% block styles %}
 <!-- temporarily using the same styling as the quote page -->
 <link rel="stylesheet" href="../static/css/joke.css" />
-{% endblock %} {% block main %}
+{% endblock %}
+
+{% block main %}
 <!-- hero section -->
 <div class="hero-section">
   <section>
@@ -23,7 +27,7 @@ styles %}
     </div>
   </div>
   <div class="button-area">
-    <button type="button" class="btn btn-primary">Go to journal</button>
+    <a href="/journal" class="btn btn-primary">Go to journal</a>
   </div>
 </div>
 {% endblock %}

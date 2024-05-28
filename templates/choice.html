@@ -1,8 +1,12 @@
+{% extends "layout.html" %} 
 
-{% extends "layout.html" %} {% block title %} Choice {% endblock %} {% block
-styles %}
+{% block title %} Choice {% endblock %} 
+
+{% block styles %}
 <link rel="stylesheet" href="../static/css/choices.css" />
-{% endblock %} {% block main %}
+{% endblock %} 
+
+{% block main %}
 <!-- hero section -->
 <div class="hero-section">
 
@@ -23,7 +27,7 @@ styles %}
               It's all about that mindset<br>
             
             </p>
-            <a href="#" class="btn btn-primary">Inspire me</a>
+            <a href="/quote" class="btn btn-primary">Inspire me</a>
           </div>
         </div>
       </div>
@@ -34,7 +38,7 @@ styles %}
             <p class="card-text">
               Let's make you snort laugh
             </p>
-            <a href="#" class="btn btn-primary">Tell me a joke</a>
+            <a href="/joke" class="btn btn-primary">Tell me a joke</a>
           </div>
         </div>
       </div>
