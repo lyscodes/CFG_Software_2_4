@@ -1,65 +1,199 @@
-/* BACKGROUND */
-body {
-  text-align: center;
-  background: linear-gradient(-45deg, #f7cac9, #92a8d1, #dec2cb, #abb1cf, #c5b9cd);
-  background-size: 400% 400%;
-  animation: gradient 15s ease infinite;
-  height: 100vh;
-  margin: 0; /* Remove default margin */
-  padding: 0; /* Remove default padding */
-}
-
-/* ANIMATION */
-@keyframes gradient {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
 /* HEADINGS */
 h1 {
-  font-family: "Poetsen One", sans-serif;
-  font-weight: 400;
-  margin-top: 20px; /* Reduce margin for mobile view */
+  font-family: "Outfit", sans-serif;
+  font-weight: 450;
+  font-optical-sizing: auto;
   font-style: normal;
-  color: whitesmoke;
+  color: #A77A01;
+  text-align: center;
+  z-index: 1;
+  white-space: nowrap;
+  /* Prevent line break */
+}
+
+/* NAV BAR */
+.container {
+  margin-top: auto;
+  position: fixed;
+  display: flex;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  margin-bottom: 10px;
+  width: 100%;
+  background-color: white;
+  overflow: auto;
+  height: 60px;
+  align-items: center;
+  font-family: "Outfit", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: 1.2rem;
+  font-style: normal;
+}
+
+/* ENSURE NAV BAR STRETCHES ACROSS THE SCREEN */
+body::before {
+  position: fixed;
+  content: "";
+  display: block;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  /* Height should match the height of the navigation bar */
+  background-color: white;
+  z-index: 0;
+  /* Ensure the strip appears behind the navigation bar */
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 150px;
+  background-color: #ffffff;
+  box-sizing: border-box;
+  display: block;
+  unicode-bidi: isolate;
+  width: 100%;
+}
+
+
+
+/* aligns nav items to the left using nav class */
+.nav {
+  margin-left: auto;
+  color: #A77A01;
+}
+
+a.nav-link {
+  color: #A77A01;
+}
+
+a.nav-link:hover {
+  margin-left: auto;
+  color: #7A5A01;
+}
+
+.nav-pills .nav-link.active {
+  background: #7E70AA;
+}
+
+.nav-pills .nav-link.active:hover {
+  background: #4E6A67;
+}
+
+/* NAV BAR MOBILE VIEW */
+@media screen and (max-width: 600px) {
+  .nav {
+    flex-direction: column;
+    /* Stack nav items vertically does this even work lol*/
+    align-items: center;
+    /* Center align nav items*/
+  }
+
+  .nav-item {
+    margin-bottom: 5px;
+    /* Add space between nav items */
+  }
+}
+
+/*BODY*/
+body {
+  background-color: #F2E7C4;
+  margin-top: auto;
+}
+
+/* HOW ARE YOU FEELING TODAY? BOX */
+.box {
+  border: 5px solid #A77A01;
+  padding: 5px;
+  margin: 10px auto;
+  /* Reduced margin-top and margin-bottom */
+  margin-top: 115px;
+  width: 75%;
+  /* Increase width to provide more space */
+  max-width: 600px;
+  /* Increase max width for larger screens */
+  background-color: #F2E7C4;
+  border-radius: 8px;
+  box-shadow: 0px 0px 15px #A77A01;
 }
 
 /* GRID LAYOUT */
 .grid-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Adjust the column width */
-  grid-gap: 10px; /* Add gap between items */
+  display: flex;
+  /* Changed to flexbox layout */
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  height: 80vh; /* Adjust height for mobile view */
-  padding: 10px; /* Add padding */
+  gap: 10px;
+  padding: auto;
+}
+
+/* EMOTION CONTAINER */
+.emotion-container {
+  border: 1px solid #A77A01;
+  margin-top: 100px;
+  width: 200px;
+  /* Fixed width for uniformity */
+  height: 200px;
+  /* Adjusted height for more space */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  /* Pushes content to the bottom */
+  align-items: center;
+  text-align: center;
+  overflow: hidden;
+  /* Ensures content does not overflow the container */
+  padding-bottom: -10px;
+  /* Adds space at the bottom */
 }
 
 /* GIFS AND TEXT */
-.emotion-container {
-  margin-top: 10px; /* Adjust margin for mobile view */
-}
-
-
 .emotion-container video {
-  width: 200px;
+  width: 100%;
+  /* Make video responsive */
+  height: auto;
+  /* Adjust video height to maintain aspect ratio */
+  flex-grow: 1;
+  /* Allows video to take up available space */
+  object-fit: cover;
+  /* Maintain aspect ratio and cover the container */
 }
-
 
 .gif-text {
-  font-family: "Poetsen One", sans-serif;
-  font-weight: 250;
+  width: 100%;
+  margin-top: -10px;
+  background-color: #ffffff;
+}
+
+.gif-text p {
+  font-family: "Outfit", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 450;
   font-style: normal;
-  color: whitesmoke;
-  margin-top: 5px; /* Adjust margin for mobile view */
-  text-align: center; /* Center text */
+  color: #000000;
+  margin: 0;
+  /* Reset margin */
+  text-align: center;
+  align-self: flex-end;
+  /* Ensures text stays at the bottom */
+}
+
+
+
+.gif-text p {
+  font-family: "Outfit", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 450;
+  font-style: normal;
+  color: #A77A01;
+  margin-top: 5px;
+  text-align: center;
 }
 
 /* GIPHY IMAGE */
@@ -70,27 +204,31 @@ h1 {
 }
 
 .giphy img {
-  width: 100px; /* Adjust image width */
-  height: auto; /* Maintain aspect ratio */
+  width: 100px;
+  height: auto;
 }
 
 /* MOBILE VIEW */
 @media screen and (max-width: 600px) {
-  /* Adjustments for screens up to 600px wide */
   .grid-container {
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Adjust column width */
-    height: 70vh; /* Adjust height */
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    height: 70vh;
   }
 }
 
-  h1 {
-    margin-top: 10px; /* Adjust margin */
-  }
+h1 {
+  margin-top: 10px;
+}
 
-  .gif-text {
-    font-size: 14px; /* Adjust font size */
-    text-align: center; /* Center text */
-  }
+.happy-text,
+.calm-text,
+.sad-text,
+.worried-text,
+.frustrated-text,
+.angry-text {
+  font-size: 14px;
+  text-align: center;
+}
 
 /* GIPHY CREDS */
 .giphy {
@@ -102,35 +240,25 @@ h1 {
   height: auto;
 }
 
+/* HOVER EFFECT */
+#happy-gif:hover,
+#calm-gif:hover,
+#sad-gif:hover,
+#worried-gif:hover,
+#frustrated-gif:hover,
+#angry-gif:hover {
+  background-color: transparent;
+  transition: background-color 0.9s ease;
+  border: 2px solid #ffffff;
+  cursor: pointer
+}
 
-/* DO NOT TOUCH BEYOND THIS POINT 
-
-the code below is for the search bar, however
-the preference was to have a scale instead which
-4-6 GIFs of different emotions appear on the page
-in teh first instance and the user selects by clicking on one
-
-
-
-#emotion-input {
-    border-radius: 20px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    width: 200px; 
-  } 
-  
-  button {
-    font-family: 'Poetsen One', sans-serif; 
-    border-radius: 20px; 
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  button:hover {
-    background-color: #0056b3;
-  }
-  */
+/* TEXT HOVER */
+.happy:hover .happy-text,
+.calm:hover .calm-text,
+.sad:hover .sad-text,
+.worried:hover .worried-text,
+.frustrated:hover .frustrated-text,
+.angry:hover .angry-text {
+  color: #000000;
+}
