@@ -1,27 +1,48 @@
-{% extends "layout.html" %}
 
-{% block title %} Choice {% endblock %}
-
-{% block styles %}
-    <link rel="stylesheet" href="../static/css/journal-page.css" />
-{% endblock %}
-
-{% block main %}
+{% extends "layout.html" %} {% block title %} Choice {% endblock %} {% block
+styles %}
+<link rel="stylesheet" href="../static/css/choices.css" />
+{% endblock %} {% block main %}
 <!-- hero section -->
-<div class=“hero-section”>
-  <div class=“card” style=“width: 48rem; height: 18rem”>
-    <div class=“card-body”>
-      <i class=“fa-regular fa-heart fa-xl”></i>
-      <p class=“card-text”>{{quote}}</p>
+<div class="hero-section">
+
+  <section>
+    <div class="heading-container">
+      <h3>Today, you feel <span id="chosen-feeling">{{emotion}}</span></h3>
+      <h1>How can I help?</h1>
     </div>
-    <!-- <i class=“fa-regular fa-heart”></i> -->
-    <!-- <i class=“fa-regular fa-trash-can”></i> -->
-    <!-- <br> -->
-    <h6 class=“card-subtitle mb-2 text-muted”>- {{author}}</h6>
-    <br />
-    <a href=“/journal” class=“card-link”>Go to Journal</a>
-    <a href=“/overview” class=“card-link-2”>Overview</a>
+  </section>
+
+  <div class="container">
+    <div class="row text-center mx-auto gx-5">
+      <div class="col-lg-6">
+        <div class="card" style="width: 24rem">
+          <img class="card-img-top .img-thumbnail mt-5 mb-4" src="../static/css/icons/girl (1).png" alt="Card image cap" />
+          <div class="card-body">
+            <p class="card-text">
+              It's all about that mindset<br>
+            
+            </p>
+            <a href="#" class="btn btn-primary">Inspire me</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6  text-center">
+        <div class="card" style="width: 24rem">
+          <img class="card-img-top .img-thumbnail mt-5 mb-4" src="../static/css/icons/girl.png" alt="Card image cap" />
+          <div class="card-body">
+            <p class="card-text">
+              Let's make you snort laugh
+            </p>
+            <a href="#" class="btn btn-primary">Tell me a joke</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+    
   </div>
 </div>
+
 {% endblock %}
 

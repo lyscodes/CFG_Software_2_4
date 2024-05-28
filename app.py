@@ -20,6 +20,7 @@ def mood_checkin():
 @app.route('/choice/<id>', methods=['GET', 'POST'])
 def choice(id):
     if request.method == 'GET':
+
         today_emotion(id) # save their emotional choice to the database
         return render_template("choice.html", emotion=id)
 
