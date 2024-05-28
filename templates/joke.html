@@ -1,29 +1,32 @@
-{% extends "layout.html" %} 
-
-{% block title %} Joke {% endblock %}
-
-{% block styles %}
-    <!-- temporarily using the same styling as the quote page -->
-    <link rel="stylesheet" href="../static/css/quote-page.css" />
-{% endblock %}
-
-{% block main %}
-      <!-- hero section -->
-      <div class="hero-section">
-        <div class="card" style="width: 48rem; height: 18rem">
-          <div class="card-body">
-            <i class="fa-regular fa-heart fa-xl"></i>
-            <p class="card-text">
-              {{joke}}
-            </p>
-          </div>
-          <!-- <i class="fa-regular fa-heart"></i> -->
-          <!-- <i class="fa-regular fa-trash-can"></i> -->
-          <!-- <br> -->
-         
-          <br />
-          <a href="#" class="card-link">Go to Journal</a>
-          <a href="#" class="card-link-2">Overview</a>
-        </div>
+{% extends "layout.html" %} {% block title %} Joke {% endblock %} {% block
+styles %}
+<!-- temporarily using the same styling as the quote page -->
+<link rel="stylesheet" href="../static/css/joke.css" />
+{% endblock %} {% block main %}
+<!-- hero section -->
+<div class="hero-section">
+  <section>
+    <div class="heading-container">
+      <h3>
+        You have a chosen a <span id="chosen-option-joke">joke{{emotion}}</span>
+      </h3>
+      <h1>Great choice!</h1>
+      <div id="girl-laughing-image">
+        <img src="../static/css/icons/girl.png" alt="" />
       </div>
+    </div>
+  </section>
+  <div class="card" style="width: 48rem; height: 18rem">
+    <div class="card-body">
+      <i class="fa-regular fa-heart fa-xl"></i>
+      <p class="card-text">{{joke}}</p>
+    </div>
+  </div>
+  <div class="button-area">
+    <button type="button" class="btn btn-primary">Go to journal</button>
+  </div>
+</div>
 {% endblock %}
+<!-- 
+<a href="https://www.flaticon.com/free-icons/laugh" title="laugh icons">Laugh icons created by aslaiart - Flaticon</a> -->
+<!-- https://www.flaticon.com/free-icon/girl_7836495?term=joke&page=1&position=59&origin=search&related_id=7836495 -->

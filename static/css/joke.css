@@ -1,0 +1,177 @@
+
+
+  
+
+    
+  main {
+    display: flex;
+  }
+    
+  section {
+    margin-top: 24px;
+  }
+      
+  
+    /* hero section */
+      
+  .hero-section {
+    margin-top: 32px;
+    width: 100%;
+    height: 800px;
+    display: block;
+    
+    box-sizing: border-box;
+    background-color: #fdfaf3;
+    column-gap: 56px;
+  }
+
+
+      
+  img {
+    width: 140px;
+    height: 140px;
+  
+    margin-top: 40px; 
+    margin-bottom: 40px;
+      /* filter: drop-shadow(6px 6px 4px #f1f9f8); */
+  }
+      
+  .quote {
+    font-family: "Quicksand", sans-serif;
+    font-weight: 800;
+    font-size: 2rem;
+    color: #886811;
+    /* margin-top: 160px; */
+    width: auto;
+    height: auto;
+  }
+      
+  #author {
+      font-family: "Quicksand", sans-serif;
+    font-weight: 400;
+    font-size: 1.2rem;
+    color: #797979;
+    margin-top: 160px;
+  }
+        
+  /* card section */
+  
+  .card {
+      width: 100%;
+      margin: auto;
+      border-radius: 16px;
+    border: 1.5px solid #a77b0133;
+    box-shadow: 8px 8px 8px rgba(170, 90, 10, 0.727);
+    /* background-color: #f2bd413b; */
+    background: linear-gradient(#FFF0C6, #fcde83a6);
+    height: 130px;
+  }
+  
+  .card-subtitle {
+    font-family: "Outfit", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-size: 1.4rem;
+    font-style: normal;
+    color: #565656;
+    margin-left: 8%;
+    margin-right: 8%;
+    
+  }
+      
+  .card-text {
+      margin-top:4%;
+      margin-left: 8%;
+      margin-right: 8%;
+    font-family: "Outfit", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 450;
+    font-size: 1.75rem;
+    font-style: normal;
+    color: #93700f;
+  }
+  
+  .container {
+    margin: auto;
+}
+
+.heading-container{
+  text-align: center;
+  margin-top: 32px;
+  display: block;
+  margin:auto;
+
+}
+
+#chosen-option-joke {
+  text-decoration-line: underline;
+  color: #a27701;
+  font-size: 2.05rem;
+
+}
+
+h3 {
+  margin-top:48px;
+  color: #daa002;
+  font-family: "Outfit", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 450;
+  font-size:2rem;
+  font-style: normal;
+  /* color: #85650d; */
+}
+
+
+h1 {
+  margin-top:40px;
+  color: #a27701;
+  font-family: "Outfit", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 450;
+  font-size:2.65rem;
+  font-style: normal;
+  /* color: #85650d; */
+}
+
+
+/* button styling */
+
+.button-area{
+    margin:auto;
+    text-align: center;
+    display: block;
+}
+.btn-primary {
+    margin-top:40px;
+    background-color: #8e6c10;
+    border: none;
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.092);
+    font-weight: 400;
+    font-size: 1.25rem;
+    padding-left:12px;
+    padding-right:12px;
+    margin-bottom: 24px;
+  } 
+
+
+  .btn-primary:not(:disabled):not(:disabled):active {
+    background-color: #f2bc75;
+    border: none;
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.092);
+    font-weight: 400;
+    font-size: 1.25rem;
+    padding-left:12px;
+    padding-right:12px;
+    color: #8e6c10;
+ } 
+
+ .btn-primary:hover {
+  background-color: #f2bc75;
+  border: none;
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.092);
+  font-weight: 400;
+  font-size: 1.25rem;
+  padding-left:12px;
+  padding-right:12px;
+  color: #8e6c10;
+} 
