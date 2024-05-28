@@ -1,5 +1,6 @@
 import mysql.connector
 from config import (user, password, host)
+import datetime
 
 db_name = 'Mood_Tracker'
 
@@ -33,24 +34,24 @@ def get_journal_entry(date):
         db_connection = _connect_to_db(db_name)
         if not db_connection:
             raise DbConnectionError("Failed to connect to DB")
-        
+
         cur = db_connection.cursor()
-        
+
         query = """
             SELECT Diary_Entry
             FROM Entries
             WHERE User_id = {user} 
             AND Entry_Date = DATE('{date}') 
             """.format(user=get_user_id(), date=date)
-        
+
         cur.execute(query)
         result = cur.fetchall()
         cur.close()
         return result
-        
+
     except Exception:
         print("Something went wrong when trying to get the entry")
-    
+
     finally:
         if db_connection:
             db_connection.close()
@@ -66,7 +67,7 @@ def add_journal_entry(entry, date):
             db_connection = _connect_to_db(db_name)
             if not db_connection:
                 raise DbConnectionError("Failed to connect to DB")
-            
+
             cur = db_connection.cursor()
 
             query = """
@@ -83,10 +84,10 @@ def add_journal_entry(entry, date):
         except Exception:
             print("Some exception was raised when trying to add entry")
             return False
-        
+
         else:
             return True
-        
+
         finally:
             if db_connection:
                 db_connection.close()

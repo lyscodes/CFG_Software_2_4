@@ -41,8 +41,9 @@ app.configs(key)
 
 def mood_checkin():
     if request.method == 'GET':
-        emotions = MoodDict.make_dict()
-        return render_template("mood.html", emotions=emotions)
+        emotions = MoodDict()
+        emotions_list = emotions.make_dict()
+        return render_template("mood.html", emotions=emotions_list)
 
 def choice(id):
     if request.method == 'GET':
