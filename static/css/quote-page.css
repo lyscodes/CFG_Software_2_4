@@ -70,7 +70,7 @@ img {
     /* background-color: #f2bd413b; */
     /* background: linear-gradient(#9ed9d23a, #9ed9d265); */
     height: 130px;
-  background: linear-gradient(#FFF0C6, #fcde83a6);
+  background: linear-gradient(#fdfaf3, #f7cf7066);
 }
 
 .card-body{
@@ -123,7 +123,7 @@ img {
   margin-left: 8%;
     margin-right: 8%;
     font-family: "Outfit";
-    background-color: #d2656526;
+    background-color: #e354542d;
     box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.092);
  padding-left: 4px;
   padding-right: 4px;
