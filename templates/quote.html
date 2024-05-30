@@ -1,30 +1,36 @@
 <!-- this page contains only the html for the main block of the quote page -->
 
-{% extends "layout.html" %} 
-
-{% block title %} Quote of the day {% endblock %}
-
-{% block styles %}
-    <link rel="stylesheet" href="../static/css/quote-page.css" />
-{% endblock %}
-
-{% block main %}
-      <!-- hero section -->
-      <div class="hero-section">
-        <div class="card" style="width: 48rem; height: 18rem">
-          <div class="card-body">
-            <i class="fa-regular fa-heart fa-xl"></i>
-            <p class="card-text">
-              {{quote}}
-            </p>
-          </div>
-          <!-- <i class="fa-regular fa-heart"></i> -->
-          <!-- <i class="fa-regular fa-trash-can"></i> -->
-          <!-- <br> -->
-          <h6 class="card-subtitle mb-2 text-muted">- {{author}}</h6>
-          <br />
-          <a href="/journal" class="card-link">Go to Journal</a>
-          <a href="/overview" class="card-link-2">Overview</a>
-        </div>
+{% extends "layout.html" %} {% block title %} Quote of the day {% endblock %} {%
+block styles %}
+<link rel="stylesheet" href="../static/css/quote-page.css" />
+{% endblock %} {% block main %}
+<!-- hero section -->
+<div class="hero-section">
+  <section>
+    <div class="heading-container">
+      <h3>
+        You have a chosen an
+        <span id="chosen-option-quote">inspirational quote</span>
+      </h3>
+      <h1>Great choice!</h1>
+      <div id="girl-laughing-image">
+        <img src="../static/css/icons/girl (1).png" alt="" />
       </div>
+    </div>
+  </section>
+  <div class="card" style="width: 48rem; height: 18rem">
+    <div class="card-body">
+      <!-- <i class="fa-regular fa-heart fa-xl"></i> -->
+      <p class="card-text">{{quote}}</p>
+    </div>
+    <h6 class="card-subtitle mb-2 text-muted">- {{author}}</h6>
+    <br />
+    <a href="/journal" class="card-link">Save quote</a>
+  </div>
+  <div class="button-area">
+    <a href="/journal" class="btn btn-primary">Go to journal</a>
+  </div>
+</div>
+</div>
+
 {% endblock %}
