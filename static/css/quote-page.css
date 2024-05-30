@@ -1,16 +1,21 @@
 
 
-  
+/*   
 .card {
   display:inline-block;
-}
+} */
   
 main {
-  display: flex;
+  display: block;
 }
   
 section {
-  margin-top: 200px;
+  margin-top: 24px;
+}
+   
+
+.container {
+  margin: auto;
 }
     
 
@@ -19,22 +24,20 @@ section {
 .hero-section {
   margin-top: 32px;
   width: 100%;
-  height: 500px;
-  display: flex;
-  align-items: start;
+  height: 800px;
+  display: block;
+  height: 800px;
   box-sizing: border-box;
   background-color: #fdfaf3;
   column-gap: 56px;
-  padding-left: 200px;
-  padding-right: 200px;
 }
     
 img {
-  width: 440px;
-  height: 350px;
+  width: 140px;
+  height: 140px;
 
-  margin-top: 80px; 
-  
+  margin-top: 40px; 
+  margin-bottom: 40px;
     /* filter: drop-shadow(6px 6px 4px #f1f9f8); */
 }
     
@@ -59,13 +62,19 @@ img {
 /* card section */
 
 .card {
-    width: 100%;
-    margin: auto;
-    border-radius: 16px;
-  border: 1.5px solid #a77b0133;
-  box-shadow: 8px 8px 8px rgba(170, 90, 10, 0.727);
-  /* background-color: #f2bd413b; */
+  width: 100%;
+      margin: auto;
+      border-radius: 16px;
+    border: 1.5px solid #a77b0133;
+    box-shadow: 8px 8px 8px rgba(170, 90, 10, 0.727);
+    /* background-color: #f2bd413b; */
+    /* background: linear-gradient(#9ed9d23a, #9ed9d265); */
+    height: 130px;
   background: linear-gradient(#FFF0C6, #fcde83a6);
+}
+
+.card-body{
+  flex: 0 auto;
 }
 
 .card-subtitle {
@@ -78,6 +87,18 @@ img {
   margin-left: 8%;
   margin-right: 8%;
   
+}
+
+.container {
+  margin: auto;
+}
+
+.heading-container{
+  text-align: center;
+  margin-top: 32px;
+  display: block;
+  margin:auto;
+
 }
     
 .card-text {
@@ -96,25 +117,43 @@ img {
 
 .card-link {
   font-weight: 400;
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   font-style: normal;
-  color: #9f7911;
-  margin-top: 32px;
+  color: #e80c0cd5;
   margin-left: 8%;
     margin-right: 8%;
     font-family: "Outfit";
-  text-decoration-thickness: 2px;
+    background-color: #d2656526;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.092);
+ padding-left: 4px;
+  padding-right: 4px;
+ padding-top: 2px;
+ padding-bottom: 4px;
+    text-decoration: none;
+    border-radius: 16px;
+    width: 135px;
+    padding-left: 16px
 }
 
 
 .card-link:hover {
-  font-weight: 400;
-  font-size: 1.28rem;
-  font-style: normal;
-  color: #85650f;
-  margin-top: 24px;
-  margin-left: 8%;
-    margin-right: 8%;
+
+    font-weight: 400;
+    font-size: 1.3rem;
+    font-style: normal;
+    color: white;
+    margin-left: 8%;
+      margin-right: 8%;
+      font-family: "Outfit";
+      background-color: #d4071f90;
+   padding-left: 4px;
+    padding-right: 4px;
+   padding-top: 2px;
+   padding-bottom: 4px;
+      text-decoration: none;
+      border-radius: 16px;
+      width: 135px;
+      padding-left: 16px
 }
 
 .card-link-2 {
@@ -129,21 +168,88 @@ img {
   font-family: "Outfit";
 }
 
-.card-link-2:hover {
-  font-weight: 300;
-  font-size: 1.28rem;
-  font-style: normal;
-  color: #85650f;
-  margin-top: 24px;
-  /* margin-left: 8%;
-  margin-right: 8%; */
-  text-decoration: none;
+/* heading section */
+
+
+.heading-container{
+  text-align: center;
+  margin-top: 32px;
+  display: block;
+  margin:auto;
+
 }
 
-/* .btn-primary:hover {
+#chosen-option-quote {
+  text-decoration-line: underline;
+  color: #a27701;
+  font-size: 2.05rem;
+
+}
+
+h3 {
+  padding-top: 48px;
+  color: #daa002;
+  font-family: "Outfit", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 450;
+  font-size:2rem;
+  font-style: normal;
+  /* color: #85650d; */
+}
+
+
+h1 {
+  margin-top:40px;
+  color: #a27701;
+  font-family: "Outfit", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 450;
+  font-size:2.65rem;
+  font-style: normal;
+  /* color: #85650d; */
+}
+
+
+/* button area */
+
+
+.button-area{
+  margin:auto;
+  text-align: center;
+  display: block;
+}
+.btn-primary {
+  margin-top:40px;
   background-color: #8e6c10;
   border: none;
   box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.092);
-} */
+  font-weight: 400;
+  font-size: 1.25rem;
+  padding-left:20px;
+  padding-right:20px;
+  margin-bottom: 24px;
+} 
 
+
+.btn-primary:not(:disabled):not(:disabled):active {
+  background-color: #f2bc75;
+  border: none;
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.092);
+  font-weight: 400;
+  font-size: 1.25rem;
+  padding-left:20px;
+  padding-right:20px;
+  color: #8e6c10;
+} 
+
+.btn-primary:hover {
+background-color: #f2bc75;
+border: none;
+box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.092);
+font-weight: 400;
+font-size: 1.25rem;
+padding-left:20px;
+  padding-right:20px;
+color: #8e6c10;
+} 
 
