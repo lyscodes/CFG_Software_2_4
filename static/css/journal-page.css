@@ -7,7 +7,12 @@
     }
     
     section {
-        margin-top: 200px;
+        margin-top: 64px;
+        border: 2px solid #628e89;
+        background-color:#628e89 ;
+        border-radius: 16px;
+        margin-left: 188px;
+        margin-right: 188px;
     }
     
     /* hero section */
@@ -15,7 +20,7 @@
     .hero-section {
         margin-top: 32px;
         width: 100%;
-        height: 600px;
+        height: 850px;
         display: block;
         align-items: start;
         box-sizing: border-box;
@@ -23,23 +28,14 @@
         column-gap: 56px;
         padding-left: 100px;
         padding-right: 100px;
-    
+  
     }
-    
-    img {
-        width: 440px;
-        height: 350px;
-      
-        margin-top: 80px;
-       
-      
-        /* filter: drop-shadow(6px 6px 4px #f1f9f8); */
-    }
+
     
     .quote {
       font-family: "Quicksand", sans-serif;
       font-weight: 800;
-      font-size: 2rem;
+      font-size: 2.2rem;
       color: #886811;
       /* margin-top: 160px; */
       width: auto;
@@ -48,8 +44,8 @@
     
     #author {
         font-family: "Quicksand", sans-serif;
-      font-weight: 400;
-      font-size: 1.2rem;
+      font-weight: 300;
+      font-size: 1.35rem;
       color: #797979;
       margin-top: 160px;
     }
@@ -98,7 +94,7 @@
       width: 70%;
       /* border: 3px solid #8AC0BA; */
       border-radius: 16px;
-      height: 60%;
+      height: 100%;
       display: block;
       /* box-shadow: inset 6px 6px 10px 0(0,0,0,0,2), inset -6px -6px, 10px, 0 rgba(255,255,255,0.5) */
     
@@ -110,7 +106,7 @@
       /* background-color: #fdfdfd; */
       /* box-shadow: inset 6px 6px 10px 0 rgba(0, 0, 0, 0.2), inset -6px -6px 10px 0 rgba(255, 255, 255, 0.5); */
       box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px 0px inset, rgba(17, 17, 26, 0.05) 0px 8px 32px 0px;
-   
+
     }
 
    
@@ -153,23 +149,134 @@ margin-bottom: 40px;
       font-family: "Outfit", sans-serif;
       font-optical-sizing: auto;
       font-weight: 300;
-      font-size: 1.2rem;
+      font-size: 1.4rem;
       font-style: normal;
       color: #4e6a67;      
     }
 
 
     .error {
-        color: red,
-        text-align: center,
+        color: "red";
+        text-align: center;
         font-weight: 300;
         margin-right: 30%
     }
 
-    /* lightbulb icon */
-    .fa-feather {
-      color: #6D9691;
-      margin: auto;
-      margin-right: 2%;
+    
+          
+
+      .heading-container{
+        text-align: center;
+        margin-top: 32px;
+        display: block;
+        margin:auto;
+      
       }
-   
+      
+      h1 {
+        color: white;
+        font-family: "Outfit", sans-serif;
+        font-optical-sizing: auto;
+        font-weight: 500;
+        font-size:3.5rem;
+        font-style: normal;
+        padding-top: 16px;
+        padding-bottom: 16px;
+        /* color: #85650d; */
+      }
+      
+      /* save entry button */
+
+
+#save-entry-btn{
+  margin-top: 16px;
+  font-weight: 400;
+  font-size: 1.3rem;
+  font-style: normal;
+  color: #e80c0cd5;
+
+    font-family: "Outfit";
+    background-color: #e354542d;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.092);
+
+ padding-top: 2px;
+ padding-bottom: 4px;
+    outline: none;
+    border-radius: 16px;
+    width: 135px;
+}
+
+
+#save-entry-btn:hover {
+
+    font-weight: 400;
+    font-size: 1.3rem;
+    font-style: normal;
+    color: white;
+      font-family: "Outfit";
+      background-color: #d4071f90;
+   padding-top: 2px;
+   padding-bottom: 4px;
+      text-decoration: none;
+      border-radius: 16px;
+      width: 135px;
+      outline:none;
+}
+
+.container-image{
+  text-align: center;
+}
+
+img {
+  height: auto;
+  width: 200px;
+  margin-bottom: 48px;
+}
+
+/* Button area */
+
+/* button area */
+
+
+.button-area{
+  margin:auto;
+  text-align: center;
+  display: block;
+}
+.btn-primary {
+  margin-top:40px;
+  background-color: #8e6c10;
+  border: none;
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.092);
+  font-weight: 400;
+  font-size: 1.25rem;
+  padding-left:20px;
+  padding-right:20px;
+  margin-bottom: 40px;
+} 
+
+
+.btn-primary:not(:disabled):not(:disabled):active {
+  background-color: #f2bc75;
+  border: none;
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.092);
+  font-weight: 400;
+  font-size: 1.25rem;
+  padding-left:20px;
+  padding-right:20px;
+  color: #8e6c10;
+} 
+
+.btn-primary:hover {
+background-color: #f2bc75;
+border: none;
+box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.092);
+font-weight: 400;
+font-size: 1.25rem;
+padding-left:20px;
+  padding-right:20px;
+color: #8e6c10;
+} 
+
+
+
