@@ -8,6 +8,11 @@
     
     section {
         margin-top: 64px;
+        border: 2px solid #628e89;
+        background-color:#628e89 ;
+        border-radius: 16px;
+        margin-left: 188px;
+        margin-right: 188px;
     }
     
     /* hero section */
@@ -23,7 +28,7 @@
         column-gap: 56px;
         padding-left: 100px;
         padding-right: 100px;
-    
+  
     }
 
     
@@ -169,12 +174,14 @@ margin-bottom: 40px;
       }
       
       h1 {
-        color: #587773;
+        color: white;
         font-family: "Outfit", sans-serif;
         font-optical-sizing: auto;
         font-weight: 500;
         font-size:3.5rem;
         font-style: normal;
+        padding-top: 16px;
+        padding-bottom: 16px;
         /* color: #85650d; */
       }
       
