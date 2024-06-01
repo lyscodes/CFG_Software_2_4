@@ -45,6 +45,7 @@ def quote_of_the_day():
                 flash("Something went wrong. Please try again later")
     return render_template("quote.html", quote=quote, author=author)
 
+
 # Get a joke
 @app.route('/joke', methods=['GET', 'POST'])
 def joke_generator():
@@ -62,29 +63,6 @@ def joke_generator():
             else:
                 flash("Something went wrong. Please try again later")
     return render_template("joke.html", joke=result)
-
-
-
-'''
-@app.route('/quote/keyword', methods=['GET'])
-def quote_for_mood():
-    result = get_quote_by_mood()
-    quote = result[0]
-    author = result[1]
-    return render_template("quote.html", quote=quote, author=author)
-
-
-
-# use this instead of hard coded function when ready to go live:
-
-@app.route('/quote/<mood>', methods=['GET'])
-def quote_for_mood(mood):
-    result = get_quote_by_mood(mood)
-    quote = result[0]
-    author = result[1]
-    return render_template("quote.html", quote=quote, author=author)
-
-'''
 
 
 # Save a journal entry
@@ -151,6 +129,7 @@ def user_login(user=""):
     if user == "new":
         flash("Your account has been created. Please login.")
     elif user == "out":
+        session.clear()
         flash("You have been logged out. See you soon!")
     if request.method == 'POST':
         session.clear()
@@ -168,12 +147,6 @@ def user_login(user=""):
         else:
             flash("Something went wrong! Please try again later")
     return render_template("login.html")
-
-# Log out user
-@app.route('/logout')
-def user_logout():
-    session.clear()
-    return redirect('/login/out')
 
 
 if __name__ == '__main__':
