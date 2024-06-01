@@ -8,11 +8,12 @@
     
     section {
         margin-top: 64px;
-        border: 2px solid #628e89;
-        background-color:#628e89 ;
+        border: 1px solid #628e89;
+        /* background-color:#628e89 ; */
         border-radius: 16px;
         margin-left: 188px;
         margin-right: 188px;
+        background: linear-gradient(#628e8993, #628e89);
     }
     
     /* hero section */
