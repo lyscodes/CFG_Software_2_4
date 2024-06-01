@@ -24,17 +24,19 @@ def get_user_id():
 
 
 # Record mood choice in db
-def today_emotion(user, emotion, date, response):
+def today_emotion(user, emotion, date, choice, response):
     try:
         db_connection = _connect_to_db(db_name)
         cur = db_connection.cursor()
-        add_query = """INSERT INTO Entries (User_Name, Entry_Date, Emotion, Response, Diary_Entry)
-                VALUES('{Username}', '{EntryDate}', '{Emotion}', '{Response}');""".format(
+        add_query = """INSERT INTO Entries (User_Name, Entry_Date, Emotion, Choice, Response)
+                VALUES('{Username}', '{EntryDate}', '{Emotion}', '{Choice}', '{Response}');""".format(
             Username=user,
             EntryDate=date,
             Emotion=emotion,
+            Choice=choice,
             Response=response
         )
+        print(add_query)
         cur.execute(add_query)
         db_connection.commit()
     except Exception:
@@ -136,6 +138,7 @@ def verify_cred(username, password):
             Username=username,
             password=password
         )
+        print(ver_query)
         cur.execute(ver_query)
         validation_check = cur.fetchall()[0][0]
     except Exception:
@@ -159,12 +162,12 @@ def get_journal_entry(user, date):
         query = """
             SELECT Diary_Entry
             FROM Entries
-            WHERE User_id = {user} 
-            AND Entry_Date = DATE('{date}') 
+            WHERE User_Name = '{user}' 
+            AND Entry_Date = '{date}';
             """.format(user=user, date=date)
-
+        print(query)
         cur.execute(query)
-        result = cur.fetchall()
+        result_entry = cur.fetchall()
         cur.close()
 
     except Exception:
@@ -173,10 +176,41 @@ def get_journal_entry(user, date):
     finally:
         if db_connection:
             db_connection.close()
-        return result
+        return result_entry
+
+def check_entry_journal(user, date):
+    validation_check = False
+    try:
+        db_connection = _connect_to_db(db_name)
+        if not db_connection:
+            raise DbConnectionError("Failed to connect to DB")
+
+        cur = db_connection.cursor()
+
+        query = """SELECT EXISTS(
+            SELECT Diary_Entry
+            FROM Entries
+            WHERE User_Name = '{user}' 
+            AND Entry_Date = '{date}'
+            AND Diary_Entry IS NOT NULL);
+            """.format(user=user, date=date)
+        cur.execute(query)
+        validation_check = cur.fetchall()[0][0]
+        cur.close()
+
+    except Exception:
+        print("Something went wrong when trying to get the entry")
+
+    finally:
+        if db_connection:
+            db_connection.close()
+        return validation_check
+
+
+
 
 # Record new journal entry in db
-def add_journal_entry(entry, user, date):
+def add_journal(entry, user, date):
     try:
         db_connection = _connect_to_db(db_name)
         if not db_connection:
@@ -185,12 +219,11 @@ def add_journal_entry(entry, user, date):
         cur = db_connection.cursor()
 
         query = """
-                INSERT INTO Entries
-                (User_ID, Entry_Date, Diary_Entry)
-                VALUES
-                ({user}, DATE('{date}'), '{entry}')
+                UPDATE Entries 
+                SET Diary_Entry = '{entry}'
+                WHERE User_Name = '{user}' AND Entry_Date = '{date}';
                 """.format(user=user, date=date, entry=entry)
-
+        print(query)
         cur.execute(query)
         db_connection.commit()
         cur.close()

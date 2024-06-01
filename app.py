@@ -1,4 +1,4 @@
-from db_utils import today_emotion, add_new_user, check_email, check_username, verify_cred, check_entry, get_journal_entry
+from db_utils import today_emotion, add_new_user, check_email, check_username, check_entry_journal, verify_cred, check_entry, add_journal, get_journal_entry
 from flask import Flask, render_template, request, flash, redirect, session
 from config import SECRET_KEY
 from helper_oop import QuoteAPI, JokeAPI, MoodDict
@@ -32,9 +32,10 @@ def quote_of_the_day():
     author = result[1]
     if request.method == "POST":
         response = check_entry(session['user'], session['date'])
-        if response:
-            today_emotion(session['user'], session['emotion'], session['date'], quote)
-        elif not response:
+        if not response:
+            today_emotion(session['user'], session['emotion'], session['date'], 'Quote', quote)
+            return redirect('/journal')
+        elif response:
             flash("You have already saved an entry for today")
         else:
             flash("Something went wrong. Please try again later")
@@ -48,7 +49,8 @@ def joke_generator():
     if request.method == "POST":
         response = check_entry(session['user'], session['date'])
         if response:
-            today_emotion(session['user'], session['emotion'], session['date'], result)
+            today_emotion(session['user'], session['emotion'], session['date'], 'Joke', result)
+            return redirect('/journal')
         elif not response:
             flash("You have already saved an entry for today")
         else:
@@ -85,16 +87,17 @@ def add_journal_entry():
     result = QuoteAPI().unpack()
     quote = result[0]
     author = result[1]
+    session.pop('_flashes', None)
     if request.method == 'POST':
         content = request.form.get('textarea')
         if not content:
             flash('Journal is empty')
         else:
-            response = get_journal_entry(session['user'], session['date'])
-            if response:
-                add_journal_entry(content, session['user'], session['date'])
+            response = check_entry_journal(session['user'], session['date'])
+            if response == False:
+                add_journal(content, session['user'], session['date'])
                 flash('Entry submitted')
-            elif not response:
+            elif response == True:
                 flash('You have already submitted a diary entry for this date')
             else:
                 flash('Something went wrong. Please try again later.')
@@ -147,7 +150,7 @@ def user_login(new_user=""):
         elif not response:
             flash("Username and Password do not match")
         elif response:
-            session['user_name'] = username
+            session['user'] = username
             session['date'] = datetime.today().strftime('%Y-%m-%d')
             return redirect('/')
         else:

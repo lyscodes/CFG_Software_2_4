@@ -19,5 +19,6 @@ CREATE TABLE Entries (
     User_Name VARCHAR(50) NOT NULL UNIQUE,
     Entry_Date DATE NOT NULL,
     Emotion VARCHAR(50),
+    Choice VARCHAR(50),
     Response VARCHAR(500),
     Diary_Entry VARCHAR(500));
