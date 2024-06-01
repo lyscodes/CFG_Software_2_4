@@ -92,6 +92,27 @@ def add_new_user(user):
     add_user(user)
     return check_email(user['email'])
 
+def verify_cred(username, password):
+    validation_check = False
+    try:
+        db_connection = _connect_to_db(db_name)
+        cur = db_connection.cursor()
+        ver_query = """SELECT EXISTS (SELECT User_Name FROM Users
+                WHERE User_Name = '{Username}' AND Password = '{password}');""".format(
+            Username=username,
+            password=password
+        )
+        cur.execute(ver_query)
+        validation_check = cur.fetchall()[0][0]
+    except Exception:
+        print('Unable to verify password')
+    finally:
+        if db_connection:
+            db_connection.close()
+            print('Database connection is closed')
+        return validation_check
+
+
 # Get journal entry from date
 def get_journal_entry(date):
     try:
