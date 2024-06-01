@@ -1,5 +1,5 @@
-from db_utils import today_emotion, add_new_user, check_email, check_username
-from flask import Flask, render_template, request, flash, redirect
+from db_utils import today_emotion, add_new_user, check_email, check_username, verify_cred
+from flask import Flask, render_template, request, flash, redirect, session
 from config import SECRET_KEY
 from helper_oop import QuoteAPI, JokeAPI, MoodDict
 from registration_form import RegistrationForm
@@ -114,15 +114,25 @@ def user_login(new_user=""):
     if new_user == "new_user":
         flash("Success! Your  account has been created. Please login")
     if request.method == 'POST':
-        # to do: implement login logic to check user credentials and save session
-        return redirect('/')
+        session.clear()
+        username = request.form.get('uname')
+        password = request.form.get('password')
+        if not check_username(username):
+            flash("This username does not exist")
+        elif verify_cred(username, password):
+            session['user_name'] = username
+            return redirect('/')
+        elif not verify_cred(username, password):
+            flash("Username and Password do not match")
+        else:
+            flash("Something went wrong! Please try again later")
     return render_template("login.html")
 
 # Log out user
 @app.route('/logout')
 def user_logout():
-    # to do: clear user session
-    return redirect('/')
+    session.clear()
+    return redirect('/login')
 
 
 if __name__ == '__main__':
