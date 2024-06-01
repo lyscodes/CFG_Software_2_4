@@ -28,6 +28,70 @@ def today_emotion(emotion):
     pass
 
 
+def check_email(email):
+    validation_check = False
+    try:
+        db_connection = _connect_to_db(db_name)
+        cur = db_connection.cursor()
+        value_query = """SELECT EXISTS (SELECT Email FROM users
+                WHERE Email = '{input_to_check}');""".format(
+            input_to_check=email
+        )
+        cur.execute(value_query)
+        validation_check = cur.fetchall()[0][0]
+    except Exception:
+        print('Validation check error')
+    finally:
+        if db_connection:
+            db_connection.close()
+            print('Database connection is closed')
+    return validation_check
+
+
+def check_username(username):
+    validation_check = False
+    try:
+        db_connection = _connect_to_db(db_name)
+        cur = db_connection.cursor()
+        value_query = """SELECT EXISTS (SELECT User_Name FROM users
+                WHERE User_Name = '{input_to_check}');""".format(
+            input_to_check=username
+        )
+        cur.execute(value_query)
+        validation_check = cur.fetchall()[0][0]
+    except Exception:
+        print('Validation check error')
+    finally:
+        if db_connection:
+            db_connection.close()
+            print('Database connection is closed')
+    return validation_check
+
+def add_user(user):
+    try:
+        db_connection = _connect_to_db(db_name)
+        cur = db_connection.cursor()
+        add_query = """INSERT INTO Users (First_Name, Family_Name, User_Name, Email, Password)
+                VALUES('{FirstName}', '{LastName}', '{Username}', '{email}', '{password}');""".format(
+            FirstName=user['FirstName'],
+            LastName=user['LastName'],
+            Username=user['Username'],
+            email=user['email'],
+            password=user['password']
+        )
+        cur.execute(add_query)
+        db_connection.commit()
+    except Exception:
+        print('Unable to add new user')
+    finally:
+        if db_connection:
+            db_connection.close()
+            print('Database connection is closed')
+
+def add_new_user(user):
+    add_user(user)
+    return check_email(user['email'])
+
 # Get journal entry from date
 def get_journal_entry(date):
     try:
@@ -94,3 +158,5 @@ def add_journal_entry(entry):
                 db_connection.close()
     else:
         return False
+
+
