@@ -5,6 +5,8 @@ import requests
 from abc import ABC, abstractmethod
 
 
+# This file is dedicated to classes used to make calls to the external APIs used in the app
+
 class APIRequest(ABC):
     def __init__(self, url, params=None, headers=None):
         self.url = url
@@ -83,8 +85,7 @@ class MoodDict(object):
         return self.dict
 
 
-# tests of API endpoints
-
+"""
 getquote = QuoteAPI()
 print(getquote.unpack())
 
@@ -94,3 +95,4 @@ print(getjoke.unpack())
 mood_dict = MoodDict().make_dict()
 
 print(mood_dict)
+"""

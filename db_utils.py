@@ -59,9 +59,10 @@ def get_journal_entry(date):
 
 
 # Record new journal entry in db
-def add_journal_entry(entry, date):
+def add_journal_entry(entry):
     # It should check if the user has already submitted a journal entry for that date
-    result =  get_journal_entry(date)
+    date = "10/11/2024"
+    result = get_journal_entry(date)
     if result == []:
         try:
             db_connection = _connect_to_db(db_name)
