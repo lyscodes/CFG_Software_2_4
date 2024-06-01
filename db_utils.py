@@ -24,9 +24,46 @@ def get_user_id():
 
 
 # Record mood choice in db
-def today_emotion(emotion):
-    pass
+def today_emotion(user, emotion, date, response):
+    try:
+        db_connection = _connect_to_db(db_name)
+        cur = db_connection.cursor()
+        add_query = """INSERT INTO Entries (User_Name, Entry_Date, Emotion, Response, Diary_Entry)
+                VALUES('{Username}', '{EntryDate}', '{Emotion}', '{Response}');""".format(
+            Username=user,
+            EntryDate=date,
+            Emotion=emotion,
+            Response=response
+        )
+        cur.execute(add_query)
+        db_connection.commit()
+    except Exception:
+        print('Unable to save emotion / response')
+    finally:
+        if db_connection:
+            db_connection.close()
+            print('Database connection is closed')
 
+# check if already in
+def check_entry(user, date):
+    validation_check = False
+    try:
+        db_connection = _connect_to_db(db_name)
+        cur = db_connection.cursor()
+        value_query = """SELECT EXISTS (SELECT Entry_Date FROM Entries
+                WHERE Entry_Date = '{date}' AND User_Name = '{user}');""".format(
+            date=date,
+            user=user
+        )
+        cur.execute(value_query)
+        validation_check = cur.fetchall()[0][0]
+    except Exception:
+        print('Validation check error')
+    finally:
+        if db_connection:
+            db_connection.close()
+            print('Database connection is closed')
+    return validation_check
 
 def check_email(email):
     validation_check = False
@@ -67,7 +104,7 @@ def check_username(username):
             print('Database connection is closed')
     return validation_check
 
-def add_user(user):
+def add_new_user(user):
     try:
         db_connection = _connect_to_db(db_name)
         cur = db_connection.cursor()
@@ -87,10 +124,7 @@ def add_user(user):
         if db_connection:
             db_connection.close()
             print('Database connection is closed')
-
-def add_new_user(user):
-    add_user(user)
-    return check_email(user['email'])
+        return check_email(user['email'])
 
 def verify_cred(username, password):
     validation_check = False
@@ -114,7 +148,7 @@ def verify_cred(username, password):
 
 
 # Get journal entry from date
-def get_journal_entry(date):
+def get_journal_entry(user, date):
     try:
         db_connection = _connect_to_db(db_name)
         if not db_connection:
@@ -127,12 +161,11 @@ def get_journal_entry(date):
             FROM Entries
             WHERE User_id = {user} 
             AND Entry_Date = DATE('{date}') 
-            """.format(user=get_user_id(), date=date)
+            """.format(user=user, date=date)
 
         cur.execute(query)
         result = cur.fetchall()
         cur.close()
-        return result
 
     except Exception:
         print("Something went wrong when trying to get the entry")
@@ -140,44 +173,34 @@ def get_journal_entry(date):
     finally:
         if db_connection:
             db_connection.close()
-
-
+        return result
 
 # Record new journal entry in db
-def add_journal_entry(entry):
-    # It should check if the user has already submitted a journal entry for that date
-    date = "10/11/2024"
-    result = get_journal_entry(date)
-    if result == []:
-        try:
-            db_connection = _connect_to_db(db_name)
-            if not db_connection:
-                raise DbConnectionError("Failed to connect to DB")
+def add_journal_entry(entry, user, date):
+    try:
+        db_connection = _connect_to_db(db_name)
+        if not db_connection:
+            raise DbConnectionError("Failed to connect to DB")
 
-            cur = db_connection.cursor()
+        cur = db_connection.cursor()
 
-            query = """
+        query = """
                 INSERT INTO Entries
                 (User_ID, Entry_Date, Diary_Entry)
                 VALUES
                 ({user}, DATE('{date}'), '{entry}')
-                """.format(user=get_user_id(), date=date, entry=entry)
+                """.format(user=user, date=date, entry=entry)
 
-            cur.execute(query)
-            db_connection.commit()
-            cur.close()
+        cur.execute(query)
+        db_connection.commit()
+        cur.close()
 
-        except Exception:
-            print("Some exception was raised when trying to add entry")
-            return False
+    except Exception:
+        print("Some exception was raised when trying to add entry")
 
-        else:
-            return True
+    finally:
+        if db_connection:
+            db_connection.close()
 
-        finally:
-            if db_connection:
-                db_connection.close()
-    else:
-        return False
 
 
