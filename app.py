@@ -1,11 +1,13 @@
-from db_utils import today_emotion, add_new_user, check_email, check_username, verify_cred
+from db_utils import today_emotion, add_new_user, check_email, check_username, verify_cred, check_entry, get_journal_entry
 from flask import Flask, render_template, request, flash, redirect, session
 from config import SECRET_KEY
 from helper_oop import QuoteAPI, JokeAPI, MoodDict
 from registration_form import RegistrationForm
+from datetime import datetime
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = SECRET_KEY
+
 
 # Choose how you feel
 @app.route('/', methods=['GET', 'POST'])
@@ -18,18 +20,42 @@ def mood_checkin():
 # Accessed after choosing a feeling - allows user to choose between getting a joke or a quote
 @app.route('/choice/<id>', methods=['GET', 'POST'])
 def choice(id):
-    if request.method == 'GET':
-        today_emotion(id)
-        return render_template("choice.html", emotion=id)
+    session['emotion'] = id
+    return render_template("choice.html", emotion=id)
 
 
 # Get the quote of the day
-@app.route('/quote', methods=['GET'])
+@app.route('/quote', methods=['GET', 'POST'])
 def quote_of_the_day():
     result = QuoteAPI().unpack()
     quote = result[0]
     author = result[1]
+    if request.method == "POST":
+        response = check_entry(session['user'], session['date'])
+        if response:
+            today_emotion(session['user'], session['emotion'], session['date'], quote)
+        elif not response:
+            flash("You have already saved an entry for today")
+        else:
+            flash("Something went wrong. Please try again later")
+    # save emotion for the day, and quote to the database for that date
     return render_template("quote.html", quote=quote, author=author)
+
+# Get a joke
+@app.route('/joke', methods=['GET', 'POST'])
+def joke_generator():
+    result = JokeAPI().unpack()
+    if request.method == "POST":
+        response = check_entry(session['user'], session['date'])
+        if response:
+            today_emotion(session['user'], session['emotion'], session['date'], result)
+        elif not response:
+            flash("You have already saved an entry for today")
+        else:
+            flash("Something went wrong. Please try again later")
+    return render_template("joke.html", joke=result)
+
+
 
 '''
 @app.route('/quote/keyword', methods=['GET'])
@@ -64,19 +90,17 @@ def add_journal_entry():
         if not content:
             flash('Journal is empty')
         else:
-            response = add_journal_entry(content)
-            if response == True:
+            response = get_journal_entry(session['user'], session['date'])
+            if response:
+                add_journal_entry(content, session['user'], session['date'])
                 flash('Entry submitted')
-            elif response == False:
+            elif not response:
                 flash('You have already submitted a diary entry for this date')
+            else:
+                flash('Something went wrong. Please try again later.')
     return render_template("journal.html", quote=quote, author=author)
 
 
-# Get a joke
-@app.route('/joke', methods=['GET'])
-def joke_generator():
-    result = JokeAPI().unpack()
-    return render_template("joke.html", joke=result)
 
 
 # Get calendar view of your entries + stats of moods
@@ -117,13 +141,15 @@ def user_login(new_user=""):
         session.clear()
         username = request.form.get('uname')
         password = request.form.get('password')
+        response = verify_cred(username, password)
         if not check_username(username):
             flash("This username does not exist")
-        elif verify_cred(username, password):
-            session['user_name'] = username
-            return redirect('/')
-        elif not verify_cred(username, password):
+        elif not response:
             flash("Username and Password do not match")
+        elif response:
+            session['user_name'] = username
+            session['date'] = datetime.today().strftime('%Y-%m-%d')
+            return redirect('/')
         else:
             flash("Something went wrong! Please try again later")
     return render_template("login.html")
