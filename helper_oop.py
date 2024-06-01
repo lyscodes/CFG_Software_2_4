@@ -21,7 +21,7 @@ class APIRequest(ABC):
         else:
             self.params = {}
 
-    def __call__(self):
+    def __call__(self): # put custom try and except here and return None is unsuccessful?
         response = requests.get(self.url, params=self.params, headers=self.headers).json()
         return response
 
