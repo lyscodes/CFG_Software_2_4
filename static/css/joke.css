@@ -175,3 +175,39 @@ h1 {
     padding-right:20px;
   color: #8e6c10;
 } 
+
+#save-entry-btn{
+  margin-top: 16px;
+  font-weight: 400;
+  font-size: 1.3rem;
+  font-style: normal;
+  color: #e80c0cd5;
+
+    font-family: "Outfit";
+    background-color: #e354542d;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.092);
+
+ padding-top: 2px;
+ padding-bottom: 4px;
+    outline: none;
+    border-radius: 16px;
+    width: 135px;
+    margin-left: 48px;
+}
+
+
+#save-entry-btn:hover {
+
+    font-weight: 400;
+    font-size: 1.3rem;
+    font-style: normal;
+    color: white;
+      font-family: "Outfit";
+      background-color: #d4071f90;
+   padding-top: 2px;
+   padding-bottom: 4px;
+      text-decoration: none;
+      border-radius: 16px;
+      width: 135px;
+      outline:none;
+}
