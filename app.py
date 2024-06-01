@@ -31,15 +31,17 @@ def quote_of_the_day():
     quote = result[0]
     author = result[1]
     if request.method == "POST":
-        response = check_entry(session['user'], session['date'])
-        if not response:
-            today_emotion(session['user'], session['emotion'], session['date'], 'Quote', quote)
-            return redirect('/journal')
-        elif response:
-            flash("You have already saved an entry for today")
+        if 'user' not in session:
+            return redirect('/login')
         else:
-            flash("Something went wrong. Please try again later")
-    # save emotion for the day, and quote to the database for that date
+            response = check_entry(session['user'], session['date'])
+            if not response:
+                today_emotion(session['user'], session['emotion'], session['date'], 'Quote', quote)
+                return redirect('/journal')
+            elif response:
+                flash("You have already saved an entry for today")
+            else:
+                flash("Something went wrong. Please try again later")
     return render_template("quote.html", quote=quote, author=author)
 
 # Get a joke
@@ -47,14 +49,17 @@ def quote_of_the_day():
 def joke_generator():
     result = JokeAPI().unpack()
     if request.method == "POST":
-        response = check_entry(session['user'], session['date'])
-        if response:
-            today_emotion(session['user'], session['emotion'], session['date'], 'Joke', result)
-            return redirect('/journal')
-        elif not response:
-            flash("You have already saved an entry for today")
+        if 'user' not in session:
+            return redirect('/login')
         else:
-            flash("Something went wrong. Please try again later")
+            response = check_entry(session['user'], session['date'])
+            if response:
+                today_emotion(session['user'], session['emotion'], session['date'], 'Joke', result)
+                return redirect('/journal')
+            elif not response:
+                flash("You have already saved an entry for today")
+            else:
+                flash("Something went wrong. Please try again later")
     return render_template("joke.html", joke=result)
 
 
@@ -90,13 +95,15 @@ def add_journal_entry():
     session.pop('_flashes', None)
     if request.method == 'POST':
         content = request.form.get('textarea')
-        if not content:
+        if 'user' not in session:
+            return redirect('/login')
+        elif not content:
             flash('Journal is empty')
         else:
             response = check_entry_journal(session['user'], session['date'])
             if response == False:
                 add_journal(content, session['user'], session['date'])
-                flash('Entry submitted')
+                return redirect('/overview')
             elif response == True:
                 flash('You have already submitted a diary entry for this date')
             else:
@@ -109,6 +116,8 @@ def add_journal_entry():
 # Get calendar view of your entries + stats of moods
 @app.route('/overview', methods=['GET'])
 def show_overview():
+    if 'user' not in session:
+        return redirect('login')
     return render_template("overview.html")
 
 
@@ -140,6 +149,8 @@ def register_user():
 def user_login(new_user=""):
     if new_user == "new_user":
         flash("Success! Your  account has been created. Please login")
+    elif new_user == "logout":
+        flash("You have been logged out. See you soon!")
     if request.method == 'POST':
         session.clear()
         username = request.form.get('uname')
@@ -161,7 +172,7 @@ def user_login(new_user=""):
 @app.route('/logout')
 def user_logout():
     session.clear()
-    return redirect('/login')
+    return redirect('/login/logout')
 
 
 if __name__ == '__main__':

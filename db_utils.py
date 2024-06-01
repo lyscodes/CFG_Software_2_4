@@ -1,6 +1,5 @@
 import mysql.connector
 from config import (user, password, host)
-import datetime
 
 db_name = 'Mood_Tracker'
 
@@ -234,6 +233,4 @@ def add_journal(entry, user, date):
     finally:
         if db_connection:
             db_connection.close()
-
-
 
