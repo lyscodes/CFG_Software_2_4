@@ -64,7 +64,6 @@ class MoodAPI(APIRequest):
     def unpack(self):
         response = self.__call__()
         list = response['data']
-        print(list)
         if list:
             item = list[0]
             gif_url = item['images']['fixed_width']['mp4']

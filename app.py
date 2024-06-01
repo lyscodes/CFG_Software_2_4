@@ -12,15 +12,16 @@ app.config['SECRET_KEY'] = SECRET_KEY
 # Choose how you feel
 @app.route('/', methods=['GET', 'POST'])
 def mood_checkin():
-    if request.method == 'GET':
-        emotions = MoodDict().make_dict()
-        return render_template("mood.html", emotions=emotions)
+    emotions = MoodDict().make_dict()
+    session['mood_dict'] = emotions # in case we do want to save the giphy url - delete if not
+    return render_template("mood.html", emotions=emotions)
 
 
 # Accessed after choosing a feeling - allows user to choose between getting a joke or a quote
 @app.route('/choice/<id>', methods=['GET', 'POST'])
 def choice(id):
     session['emotion'] = id
+    session['mood_url'] = session['mood_dict'][id] # in case we do want to save the giphy url - delete if not
     return render_template("choice.html", emotion=id)
 
 
