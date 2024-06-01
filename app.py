@@ -1,4 +1,4 @@
-from db_utils import today_emotion, add_new_user, check_email, check_username, check_entry_journal, verify_cred, check_entry, add_journal, get_journal_entry
+from db_utils import today_emotion, add_new_user, check_email, check_username, check_entry_journal, verify_cred, check_entry, add_journal
 from flask import Flask, render_template, request, flash, redirect, session
 from config import SECRET_KEY
 from helper_oop import QuoteAPI, JokeAPI, MoodDict
@@ -54,10 +54,10 @@ def joke_generator():
             return redirect('/login')
         else:
             response = check_entry(session['user'], session['date'])
-            if response:
+            if not response:
                 today_emotion(session['user'], session['emotion'], session['date'], 'Joke', result)
                 return redirect('/journal')
-            elif not response:
+            elif response:
                 flash("You have already saved an entry for today")
             else:
                 flash("Something went wrong. Please try again later")
@@ -138,7 +138,7 @@ def register_user():
         elif check_username(content['Username']):
             flash('Username already in use')
         elif add_new_user(content):
-            return redirect('/login/new_user')
+            return redirect('/login/new')
         else:
             flash('We were unable to register you at this time. Please try again later')
     return render_template("register.html", form=form)
@@ -146,11 +146,11 @@ def register_user():
 
 # Log in with credentials
 @app.route('/login', methods=['GET', 'POST'])
-@app.route('/login/<new_user>', methods=['GET', 'POST'])
-def user_login(new_user=""):
-    if new_user == "new_user":
-        flash("Success! Your  account has been created. Please login")
-    elif new_user == "logout":
+@app.route('/login/<user>', methods=['GET', 'POST'])
+def user_login(user=""):
+    if user == "new":
+        flash("Your account has been created. Please login.")
+    elif user == "out":
         flash("You have been logged out. See you soon!")
     if request.method == 'POST':
         session.clear()
@@ -173,7 +173,7 @@ def user_login(new_user=""):
 @app.route('/logout')
 def user_logout():
     session.clear()
-    return redirect('/login/logout')
+    return redirect('/login/out')
 
 
 if __name__ == '__main__':
