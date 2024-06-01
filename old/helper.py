@@ -81,13 +81,6 @@ def get_quote_by_mood():
     return [quote, author]
 
 
-def submit_entry(entry): # maybe don't need to separate out to db_utils and this
-    date = datetime.datetime.now().date()
-    return add_journal_entry(entry, date)
-
-def choice_joke_quote(id):
-    date = datetime.datetime.now().date()
-    today_emotion(id, date) # maybe don't need to separate out to db_utils and this
 
 '''
 # use this instead of hard coded function when ready to go live:
