@@ -1,11 +1,11 @@
-from db_utils import today_emotion
+from db_utils import today_emotion, add_new_user, check_email, check_username
 from flask import Flask, render_template, request, flash, redirect
 from config import SECRET_KEY
 from helper_oop import QuoteAPI, JokeAPI, MoodDict
+from registration_form import RegistrationForm
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = SECRET_KEY
-
 
 # Choose how you feel
 @app.route('/', methods=['GET', 'POST'])
@@ -67,7 +67,6 @@ def add_journal_entry():
             response = add_journal_entry(content)
             if response == True:
                 flash('Entry submitted')
-                # use fetch here to dynamically take away the form? With an offer to visit overview?
             elif response == False:
                 flash('You have already submitted a diary entry for this date')
     return render_template("journal.html", quote=quote, author=author)
@@ -90,22 +89,34 @@ def show_overview():
 # Register a new user
 @app.route('/register', methods=['GET', 'POST'])
 def register_user():
-    if request.method == 'GET':
-        return render_template("register.html")
-    else:
-        # to do: save the user data in db
-        return redirect('/')    # seems like good practice to use redirect for POST request (for more info: https://stackoverflow.com/questions/21668481/difference-between-render-template-and-redirect)
+    form = RegistrationForm(request.form)
+    if request.method == 'POST':
+        content = {}
+        for item in ["FirstName", "LastName", "Username", "email", "password", "confirm", "accept_tos"]:
+            content[item] = request.form.get(item)
+        if content['password'] != content['confirm']:
+            flash('Password and Password Confirmation do not match')
+        elif check_email(content['email']):
+            flash('Email already registered')
+        elif check_username(content['Username']):
+            flash('Username already in use')
+        elif add_new_user(content):
+            return redirect('/login/new_user')
+        else:
+            flash('We were unable to register you at this time. Please try again later')
+    return render_template("register.html", form=form)
 
 
 # Log in with credentials
 @app.route('/login', methods=['GET', 'POST'])
-def user_login():
-    if request.method == 'GET':
-        return render_template("login.html")
-    else:
+@app.route('/login/<new_user>', methods=['GET', 'POST'])
+def user_login(new_user=""):
+    if new_user == "new_user":
+        flash("Success! Your  account has been created. Please login")
+    if request.method == 'POST':
         # to do: implement login logic to check user credentials and save session
         return redirect('/')
-
+    return render_template("login.html")
 
 # Log out user
 @app.route('/logout')

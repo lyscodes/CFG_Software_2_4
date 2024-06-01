@@ -84,15 +84,3 @@ class MoodDict(object):
                 self.dict[mood] = default_gifs[mood]
         return self.dict
 
-
-"""
-getquote = QuoteAPI()
-print(getquote.unpack())
-
-getjoke = JokeAPI()
-print(getjoke.unpack())
-
-mood_dict = MoodDict().make_dict()
-
-print(mood_dict)
-"""
