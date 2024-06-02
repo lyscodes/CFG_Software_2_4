@@ -7,4 +7,16 @@ default_gifs = {
     'frustrated': 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExemlqMXNtaWloNjEwa2F6NW4wdWFqcThsbXYydmpuOXZ0Zm9oc2o3eSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/OOezqqxPB8aJ2/giphy.mp4',
     'angry': 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdnVmazNrZGR4ZWkxdDJyNDQwcDVjNjUyN2g2YjJ5YzQ3M2U5c2pqZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/H9Mm0ULO8AtMc/giphy.mp4'
 }
-    
+
+default_jokes = [
+    'My New Years resolution is to stop leaving things so late.', 'You can\'t trust a ladder. It will always let you down.', 'Have you ever seen fruit preserves being made? It\'s jarring.', 'Where do you take someone who’s been injured in a peek-a-boo accident? To the I.C.U.', 'What do you call a duck that gets all A\'s? A wise quacker.'
+]
+
+default_quotes = [
+    {'q': 'Love is that condition in which the happiness of another person is essential to your own.', 'a': 'Robert A. Heinlein'},
+    {'q': 'Folks are usually about as happy as they make their minds up to be.', 'a': 'Abraham Lincoln'},
+    {'q': 'Time you enjoy wasting is not wasted time.', 'a': 'Marthe Troly-Curtin'},
+    {'q': 'Its so hard to forget pain, but its even harder to remember sweetness. We have no scar to show for happiness. We learn so little from peace.', 'a': 'Chuck Palahniuk'},
+    {'q': 'Let us be grateful to the people who make us happy; they are the charming gardeners who make our souls blossom.', 'a': 'Marcel Proust'},
+
+]
