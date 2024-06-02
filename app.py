@@ -36,11 +36,9 @@ def quote_of_the_day():
             return redirect('/login')
         else:
             response = check_entry(session['user_id'], session['date'])
-            print('This is the response on quote', response)
             if response == True:
                 flash("You have already saved an entry for today")
             elif response == False:
-                print("In the false quote")
                 today_emotion(session['user_id'], session['emotion'], session['date'], 'Quote', quote)
                 response_two = check_entry(session['user_id'], session['date'])
                 if response_two:
@@ -59,11 +57,9 @@ def joke_generator():
             return redirect('/login')
         else:
             response = check_entry(session['user_id'], session['date'])
-            print('This is the response on joke', response)
             if response == True:
                 flash("You have already saved an entry for today")
             elif response == False:
-                print("In the false joke")
                 today_emotion(session['user_id'], session['emotion'], session['date'], 'Joke', result)
                 response_two = check_entry(session['user_id'], session['date'])
                 if response_two:
