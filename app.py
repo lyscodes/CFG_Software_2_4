@@ -44,7 +44,7 @@ def quote_of_the_day():
                 today_emotion(session['user_id'], session['emotion'], session['date'], 'Quote', quote)
                 response_two = check_entry(session['user_id'], session['date'])
                 if response_two:
-                    return redirect('/overview')
+                    return redirect('/journal')
             else:
                 flash("Something went wrong. Please try again later")
     return render_template("quote.html", quote=quote, author=author)
@@ -67,7 +67,7 @@ def joke_generator():
                 today_emotion(session['user_id'], session['emotion'], session['date'], 'Joke', result)
                 response_two = check_entry(session['user_id'], session['date'])
                 if response_two:
-                    return redirect('/overview')
+                    return redirect('/journal')
             else:
                 flash("Something went wrong. Please try again later")
     return render_template("joke.html", joke=result)
