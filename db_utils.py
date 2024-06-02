@@ -17,47 +17,7 @@ def _connect_to_db(db_name):
     return connection
 
 
-# Get the user id from db
-def get_user_id(username):
-    try:
-        db_connection = _connect_to_db(db_name)
-        cur = db_connection.cursor()
-        value_query = """SELECT ID FROM Users
-            WHERE User_Name = '{user}' LIMIT 1;""".format(
-        user=username)
-        cur.execute(value_query)
-        user_ID = cur.fetchall()[0][0]
-    except Exception:
-        print('Unable to save emotion / response')
-    finally:
-        if db_connection:
-            db_connection.close()
-            print('Database connection is closed')
-        return user_ID
-
-
-# Record mood choice in db
-def today_emotion(user_id, emotion, date, choice, response):
-    try:
-        db_connection = _connect_to_db(db_name)
-        cur = db_connection.cursor()
-        add_query = """INSERT INTO Entries (User_ID, Entry_Date, Emotion, Choice_J_or_Q, Response_J_or_Q )
-                VALUES('{UserID}', '{EntryDate}', '{Emotion}', '{Choice}', '{Response}');""".format(
-            UserID=user_id,
-            EntryDate=date,
-            Emotion=emotion,
-            Choice=choice,
-            Response=response
-        )
-        print(add_query)
-        cur.execute(add_query)
-        db_connection.commit()
-    except Exception:
-        print('Unable to save emotion / response')
-    finally:
-        if db_connection:
-            db_connection.close()
-            print('Database connection is closed')
+# VALIDATION QUERIES:
 
 # check if already in
 def check_entry(user_id, date):
@@ -120,27 +80,6 @@ def check_username(username):
             print('Database connection is closed')
     return validation_check
 
-def add_new_user(user):
-    try:
-        db_connection = _connect_to_db(db_name)
-        cur = db_connection.cursor()
-        add_query = """INSERT INTO Users (First_Name, Family_Name, User_Name, Email, Password)
-                VALUES('{FirstName}', '{LastName}', '{Username}', '{email}', '{password}');""".format(
-            FirstName=user['FirstName'],
-            LastName=user['LastName'],
-            Username=user['Username'],
-            email=user['email'],
-            password=user['password']
-        )
-        cur.execute(add_query)
-        db_connection.commit()
-    except Exception:
-        print('Unable to add new user')
-    finally:
-        if db_connection:
-            db_connection.close()
-            print('Database connection is closed')
-        return check_email(user['email'])
 
 def verify_cred(username, password):
     validation_check = False
@@ -162,31 +101,6 @@ def verify_cred(username, password):
             db_connection.close()
             print('Database connection is closed')
         return validation_check
-
-
-# Get journal entry from date
-def get_journal_entry(user_id, date):
-    try:
-        db_connection = _connect_to_db(db_name)
-        if not db_connection:
-            raise DbConnectionError("Failed to connect to DB")
-        cur = db_connection.cursor()
-        query = """
-            SELECT Diary_Entry
-            FROM Entries
-            WHERE User_ID = '{user}' 
-            AND Entry_Date = '{date}';
-            """.format(user=user_id, date=date)
-        print(query)
-        cur.execute(query)
-        result_entry = cur.fetchall()
-        cur.close()
-    except Exception:
-        print("Something went wrong when trying to get the entry")
-    finally:
-        if db_connection:
-            db_connection.close()
-        return result_entry
 
 def check_entry_journal(user, date):
     validation_check = False
@@ -217,6 +131,111 @@ def check_entry_journal(user, date):
         return validation_check
 
 
+# RETRIEVE QUERIES:
+
+# Get journal entry from date
+def get_journal_entry(user_id, date):
+    result_entry = "Oops! Looks like there is no entry on this date"
+    try:
+        db_connection = _connect_to_db(db_name)
+        if not db_connection:
+            raise DbConnectionError("Failed to connect to DB")
+        cur = db_connection.cursor()
+        query = """
+            SELECT Diary_Entry
+            FROM Entries
+            WHERE User_ID = '{user}' 
+            AND Entry_Date = '{date}';
+            """.format(user=user_id, date=date)
+        print(query)
+        cur.execute(query)
+        result_entry = cur.fetchall()
+        cur.close()
+    except Exception:
+        print("Something went wrong when trying to get the entry")
+    finally:
+        if db_connection:
+            db_connection.close()
+        return result_entry
+
+
+# Get the user id from db
+def get_user_id(username):
+    try:
+        db_connection = _connect_to_db(db_name)
+        cur = db_connection.cursor()
+        value_query = """SELECT ID FROM Users
+            WHERE User_Name = '{user}' LIMIT 1;""".format(user=username)
+        cur.execute(value_query)
+        user_ID = cur.fetchall()[0][0]
+    except Exception:
+        print('Unable to save emotion / response')
+    finally:
+        if db_connection:
+            db_connection.close()
+            print('Database connection is closed')
+        return user_ID
+
+
+def get_month_emotions(user_id, month, year):
+    dict = {'happy': 3,
+            'calm': 4,
+            'sad': 5,
+            'worried': 10,
+            'frustrated': 12,
+            'angry': 1}
+    return dict
+
+
+# COMMIT QUERIES:
+
+# Record mood choice in db
+def today_emotion(user_id, emotion, giphy_url, date, choice, response):
+    try:
+        db_connection = _connect_to_db(db_name)
+        cur = db_connection.cursor()
+        add_query = """INSERT INTO Entries (User_ID, Entry_Date, Emotion, Giph_URL, Choice_J_or_Q, Response_J_or_Q )
+                VALUES('{UserID}', '{EntryDate}', '{Emotion}', '{URL}', '{Choice}', '{Response}');""".format(
+            UserID=user_id,
+            EntryDate=date,
+            Emotion=emotion,
+            URL=giphy_url,
+            Choice=choice,
+            Response=response
+        )
+        print(add_query)
+        cur.execute(add_query)
+        db_connection.commit()
+    except Exception:
+        print('Unable to save emotion / response')
+    finally:
+        if db_connection:
+            db_connection.close()
+            print('Database connection is closed')
+
+
+
+def add_new_user(user):
+    try:
+        db_connection = _connect_to_db(db_name)
+        cur = db_connection.cursor()
+        add_query = """INSERT INTO Users (First_Name, Family_Name, User_Name, Email, Password)
+                VALUES('{FirstName}', '{LastName}', '{Username}', '{email}', '{password}');""".format(
+            FirstName=user['FirstName'],
+            LastName=user['LastName'],
+            Username=user['Username'],
+            email=user['email'],
+            password=user['password']
+        )
+        cur.execute(add_query)
+        db_connection.commit()
+    except Exception:
+        print('Unable to add new user')
+    finally:
+        if db_connection:
+            db_connection.close()
+            print('Database connection is closed')
+
 
 # Record new journal entry in db
 def add_journal(entry, user, date):
@@ -226,7 +245,6 @@ def add_journal(entry, user, date):
             raise DbConnectionError("Failed to connect to DB")
 
         cur = db_connection.cursor()
-
         query = """
                 UPDATE Entries 
                 SET Diary_Entry = '{entry}'
@@ -243,3 +261,5 @@ def add_journal(entry, user, date):
     finally:
         if db_connection:
             db_connection.close()
+
+
