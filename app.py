@@ -12,9 +12,10 @@ app.config['SECRET_KEY'] = SECRET_KEY
 # Choose how you feel
 @app.route('/', methods=['GET', 'POST'])
 def mood_checkin():
-    emotions = MoodDict().make_dict()
-    session['mood_dict'] = emotions # in case we do want to save the giphy url - delete if not
-    return render_template("mood.html", emotions=emotions)
+    emotions_api = MoodDict()
+    emotions_dict = emotions_api.make_dict()
+    session['mood_dict'] = emotions_dict # in case we do want to save the giphy url - delete if not
+    return render_template("mood.html", emotions=emotions_dict)
 
 
 # Accessed after choosing a feeling - allows user to choose between getting a joke or a quote
@@ -28,7 +29,8 @@ def choice(id):
 # Get the quote of the day
 @app.route('/quote', methods=['GET', 'POST'])
 def quote_of_the_day():
-    result = QuoteAPI().unpack()
+    quote_api = QuoteAPI()
+    result = quote_api.unpack()
     quote = result[0]
     author = result[1]
     if request.method == "POST":
@@ -39,7 +41,7 @@ def quote_of_the_day():
             if response == True:
                 flash("You have already saved an entry for today")
             elif response == False:
-                today_emotion(session['user_id'], session['emotion'], session['date'], 'Quote', quote)
+                today_emotion(session['user_id'], session['emotion'], session['mood_url'], session['date'], 'Quote', quote)
                 response_two = check_entry(session['user_id'], session['date'])
                 if response_two:
                     return redirect('/journal')
@@ -51,7 +53,8 @@ def quote_of_the_day():
 # Get a joke
 @app.route('/joke', methods=['GET', 'POST'])
 def joke_generator():
-    result = JokeAPI().unpack()
+    joke_api = JokeAPI()
+    result = joke_api.unpack()
     if request.method == "POST":
         if 'user' not in session:
             return redirect('/login')
@@ -60,7 +63,7 @@ def joke_generator():
             if response == True:
                 flash("You have already saved an entry for today")
             elif response == False:
-                today_emotion(session['user_id'], session['emotion'], session['date'], 'Joke', result)
+                today_emotion(session['user_id'], session['emotion'], session['mood_url'], session['date'], 'Joke', result)
                 response_two = check_entry(session['user_id'], session['date'])
                 if response_two:
                     return redirect('/journal')
@@ -72,9 +75,6 @@ def joke_generator():
 # Save a journal entry
 @app.route('/journal', methods=['GET', 'POST'])
 def add_journal_entry():
-    result = QuoteAPI().unpack()
-    quote = result[0]
-    author = result[1]
     session.pop('_flashes', None)
     if request.method == 'POST':
         content = request.form.get('textarea')
@@ -93,9 +93,7 @@ def add_journal_entry():
                     return redirect('/overview')
             else:
                 flash('Something went wrong. Please try again later.')
-    return render_template("journal.html", quote=quote, author=author)
-
-
+    return render_template("journal.html")
 
 
 # Get calendar view of your entries + stats of moods
@@ -104,7 +102,6 @@ def show_overview():
     if 'user' not in session:
         return redirect('/login')
     return render_template("overview.html")
-
 
 
 # Register a new user
@@ -121,10 +118,12 @@ def register_user():
             flash('Email already registered')
         elif check_username(content['Username']):
             flash('Username already in use')
-        elif add_new_user(content):
-            return redirect('/login/new')
         else:
-            flash('We were unable to register you at this time. Please try again later')
+            add_new_user(content)
+            if check_email(content['email']):
+                return redirect('/login/new')
+            else:
+                flash('We were unable to register you at this time. Please try again later')
     return render_template("register.html", form=form)
 
 
