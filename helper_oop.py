@@ -5,6 +5,8 @@ import requests
 from abc import ABC, abstractmethod
 
 
+# This file is dedicated to classes used to make calls to the external APIs used in the app
+
 class APIRequest(ABC):
     def __init__(self, url, params=None, headers=None):
         self.url = url
@@ -19,7 +21,7 @@ class APIRequest(ABC):
         else:
             self.params = {}
 
-    def __call__(self):
+    def __call__(self): # put custom try and except here and return None is unsuccessful?
         response = requests.get(self.url, params=self.params, headers=self.headers).json()
         return response
 
@@ -62,8 +64,11 @@ class MoodAPI(APIRequest):
     def unpack(self):
         response = self.__call__()
         list = response['data']
-        item = list[0]
-        gif_url = item['images']['fixed_width']['mp4']
+        if list:
+            item = list[0]
+            gif_url = item['images']['fixed_width']['mp4']
+        else:
+            gif_url = None
         return gif_url
 
 
@@ -82,15 +87,3 @@ class MoodDict(object):
                 self.dict[mood] = default_gifs[mood]
         return self.dict
 
-
-# tests of API endpoints
-
-getquote = QuoteAPI()
-print(getquote.unpack())
-
-getjoke = JokeAPI()
-print(getjoke.unpack())
-
-mood_dict = MoodDict().make_dict()
-
-print(mood_dict)

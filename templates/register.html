@@ -13,51 +13,26 @@
 
 
 {% block main %}
-
+  <div>
+    {% with messages = get_flashed_messages() %} {% if messages %} {% for
+    message in messages %}
+    <span id="error">{{ message }}</span>
+    {% endfor %} {% endif %} {% endwith %}
+  </div>
 <div class="wrapper">
-    <form action="">
+    {% from "_formhelpers.html" import render_field %}
+    <form method="POST" id="RegisterForm" action="">
         <h1>Count me in.</h1>
-
-        <div class="input-box">
-            <div class="input-field">
-                <input type="text" placeholder="First Name" required>
-                <i class='bx bxs-user'></i>
-            </div>
-
-
-            <div class="input-field">
-                <input type="text" placeholder="Last Name" required>
-                <i class='bx bxs-user'></i>
-            </div>
-        </div>
-
-        <div class="input-box">
-            <div class="input-field">
-                <input type="email" placeholder="Email" required>
-                <i class='bx bxs-envelope'></i>
-            </div>
-
-            <div class="input-field">
-                <input type="text" placeholder="Username" required>
-                <i class='bx bxs-face'></i>
-            </div>
-        </div>
-
-        <div class="input-box">
-            <div class="input-field">
-                <input type="password" placeholder="Password" required>
-                <i class='bx bxs-lock-alt'></i>
-            </div>
-
-            <div class="input-field">
-                <input type="password" placeholder="Confirm Password" required>
-                <i class='bx bxs-lock-alt'></i>
-            </div>
-        </div>
-
-        <label><input type="checkbox"> I hereby declare that the information given is, to the best of my knowledge and belief, true and correct</label>
-
-        <button type="submit" class="btn">Register</button>
+  <dl>
+      {{ render_field(form.FirstName) }}
+      {{ render_field(form.LastName) }}
+      {{ render_field(form.Username) }}
+      {{ render_field(form.email) }}
+      {{ render_field(form.password) }}
+      {{ render_field(form.confirm) }}
+      {{ render_field(form.accept_tos) }}
+  </dl>
+        <button type="submit" value="submit" id="save-entry-btn">Register</button>
     </form>
 </div>
 

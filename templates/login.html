@@ -11,23 +11,23 @@
 
 {% block main %}
 <!-- HTML for the login form -->
-
+  <div>
+    {% with messages = get_flashed_messages() %} {% if messages %} {% for
+    message in messages %}
+    <span id="error">{{ message }}</span>
+    {% endfor %} {% endif %} {% endwith %}
+  </div>
 <div class="wrapper">
     <form method="POST" action="">
         <h1>welcome home.</h1>
         <div class="input-box">
-            <input type="text" placeholder="Username" required>
+            <input type="text" placeholder="Username" name="uname" required>
             <i class='bx bxs-user'></i>
         </div>
 
         <div class="input-box">
-            <input type="password" placeholder="Password" required>
+            <input type="password" placeholder="Password" name="password" required>
             <i class='bx bxs-lock-alt'></i>
-        </div>
-
-        <div class="remember-forgot">
-            <label><input type="checkbox"> Remember me</label>
-            <a href="#">Forgot password?</a>
         </div>
 
         <div class="button">
