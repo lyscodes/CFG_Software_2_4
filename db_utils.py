@@ -18,18 +18,32 @@ def _connect_to_db(db_name):
 
 
 # Get the user id from db
-def get_user_id():
-    return 1
-
-
-# Record mood choice in db
-def today_emotion(user, emotion, date, choice, response):
+def get_user_id(username):
     try:
         db_connection = _connect_to_db(db_name)
         cur = db_connection.cursor()
-        add_query = """INSERT INTO Entries (User_Name, Entry_Date, Emotion, Choice, Response)
-                VALUES('{Username}', '{EntryDate}', '{Emotion}', '{Choice}', '{Response}');""".format(
-            Username=user,
+        value_query = """SELECT ID FROM Users
+            WHERE User_Name = '{user}' LIMIT 1;""".format(
+        user=username)
+        cur.execute(value_query)
+        user_ID = cur.fetchall()[0][0]
+    except Exception:
+        print('Unable to save emotion / response')
+    finally:
+        if db_connection:
+            db_connection.close()
+            print('Database connection is closed')
+        return user_ID
+
+
+# Record mood choice in db
+def today_emotion(user_id, emotion, date, choice, response):
+    try:
+        db_connection = _connect_to_db(db_name)
+        cur = db_connection.cursor()
+        add_query = """INSERT INTO Entries (User_ID, Entry_Date, Emotion, Choice_J_or_Q, Response_J_or_Q )
+                VALUES('{UserID}', '{EntryDate}', '{Emotion}', '{Choice}', '{Response}');""".format(
+            UserID=user_id,
             EntryDate=date,
             Emotion=emotion,
             Choice=choice,
@@ -46,16 +60,17 @@ def today_emotion(user, emotion, date, choice, response):
             print('Database connection is closed')
 
 # check if already in
-def check_entry(user, date):
+def check_entry(user_id, date):
     validation_check = False
     try:
         db_connection = _connect_to_db(db_name)
         cur = db_connection.cursor()
         value_query = """SELECT EXISTS (SELECT Entry_Date FROM Entries
-                WHERE Entry_Date = '{date}' AND User_Name = '{user}');""".format(
+                WHERE Entry_Date = '{date}' AND User_ID = '{user_id}');""".format(
             date=date,
-            user=user
+            user_id=user_id
         )
+        print(value_query)
         cur.execute(value_query)
         validation_check = cur.fetchall()[0][0]
     except Exception:
@@ -64,7 +79,7 @@ def check_entry(user, date):
         if db_connection:
             db_connection.close()
             print('Database connection is closed')
-    return validation_check
+        return validation_check
 
 def check_email(email):
     validation_check = False
@@ -150,28 +165,24 @@ def verify_cred(username, password):
 
 
 # Get journal entry from date
-def get_journal_entry(user, date):
+def get_journal_entry(user_id, date):
     try:
         db_connection = _connect_to_db(db_name)
         if not db_connection:
             raise DbConnectionError("Failed to connect to DB")
-
         cur = db_connection.cursor()
-
         query = """
             SELECT Diary_Entry
             FROM Entries
-            WHERE User_Name = '{user}' 
+            WHERE User_ID = '{user}' 
             AND Entry_Date = '{date}';
-            """.format(user=user, date=date)
+            """.format(user=user_id, date=date)
         print(query)
         cur.execute(query)
         result_entry = cur.fetchall()
         cur.close()
-
     except Exception:
         print("Something went wrong when trying to get the entry")
-
     finally:
         if db_connection:
             db_connection.close()
@@ -189,10 +200,10 @@ def check_entry_journal(user, date):
         query = """SELECT EXISTS(
             SELECT Diary_Entry
             FROM Entries
-            WHERE User_Name = '{user}' 
+            WHERE User_ID = '{user_id}' 
             AND Entry_Date = '{date}'
             AND Diary_Entry IS NOT NULL);
-            """.format(user=user, date=date)
+            """.format(user_id=user, date=date)
         cur.execute(query)
         validation_check = cur.fetchall()[0][0]
         cur.close()
@@ -204,7 +215,6 @@ def check_entry_journal(user, date):
         if db_connection:
             db_connection.close()
         return validation_check
-
 
 
 
@@ -220,8 +230,8 @@ def add_journal(entry, user, date):
         query = """
                 UPDATE Entries 
                 SET Diary_Entry = '{entry}'
-                WHERE User_Name = '{user}' AND Entry_Date = '{date}';
-                """.format(user=user, date=date, entry=entry)
+                WHERE User_ID = '{user_id}' AND Entry_Date = '{date}';
+                """.format(user_id=user, date=date, entry=entry)
         print(query)
         cur.execute(query)
         db_connection.commit()
@@ -233,4 +243,3 @@ def add_journal(entry, user, date):
     finally:
         if db_connection:
             db_connection.close()
-

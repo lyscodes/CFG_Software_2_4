@@ -1,4 +1,4 @@
-from db_utils import today_emotion, add_new_user, check_email, check_username, check_entry_journal, verify_cred, check_entry, add_journal
+from db_utils import get_user_id, today_emotion, add_new_user, check_email, check_username, check_entry_journal, verify_cred, check_entry, add_journal
 from flask import Flask, render_template, request, flash, redirect, session
 from config import SECRET_KEY
 from helper_oop import QuoteAPI, JokeAPI, MoodDict
@@ -35,12 +35,16 @@ def quote_of_the_day():
         if 'user' not in session:
             return redirect('/login')
         else:
-            response = check_entry(session['user'], session['date'])
-            if not response:
-                today_emotion(session['user'], session['emotion'], session['date'], 'Quote', quote)
-                return redirect('/journal')
-            elif response:
+            response = check_entry(session['user_id'], session['date'])
+            print('This is the response on quote', response)
+            if response == True:
                 flash("You have already saved an entry for today")
+            elif response == False:
+                print("In the false quote")
+                today_emotion(session['user_id'], session['emotion'], session['date'], 'Quote', quote)
+                response_two = check_entry(session['user_id'], session['date'])
+                if response_two:
+                    return redirect('/overview')
             else:
                 flash("Something went wrong. Please try again later")
     return render_template("quote.html", quote=quote, author=author)
@@ -54,12 +58,16 @@ def joke_generator():
         if 'user' not in session:
             return redirect('/login')
         else:
-            response = check_entry(session['user'], session['date'])
-            if not response:
-                today_emotion(session['user'], session['emotion'], session['date'], 'Joke', result)
-                return redirect('/journal')
-            elif response:
+            response = check_entry(session['user_id'], session['date'])
+            print('This is the response on joke', response)
+            if response == True:
                 flash("You have already saved an entry for today")
+            elif response == False:
+                print("In the false joke")
+                today_emotion(session['user_id'], session['emotion'], session['date'], 'Joke', result)
+                response_two = check_entry(session['user_id'], session['date'])
+                if response_two:
+                    return redirect('/overview')
             else:
                 flash("Something went wrong. Please try again later")
     return render_template("joke.html", joke=result)
@@ -79,12 +87,14 @@ def add_journal_entry():
         elif not content:
             flash('Journal is empty')
         else:
-            response = check_entry_journal(session['user'], session['date'])
-            if response == False:
-                add_journal(content, session['user'], session['date'])
-                return redirect('/overview')
-            elif response == True:
+            response = check_entry_journal(session['user_id'], session['date'])
+            if response == True:
                 flash('You have already submitted a diary entry for this date')
+            elif response == False:
+                add_journal(content, session['user_id'], session['date'])
+                response_two = check_entry_journal(session['user_id'], session['date'])
+                if response_two:
+                    return redirect('/overview')
             else:
                 flash('Something went wrong. Please try again later.')
     return render_template("journal.html", quote=quote, author=author)
@@ -96,7 +106,7 @@ def add_journal_entry():
 @app.route('/overview', methods=['GET'])
 def show_overview():
     if 'user' not in session:
-        return redirect('login')
+        return redirect('/login')
     return render_template("overview.html")
 
 
@@ -135,17 +145,19 @@ def user_login(user=""):
         session.clear()
         username = request.form.get('uname')
         password = request.form.get('password')
-        response = verify_cred(username, password)
         if not check_username(username):
             flash("This username does not exist")
-        elif not response:
-            flash("Username and Password do not match")
-        elif response:
-            session['user'] = username
-            session['date'] = datetime.today().strftime('%Y-%m-%d')
-            return redirect('/')
         else:
-            flash("Something went wrong! Please try again later")
+            response = verify_cred(username, password)
+            if not response:
+                flash("Username and Password do not match")
+            elif response:
+                session['user'] = username
+                session['user_id'] = get_user_id(username)
+                session['date'] = datetime.today().strftime('%Y-%m-%d')
+                return redirect('/')
+            else:
+                flash("Something went wrong! Please try again later")
     return render_template("login.html")
 
 
