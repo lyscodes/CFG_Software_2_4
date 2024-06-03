@@ -5,6 +5,101 @@
     font-family: "Outfit", sans-serif;
 }
 
+/* NAV BAR */
+.container {
+    margin-top: auto;
+    position: fixed;
+    display: flex;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    margin-bottom: 10px;
+    width: 100%;
+    background-color: white;
+    overflow: auto;
+    height: 60px;
+    align-items: center;
+    font-family: "Outfit", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-size: 1.2rem;
+    font-style: normal;
+  }
+  
+  /* ENSURE NAV BAR STRETCHES ACROSS THE SCREEN */
+  body::before {
+    position: fixed;
+    content: "";
+    display: block;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    /* Height should match the height of the navigation bar */
+    background-color: white;
+    z-index: 0;
+    /* Ensure the strip appears behind the navigation bar */
+  }
+  
+  footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 150px;
+    background-color: #ffffff;
+    box-sizing: border-box;
+    display: block;
+    unicode-bidi: isolate;
+    width: 100%;
+  }
+  
+  
+  
+  /* aligns nav items to the left using nav class */
+  .nav {
+    margin-left: auto;
+    color: #A77A01;
+  }
+  
+  a.nav-link {
+    color: #A77A01;
+  }
+  
+  a.nav-link:hover {
+    margin-left: auto;
+    color: #7A5A01;
+  }
+  
+  .nav-pills .nav-link.active {
+    background: #7E70AA;
+  }
+  
+  .nav-pills .nav-link.active:hover {
+    background: #4E6A67;
+  }
+  
+  /* NAV BAR MOBILE VIEW */
+  @media screen and (max-width: 600px) {
+    .nav {
+      flex-direction: column;
+      /* Stack nav items vertically does this even work lol*/
+      align-items: center;
+      /* Center align nav items*/
+    }
+  
+    .nav-item {
+      margin-bottom: 5px;
+      /* Add space between nav items */
+    }
+  }
+  
+  /*BODY*/
+  body {
+    background-color: #F2E7C4;
+    margin-top: auto;
+  }
+
 body {
     display: flex;
     justify-content: center;
@@ -14,7 +109,6 @@ body {
 }
 
 .wrapper {
-
     width: 420px;
     background: transparent;
     border: 2px solid #7A5A01;
@@ -23,6 +117,7 @@ body {
     color: #7A5A01;
     border-radius: 10px;
     padding: 30px 40px;
+    margin-bottom: 100px;
 }
 
 .wrapper h1 {
@@ -51,8 +146,8 @@ body {
     padding: 20px 45px 20px 20px;
 }
 
-.input-box input::placeholder{
-    color: #7A5A01
+.input-box input::placeholder {
+    color: #7A5A01;
 }
 
 .input-box i {
@@ -61,7 +156,6 @@ body {
     top: 50%;
     transform: translateY(-50%);
     font-size: 20px;
-
 }
 
 .wrapper .remember-forgot {
@@ -72,10 +166,8 @@ body {
 }
 
 .remember-forgot label input {
-
     accent-color: #7A5A01;
     margin-right: 3px;
-
 }
 
 .remember-forgot a {
@@ -115,11 +207,9 @@ body {
 
 .register-link p a:hover {
     text-decoration: underline;
-
 }
 
 .notification {
-    background: #7A5A01;
     color: white;
     padding: 20px 40px;
     min-width: 420px;
@@ -131,3 +221,10 @@ body {
     border-left: 5px solid white;
 }
 
+.notification-error {
+    background: red;
+}
+
+.notification:not(.error) {
+    background: green;
+}

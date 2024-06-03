@@ -2,12 +2,13 @@
 // Function to generate dummy data for average emotions
 function generateDummyData() {
     return [
-        { name: 'happy', value: Math.floor(Math.random() * 100) + 1 },
-        { name: 'calm', value: Math.floor(Math.random() * 100) + 1 },
-        { name: 'sad', value: Math.floor(Math.random() * 100) + 1 },
-        { name: 'worried', value: Math.floor(Math.random() * 100) + 1 },
-        { name: 'frustrated', value: Math.floor(Math.random() * 100) + 1 },
-        { name: 'angry', value: Math.floor(Math.random() * 100) + 1 }
+
+        { name: 'happy', {{ graph['happy']}} },
+        { name: 'calm', {{ graph['happy']}} },
+        { name: 'sad', {{ graph['happy']}} },
+        { name: 'worried', {{ graph['happy']}} },
+        { name: 'frustrated', {{ graph['happy']}} },
+        { name: 'angry', {{ graph['happy']}} }
     ];
 }
 

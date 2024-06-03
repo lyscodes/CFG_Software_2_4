@@ -183,8 +183,10 @@ def get_user_id(username):
     return db.fetch_data(query)[0][0]
 
 
-def get_month_emotions(user_id, month, year):
-    dict = {'happy': 3,
+def get_month_emotions(user_id, year, month):
+    month = month # need to pull month from the date inputted
+    year = year # need to pull year from the date inputted
+    dict = {'happy': 40,
             'calm': 4,
             'sad': 5,
             'worried': 10,

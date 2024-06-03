@@ -1,4 +1,4 @@
-from db_utils import get_user_id, today_emotion, add_new_user, check_email, check_username, check_entry_journal, verify_cred, check_entry, add_journal, get_records
+from db_utils import get_user_id, today_emotion, add_new_user, check_email, check_username, check_entry_journal, verify_cred, check_entry, add_journal
 from flask import Flask, render_template, request, flash, redirect, session
 from config import SECRET_KEY
 from helper_oop import QuoteAPI, JokeAPI, MoodDict
@@ -39,14 +39,14 @@ def quote_of_the_day():
         else:
             response = check_entry(session['user_id'], session['date'])
             if response == True:
-                flash("You have already saved an entry for today")
+                flash("You have already saved an entry for today", "notification")
             elif response == False:
                 today_emotion(session['user_id'], session['emotion'], session['mood_url'], session['date'], 'Quote', quote)
                 response_two = check_entry(session['user_id'], session['date'])
                 if response_two:
                     return redirect('/journal')
             else:
-                flash("Something went wrong. Please try again later")
+                flash("Something went wrong. Please try again later", "error")
     return render_template("quote.html", quote=quote, author=author)
 
 
@@ -61,14 +61,14 @@ def joke_generator():
         else:
             response = check_entry(session['user_id'], session['date'])
             if response == True:
-                flash("You have already saved an entry for today")
+                flash("You have already saved an entry for today", "notification")
             elif response == False:
                 today_emotion(session['user_id'], session['emotion'], session['mood_url'], session['date'], 'Joke', result)
                 response_two = check_entry(session['user_id'], session['date'])
                 if response_two:
                     return redirect('/journal')
             else:
-                flash("Something went wrong. Please try again later")
+                flash("Something went wrong. Please try again later", "error")
     return render_template("joke.html", joke=result)
 
 
@@ -81,18 +81,18 @@ def add_journal_entry():
         if 'user' not in session:
             return redirect('/login')
         elif not content:
-            flash('Journal is empty')
+            flash('Journal is empty', "notification-error")
         else:
             response = check_entry_journal(session['user_id'], session['date'])
             if response == True:
-                flash('You have already submitted a diary entry for this date')
+                flash('You have already submitted a diary entry for this date', "notification")
             elif response == False:
                 add_journal(content, session['user_id'], session['date'])
                 response_two = check_entry_journal(session['user_id'], session['date'])
                 if response_two:
                     return redirect('/overview')
             else:
-                flash('Something went wrong. Please try again later.')
+                flash('Something went wrong. Please try again later.', "error")
     return render_template("journal.html")
 
 
@@ -104,24 +104,6 @@ def show_overview():
     return render_template("overview.html")
 
 
-# Shows the saved records for a chosen date
-@app.route('/archive/<date>')
-def show_archive_by_date(date):
-    # Get the records from the database
-    saved_records = get_records(session['user_id'], date)
-    if saved_records is None:
-        flash('You have not saved any records on this date.')
-        return redirect('/overview')
-    record = {}
-    record['emotion'] = saved_records[0]
-    record['gif_url'] = saved_records[1]
-    record['choice'] = saved_records[2]
-    record['quote_joke'] = saved_records[3]
-    record['diary'] = saved_records[4]
-    print(record)
-    return render_template("archive.html", date=date, record=record)
-
-
 # Register a new user
 @app.route('/register', methods=['GET', 'POST'])
 def register_user():
@@ -131,17 +113,17 @@ def register_user():
         for item in ["FirstName", "LastName", "Username", "email", "password", "confirm", "accept_tos"]:
             content[item] = request.form.get(item)
         if content['password'] != content['confirm']:
-            flash('Password and Password Confirmation do not match')
+            flash('Password and Password Confirmation do not match', "error")
         elif check_email(content['email']):
             flash('Email already registered')
         elif check_username(content['Username']):
-            flash('Username already in use')
+            flash('Username already in use', "error")
         else:
             add_new_user(content)
             if check_email(content['email']):
                 return redirect('/login/new')
             else:
-                flash('We were unable to register you at this time. Please try again later')
+                flash('We were unable to register you at this time. Please try again later', "error")
     return render_template("register.html", form=form)
 
 
@@ -149,28 +131,29 @@ def register_user():
 @app.route('/login', methods=['GET', 'POST'])
 @app.route('/login/<user>', methods=['GET', 'POST'])
 def user_login(user=""):
+    session.pop('_flashes', None)
     if user == "new":
-        flash("Your account has been created. Please login.")
+        flash("Your account has been created. Please login.", "notification")
     elif user == "out":
         session.clear()
-        flash("You have been logged out. See you soon!")
+        flash("You have been logged out. See you soon!", "notification")
     if request.method == 'POST':
         session.clear()
         username = request.form.get('uname')
         password = request.form.get('password')
-        # if not check_username(username):
-        #     flash("This username does not exist")
-        # else:
-        response = verify_cred(username, password)
-        if not response:
-            flash("Username and Password do not match")
-        elif response:
-            session['user'] = username
-            session['user_id'] = get_user_id(username)
-            session['date'] = datetime.today().strftime('%Y-%m-%d')
-            return redirect('/')
+        if not check_username(username):
+            flash("This username does not exist", "error")
         else:
-            flash("Something went wrong! Please try again later")
+            response = verify_cred(username, password)
+            if not response:
+                flash("Username and Password do not match", "error")
+            elif response:
+                session['user'] = username
+                session['user_id'] = get_user_id(username)
+                session['date'] = datetime.today().strftime('%Y-%m-%d')
+                return redirect('/')
+            else:
+                flash("Something went wrong! Please try again later", "error")
     return render_template("login.html")
 
 

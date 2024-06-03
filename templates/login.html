@@ -1,24 +1,23 @@
-<title>Login</title>
+{% extends "layout.html" %} {% block title %} Login {% endblock %} {% block
+styles %}
+<link rel="stylesheet" href="../static/css/login-page.css">
+{% endblock %}{% block main %}
 
-{% block style %}
-    <link rel="stylesheet" href="../static/css/login-page.css" />
-
-      <!--font-->
-      <link rel="preconnect" href="https://fonts.googleapis.com">
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-      <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
-{% endblock %}
-
-{% block main %}
 <!-- HTML for the login form -->
-  <div class = "notification">
-    {% with messages = get_flashed_messages() %} {% if messages %} {% for
-    message in messages %}
-    <span id="error">{{ message }}</span>
-    {% endfor %} {% endif %} {% endwith %}
-  </div>
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% for category, message in messages %}
+{% if category == 'error' %}
+<div class="notification-error">
+    <span>{{ message }}</span>
+</div>
+{% else %}
+<div class="notification">
+    <span>{{ message }}</span>
+</div>
+{% endif %}
+{% endfor %}
+{% endwith %}
 
-  
 <div class="wrapper">
     <form method="POST" action="">
         <h1>welcome home.</h1>
