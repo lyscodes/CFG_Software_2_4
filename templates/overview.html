@@ -12,6 +12,7 @@
     <!-- OVERVIEW Header -->
     <div class="overview">
         <p>OVERVIEW</p>
+
     </div>
 
     <!-- Calendar -->
@@ -45,15 +46,41 @@
             </div>
         </form>
         <div id="output"></div>
+
+    <!-- Graph (Dummy)-->
+
+    <div class="graph-container">
+        <div class="bars" id="bars">
+            
+
+            <!-- Bars will be dynamically inserted here -->
+        </div>
+        <div class="bar-labels">
+            <div class="bar-label">Happy</div>
+            <div class="bar-label">Calm</div>
+            <div class="bar-label">Sad</div>
+            <div class="bar-label">Worried</div>
+            <div class="bar-label">Frustrated</div>
+            <div class="bar-label">Angry</div>
+
+
+
+        </div>
+    </div>
+
+    <!-- Graph Stats Title -->
+
+    <div class="stats">
+        <p>STATS FOR </p>
     </div>
 
 
 {% endblock %}
 
 {% block script %}
-    <!-- Include jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Calendar JavaScript -->
+    <script src="../static/overview.js"></script>
 
-    <!-- Custom JavaScript -->
-    <script src="../static/js/overview.js"></script>
+    <!-- Stats JavaScript -->
+    <script src="../overview_page/emotions.js"></script>
 {% endblock %}

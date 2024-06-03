@@ -6,6 +6,9 @@ db_name = 'Mood_Tracker'
 class DbConnectionError(Exception):
     pass
 
+class ValidationCheckError(Exception):
+    pass
+
 def _connect_to_db(db_name):
     connection = mysql.connector.connect(
         host=host,
@@ -33,8 +36,8 @@ def check_entry(user_id, date):
         print(value_query)
         cur.execute(value_query)
         validation_check = cur.fetchall()[0][0]
-    except Exception:
-        print('Validation check error')
+    except ValidationCheckError as e:
+        print('Validation check error', e)
     finally:
         if db_connection:
             db_connection.close()
@@ -208,8 +211,10 @@ def get_user_id(username):
         return user_ID
 
 
-def get_month_emotions(user_id, month, year):
-    dict = {'happy': 3,
+def get_month_emotions(user_id, year, month):
+    month = month # need to pull month from the date inputted
+    year = year # need to pull year from the date inputted
+    dict = {'happy': 40,
             'calm': 4,
             'sad': 5,
             'worried': 10,
