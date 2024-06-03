@@ -158,19 +158,19 @@ def user_login(user=""):
         session.clear()
         username = request.form.get('uname')
         password = request.form.get('password')
-        if not check_username(username):
-            flash("This username does not exist")
+        # if not check_username(username):
+        #     flash("This username does not exist")
+        # else:
+        response = verify_cred(username, password)
+        if not response:
+            flash("Username and Password do not match")
+        elif response:
+            session['user'] = username
+            session['user_id'] = get_user_id(username)
+            session['date'] = datetime.today().strftime('%Y-%m-%d')
+            return redirect('/')
         else:
-            response = verify_cred(username, password)
-            if not response:
-                flash("Username and Password do not match")
-            elif response:
-                session['user'] = username
-                session['user_id'] = get_user_id(username)
-                session['date'] = datetime.today().strftime('%Y-%m-%d')
-                return redirect('/')
-            else:
-                flash("Something went wrong! Please try again later")
+            flash("Something went wrong! Please try again later")
     return render_template("login.html")
 
 
