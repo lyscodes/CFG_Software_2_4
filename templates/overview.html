@@ -10,8 +10,11 @@
 {% block main %}
 
     <!-- Archive Header -->
+
     <div class="archive">
+
         <p>ARCHIVE</p>
+
     </div>
 
     <!-- Calendar -->
@@ -35,22 +38,39 @@
         </div>
     </div>
 
-    <!-- AJAX Form for selecting a month -->
-    <div id="ajax-form-container">
-        <form id="form" method="POST">
-            <h2>Select Month</h2>
-            <input type="month" id="month" name="month">
-            <button type="submit" name="button">Submit</button>
-        </form>
-        <div id="output"></div>
+    <!-- Graph (Dummy)-->
+
+    <div class="graph-container">
+        <div class="bars" id="bars">
+            
+
+            <!-- Bars will be dynamically inserted here -->
+        </div>
+        <div class="bar-labels">
+            <div class="bar-label">Happy</div>
+            <div class="bar-label">Calm</div>
+            <div class="bar-label">Sad</div>
+            <div class="bar-label">Worried</div>
+            <div class="bar-label">Frustrated</div>
+            <div class="bar-label">Angry</div>
+
+
+
+        </div>
+    </div>
+
+    <!-- Graph Stats Title -->
+
+    <div class="stats">
+        <p>STATS FOR </p>
     </div>
 
 {% endblock %}
 
 {% block script %}
-    <!-- Include jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Calendar JavaScript -->
+    <script src="../static/overview.js"></script>
 
-    <!-- Custom JavaScript -->
-    <script src="../static/js/overview.js"></script>
+    <!-- Stats JavaScript -->
+    <script src="../overview_page/emotions.js"></script>
 {% endblock %}
