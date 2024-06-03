@@ -1,4 +1,4 @@
-from db_utils import get_user_id, today_emotion, add_new_user, check_email, check_username, check_entry_journal, verify_cred, check_entry, add_journal
+from db_utils import get_user_id, today_emotion, add_new_user, check_email, check_username, check_entry_journal, verify_cred, check_entry, add_journal, get_records
 from flask import Flask, render_template, request, flash, redirect, session
 from config import SECRET_KEY
 from helper_oop import QuoteAPI, JokeAPI, MoodDict
@@ -102,6 +102,24 @@ def show_overview():
     if 'user' not in session:
         return redirect('/login')
     return render_template("overview.html")
+
+
+# Shows the saved records for a chosen date
+@app.route('/archive/<date>')
+def show_archive_by_date(date):
+    # Get the records from the database
+    saved_records = get_records(session['user_id'], date)
+    if saved_records is None:
+        flash('You have not saved any records on this date.')
+        return redirect('/overview')
+    record = {}
+    record['emotion'] = saved_records[0]
+    record['gif_url'] = saved_records[1]
+    record['choice'] = saved_records[2]
+    record['quote_joke'] = saved_records[3]
+    record['diary'] = saved_records[4]
+    print(record)
+    return render_template("archive.html", date=date, record=record)
 
 
 # Register a new user

@@ -133,6 +133,37 @@ def check_entry_journal(user, date):
 
 # RETRIEVE QUERIES:
 
+# Get all the records for a date
+def get_records(user_id, date):
+    record = None
+    try:
+        db_connection = _connect_to_db(db_name)
+        if not db_connection:
+            raise DbConnectionError("Failed to connect to DB")
+        cur = db_connection.cursor()
+        query = """
+            SELECT 
+            Emotion,
+            Giph_URL,
+            Choice_J_or_Q,
+            Response_J_or_Q,
+            Diary_Entry
+            FROM Entries
+            WHERE User_ID = '{user}' 
+            AND Entry_Date = '{date}';
+            """.format(user=user_id, date=date)
+        print(query)
+        cur.execute(query)
+        record = cur.fetchone()
+        cur.close()
+    except Exception:
+        print("Something went wrong when trying to get the entry")
+    finally:
+        if db_connection:
+            db_connection.close()
+        return record
+
+
 # Get journal entry from date
 def get_journal_entry(user_id, date):
     result_entry = "Oops! Looks like there is no entry on this date"

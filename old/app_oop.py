@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, flash, make_response
 from config import SECRET_KEY
 from helper_oop import QuoteAPI, JokeAPI, MoodDict
-from db_utils import today_emotion, journal_entry
+from db_utils import today_emotion, add_journal_entry
 import datetime
 
 date = datetime.datetime.now().date()
@@ -62,7 +62,7 @@ def add_journal_entry():
         if not content:
             flash('Journal is empty')
         else:
-            response = journal_entry(content, date)
+            response = add_journal_entry(content, date)
             if response == True:
                 flash('Entry submitted')
                 # use fetch here to dynamically take away the form? With an offer to visit overview?
