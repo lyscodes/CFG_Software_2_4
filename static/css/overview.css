@@ -122,6 +122,7 @@ main {
 }
 
 /* Calendar Styles */
+
 .calendar-container {
     width: 80%;
     max-width: 600px;
@@ -130,29 +131,85 @@ main {
     box-shadow: 0 0 10px #0000001a;
     padding: 20px;
     margin: 20px auto;
+    overflow: hidden;
+    margin: 0 auto;
 }
 
 .calendar-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    font-family: "Outfit", sans-serif;
+    background: #A77A01;
+    border-radius: 10px;
+    padding: 5px;
+
+}
+
+.calendar-header h2 {
+    margin: 0;
+    font-size: 30px;
+    color: #fff;
+}
+
+.calendar-header button {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 20px;
+    font-size: 20px; /* Adjust font size */
+    cursor: pointer;
 }
 
 .day-names,
 .days {
     display: flex;
     flex-wrap: wrap;
+    background-color: #f6f6f6;
+    border-radius: 16px;
 }
 
-.day-names div,
+.day-names div {
+    width: 14.28%;
+    text-align: center;
+    padding: 5px 0; 
+    background: #f2f2f2;
+    margin-top: 10px;
+    font-family: "Outfit", sans-serif;
+    font-weight: 400;
+    border-bottom: 1px solid #7A5A01;
+    border-right: 1px solid #7A5A01;
+    border-left: 1px solid #7A5A01;
+    border-top: 1px solid #7A5A01;
+    color: #7A5A01;
+}
+
 .days div {
     width: 14.28%;
     text-align: center;
-    padding: 10px 0;
+    padding: 5px 0; 
+    background: #fff;
+    border-bottom: 1px dotted #7A5A01;
+    border-right: 1px dotted #7A5A01;
+    border-left: 1px dotted #7A5A01;
+    border-top: 1px dotted #7A5A01;
+}
+
+
+/* Style for the links inside the .days div */
+
+.days a {
+    color: #A77A01; /* Color of the link */
+    text-decoration: none; /* No underline */
+}
+
+.days a:hover {
+    color: #7E70AA; /* Color on hover */
+    text-decoration: underline; /* Underline on hover */
 }
 
 .days .empty {
-    background: #f0f0f0;
+    background: #fff;
 }
 
 /* AJAX Form */

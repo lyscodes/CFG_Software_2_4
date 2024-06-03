@@ -17,9 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // Set the month and year in the header
         monthYearDisplay.textContent = currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
 
-        // Update the stats title
-        statsTitle.textContent = `${monthYearDisplay.textContent.toUpperCase()} STATS`;
-
         // Clear the previous days
         daysContainer.innerHTML = '';
 
@@ -32,12 +29,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Add the actual days of the month
-        //Fake link
         for (let day = 1; day <= daysInMonth; day++) {
             const dayDiv = document.createElement('div');
             const link = document.createElement('a');
             link.textContent = day;
-            link.href = `/journal/${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            link.href = `/archive/${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
             dayDiv.appendChild(link);
             daysContainer.appendChild(dayDiv);
         }
@@ -51,26 +47,25 @@ document.addEventListener('DOMContentLoaded', () => {
     prevMonthButton.addEventListener('click', () => changeMonth(-1));
     nextMonthButton.addEventListener('click', () => changeMonth(1));
 
-    renderCalendar();
-});
-
-// Stats Calendar - changes when you move the month
-
-document.addEventListener('DOMContentLoaded', () => {
-    // Function to generate dummy data for average emotions per month
-    function generateMonthlyDummyData() {
-        const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-        const monthlyData = [];
-
-        months.forEach(month => {
-            const monthData = {
+    // Function to make AJAX request for data based on selected month
+    function fetchDataForMonthYear(month, year) {
+        $.ajax({
+            type: 'POST',
+            url: '/overview',
+            contentType: 'application/json',
+            data: JSON.stringify({
                 month: month,
                 year: year
             }),
             success: function(data) {
                 // Update the calendar and stats based on the fetched data
-                // Implement logic to update the UI with the fetched data
                 console.log(data); // Just for testing, replace with actual logic
+                
+                // Update currentDate to the selected month and year
+                currentDate = new Date(year, month - 1); // month - 1 because months are 0-indexed in JS
+
+                // Re-render the calendar
+                renderCalendar();
             },
             error: function(xhr, status, error) {
                 console.error('Error:', error);
@@ -78,38 +73,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Generate dummy data for average emotions per month
-    const monthlyData = generateMonthlyDummyData();
+    renderCalendar();
 
-    // Keep track of the currently displayed month
-    let currentMonthIndex = (new Date()).getMonth(); // Initialize with the current month
+    // Initial AJAX request for the current month
+    fetchDataForMonthYear(currentDate.getMonth() + 1, currentDate.getFullYear());
 
-    // Function to show the previous month
-    function showPrevMonth() {
-        currentMonthIndex = (currentMonthIndex - 1 + 12) % 12; // Ensure the result is a positive number in the range [0, 11]
-        renderMonthlyGraph(monthlyData, currentMonthIndex);
-        updateMonthYearDisplay();
-    }
-
-    // Function to show the next month
-    function showNextMonth() {
-        currentMonthIndex = (currentMonthIndex + 1) % 12; // Ensure the result is in the range [0, 11]
-        renderMonthlyGraph(monthlyData, currentMonthIndex);
-        updateMonthYearDisplay();
-    }
-
-    // Function to update the month and year display
-    function updateMonthYearDisplay() {
-        document.getElementById('monthYear').textContent = monthlyData[currentMonthIndex].month + ' ' + (new Date()).getFullYear();
-        // Update the stats title
-        statsTitle.textContent = `STATS FOR ${monthlyData[currentMonthIndex].month.toUpperCase()} ${monthYearDisplay.textContent.split(' ')[1]}`;
-    }
-
-    // Add event listeners for navigation buttons
-    document.getElementById('prevMonth').addEventListener('click', showPrevMonth);
-    document.getElementById('nextMonth').addEventListener('click', showNextMonth);
-
-    // Render the initial graph
-    renderMonthlyGraph(monthlyData, currentMonthIndex);
-    updateMonthYearDisplay();
+    // Bind form submission to fetch data
+    $('#form').on('submit', function(e) {
+        e.preventDefault();
+        const selectedMonth = new Date($('#month').val());
+        fetchDataForMonthYear(selectedMonth.getMonth() + 1, selectedMonth.getFullYear());
+    });
 });
