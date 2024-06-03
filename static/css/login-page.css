@@ -210,7 +210,6 @@ body {
 }
 
 .notification {
-    background: green;
     color: white;
     padding: 20px 40px;
     min-width: 420px;
@@ -222,15 +221,10 @@ body {
     border-left: 5px solid white;
 }
 
-#error {
+.notification-error {
     background: red;
-    color: white;
-    padding: 20px 40px;
-    min-width: 420px;
-    position: absolute;
-    right: 500px;
-    text-align: center;
-    top: 10px;
-    border-radius: 4px;
-    border-left: 5px solid white;
+}
+
+.notification:not(.error) {
+    background: green;
 }
