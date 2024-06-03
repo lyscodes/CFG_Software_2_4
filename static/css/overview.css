@@ -1,3 +1,11 @@
+.overview {
+    text-align: center;
+    font-size: 45px;
+    font-family: "Outfit", sans-serif;
+    font-weight: 700;
+    color: #A77A01;
+}
+
 /* NAV BAR */
 .container {
     margin-top: auto;
@@ -147,75 +155,26 @@ main {
     background: #f0f0f0;
 }
 
-/* Graph Styles */
-.graph-container {
-    width: 80%;
-    max-width: 600px;
-    background: #fff;
-    border-radius: 10px;
-    box-shadow: 0 0 10px #0000001a;
-    padding: 20px;
-    margin: 20px auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 400px;
-}
-
-.bars {
-    display: flex;
-    width: 100%;
-    height: 80%;
-    align-items: flex-end;
-    justify-content: space-around;
-}
-
-.bar-labels {
-    display: flex;
-    width: 100%;
-    justify-content: space-around;
-}
-
-.bar-label {
-    text-align: center;
-    flex: 1;
-}
-
-/* Stats Title */
-.stats {
-    font-family: "Outfit", sans-serif;
-    color: #A77A01;
-    text-align: center;
-    margin: 20px 0;
-    font-size: 45px;
-    z-index: 1;
-}
-
 /* AJAX Form */
 #ajax-form-container {
     text-align: center;
     margin: 20px auto;
+    color: #A77A01;
+    font-family: "Outfit", sans-serif;
 }
 
-/* MOBILE VIEW SPECIFIC ADJUSTMENTS */
-@media screen and (max-width: 600px) {
-    .calendar-container {
-        position: static;
-        margin: 20px auto;
-        height: auto;
-        max-width: 90%;
-    }
 
-    .graph-container {
-        position: static;
-        margin: 20px auto;
-        width: 90%;
-    }
-
-    .archive, .stats {
-        font-size: 45px;
-        margin: 0;
-        position: static;
-        text-align: center;
-    }
+.btn #submit {
+    width: 100%;
+    height: 30px;
+    background: #7E70AA;
+    color: #ffffff;
+    border: none;
+    outline: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 400;
+    margin-top: 5px;
+    margin-bottom: 10px;
 }

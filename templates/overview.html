@@ -9,9 +9,9 @@
 
 {% block main %}
 
-    <!-- Archive Header -->
-    <div class="archive">
-        <p>ARCHIVE</p>
+    <!-- OVERVIEW Header -->
+    <div class="overview">
+        <p>OVERVIEW</p>
     </div>
 
     <!-- Calendar -->
@@ -34,16 +34,19 @@
             <div class="days" id="days"></div>
         </div>
     </div>
-
+    
     <!-- AJAX Form for selecting a month -->
     <div id="ajax-form-container">
         <form id="form" method="POST">
-            <h2>Select Month</h2>
+            <h2>Select month.</h2>
             <input type="month" id="month" name="month">
-            <button type="submit" name="button">Submit</button>
+            <div class="btn">
+                <button type="submit" value="submit" id="submit">Submit</button>
+            </div>
         </form>
         <div id="output"></div>
     </div>
+
 
 {% endblock %}
 

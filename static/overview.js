@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const monthYearDisplay = document.getElementById('monthYear');
     const prevMonthButton = document.getElementById('prevMonth');
     const nextMonthButton = document.getElementById('nextMonth');
-    const statsTitle = document.querySelector('.stats p');
 
     let currentDate = new Date();
 
@@ -17,9 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Set the month and year in the header
         monthYearDisplay.textContent = currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-
-        // Update the stats title
-        statsTitle.textContent = `${monthYearDisplay.textContent.toUpperCase()} STATS`;
 
         // Clear the previous days
         daysContainer.innerHTML = '';
@@ -63,8 +59,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }),
             success: function(data) {
                 // Update the calendar and stats based on the fetched data
-                // Implement logic to update the UI with the fetched data
                 console.log(data); // Just for testing, replace with actual logic
+                
+                // Update currentDate to the selected month and year
+                currentDate = new Date(year, month - 1); // month - 1 because months are 0-indexed in JS
+
+                // Re-render the calendar
+                renderCalendar();
             },
             error: function(xhr, status, error) {
                 console.error('Error:', error);
