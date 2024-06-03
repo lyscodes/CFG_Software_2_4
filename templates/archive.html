@@ -1,0 +1,72 @@
+{% extends "layout.html" %} 
+
+{% block title %} Archive {% endblock %} 
+
+{% block styles %}
+<link rel="stylesheet" href="../static/css/choices.css" />
+{% endblock %} 
+
+{% block main %}
+<!-- hero section -->
+<div class="hero-section">
+
+    <section>
+        <div class="heading-container">
+            <h3>Your mood on:</h3>
+            <h1>{{date}}</h1>
+        </div>
+    </section>
+
+    <div class="container">
+
+        <div class="row text-center mx-auto gx-5">
+
+            <!-- Your saved emotion and gif for that date -->
+            <div class="col-lg-6">
+                <div class="card" style="width: 24rem">
+                    <div class="card-body">
+                        <h3>You were feeling</h3>
+                        <p class="card-text">
+                            {{record.emotion}}
+                        </p>
+                        <video id="{{ record.emotion }}-gif" width="200" autoplay muted loop>
+                            <source src="{{ record.gif_url }}" type="video/mp4">
+                        </video>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Your saved quote / joke -->
+            <div class="col-lg-6">
+                <div class="card" style="width: 24rem">
+                    <div class="card-body">
+                        <h3>{{record.choice}}
+                        </h3>
+                        <p class="card-text">
+                            {{record.quote_joke}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Your diary entry -->
+            <div class="col-lg-6">
+                <div class="card" style="width: 24rem">
+                    <div class="card-body">
+                        <h3>Diary entry</h3>
+                        <p class="card-text">
+                            {{record.diary}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+

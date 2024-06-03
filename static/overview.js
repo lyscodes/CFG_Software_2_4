@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const dayDiv = document.createElement('div');
             const link = document.createElement('a');
             link.textContent = day;
-            link.href = `/journal/${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            link.href = `/archive/${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
             dayDiv.appendChild(link);
             daysContainer.appendChild(dayDiv);
         }
