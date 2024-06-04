@@ -62,7 +62,25 @@
     </nav>
 
     <!-- main block will be different for each page and dynamically added here -->
-    <main>{% block main %}{% endblock %}</main>
+    <main>
+            <!-- HTML for the login form -->
+      {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+      {% if category == 'error' %}
+      <div class="notification-error">
+          <span>{{ message }}</span>
+      </div>
+      {% else %}
+      <div class="notification">
+          <span>{{ message }}</span>
+      </div>
+      {% endif %}
+      {% endfor %}
+      {% endwith %}
+
+      {% block main %}{% endblock %}
+    
+    </main>
 
     <!-- Footer for all pages -->
     <footer>
