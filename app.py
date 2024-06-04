@@ -136,15 +136,9 @@ def register_user():
         content = {}
         for item in ["FirstName", "LastName", "Username", "email", "password", "confirm", "accept_tos"]:
             content[item] = request.form.get(item)
-
         if content['password'] != content['confirm']:
             flash('Password and Password Confirmation do not match', "error")
-        else:
-            content['password'] = bcrypt.hashpw(content['password'].encode('utf-8'), bcrypt.gensalt())
-            content['password'] = content['password'].decode()
-            content['confirm'] = content['password']
-
-        if check_email(content['email']):
+        elif check_email(content['email']):
             flash('Email already registered')
         elif check_username(content['Username']):
             flash('Username already in use', "error")
@@ -156,6 +150,36 @@ def register_user():
             else:
                 flash('We were unable to register you at this time. Please try again later', "error")
     return render_template("register.html", form=form)
+
+# salting of passwords - to be completed
+
+# @app.route('/register', methods=['GET', 'POST'])
+# def register_user():
+#     form = RegistrationForm(request.form)
+#     if request.method == 'POST':
+#         content = {}
+#         for item in ["FirstName", "LastName", "Username", "email", "password", "confirm", "accept_tos"]:
+#             content[item] = request.form.get(item)
+
+#         if content['password'] != content['confirm']:
+#             flash('Password and Password Confirmation do not match', "error")
+#         else:
+#             content['password'] = bcrypt.hashpw(content['password'].encode('utf-8'), bcrypt.gensalt())
+#             content['password'] = content['password'].decode()
+#             content['confirm'] = content['password']
+
+#         if check_email(content['email']):
+#             flash('Email already registered')
+#         elif check_username(content['Username']):
+#             flash('Username already in use', "error")
+#         else:
+#             add_new_user(content)
+#             if check_email(content['email']):
+#                 flash("Your account has been created. Please login.", "notification")
+#                 return redirect('/login')
+#             else:
+#                 flash('We were unable to register you at this time. Please try again later', "error")
+#     return render_template("register.html", form=form)
 
 
 # Log in with credentials
