@@ -1,9 +1,6 @@
-{% extends "layout.html" %} 
-{% block title %} Quote of the day {% endblock %} 
-
-{% block styles %}
-<link rel="stylesheet" href="../static/css/quote-page.css" />
-{% endblock %} {% block main %}
+{% extends "layout.html" %}{% block title %} Quote of the day {%- endblock -%} 
+{% block styles %}<link rel="stylesheet" href="../static/css/quote-page.css" />
+{%- endblock %}{% block main -%}
 <!-- hero section -->
 <div class="hero-section">
   <section>
@@ -26,15 +23,13 @@
     <h6 class="card-subtitle mb-2 text-muted">- {{author}}</h6>
     <br />
     <form method='Post'>
-       <button type="submit" class="btn">Save today's emotion</button>
+       <button type="submit" class="btn" id="save-entry">Save entry</button>
     </form>
 
   </div>
   <div class="button-area">
     <a href="/journal" class="btn btn-primary">Go to journal</a>
   </div>
-
 </div>
 </div>
-
-{% endblock %}
+{%- endblock %}

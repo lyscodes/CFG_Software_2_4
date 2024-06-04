@@ -1,12 +1,6 @@
-{% extends "layout.html" %} 
-
-{% block title %} Archive {% endblock %} 
-
-{% block styles %}
-<link rel="stylesheet" href="../static/css/choices.css" />
-{% endblock %} 
-
-{% block main %}
+{% extends "layout.html" %}{% block title %}Archive{% endblock %} 
+{% block styles %} <link rel="stylesheet" href="../static/css/choices.css" />{% endblock %} 
+{%- block main -%}
 <!-- hero section -->
 <div class="hero-section">
 
@@ -59,14 +53,9 @@
                         </p>
                     </div>
                 </div>
-            </div>
-
-        
+            </div>        
         </div>
-
     </div>
-
 </div>
-
-{% endblock %}
+{%- endblock %}
 

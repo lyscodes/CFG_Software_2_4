@@ -1,7 +1,6 @@
-{% extends "layout.html" %} {% block title %} Journal {% endblock %} {% block
-styles %}
-<link rel="stylesheet" href="../static/css/journal-page.css" />
-{% endblock %} {% block main %}
+{% extends "layout.html" -%} {%- block title %} Journal {% endblock %} {%- block
+styles -%}<link rel="stylesheet" href="../static/css/journal-page.css" />
+{% endblock -%} {%- block main -%}
 <!-- hero section -->
 <div class="hero-section">
   <section>
@@ -17,8 +16,6 @@ styles %}
       <img src="../static/css/icons/guy (1).png" alt="" />
     </div>
   </div>
-
-
   <div class="form-floating">
     <form method="POST" id="journal_form">
       <textarea
@@ -37,5 +34,4 @@ styles %}
     </div>
   </div>
 </div>
-
-{% endblock %}
+{%- endblock %}

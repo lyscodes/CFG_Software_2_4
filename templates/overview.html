@@ -1,15 +1,6 @@
-{% extends "layout.html" %}
-
-{% block title %} Overview {% endblock %}
-
-{% block styles %}
-    <!-- CSS -->
-    <link rel="stylesheet" type="text/css" href="../static/css/overview.css">
-{% endblock %}
-
-{% block main %}
-
-    <!-- OVERVIEW Header -->
+{% extends "layout.html" %}{% block title %} Overview {% endblock -%}
+{%- block styles %}<link rel="stylesheet" type="text/css" href="../static/css/overview.css">
+{%- endblock %}{% block main -%}
     <div class="overview">
         <p>OVERVIEW</p>
 
@@ -47,12 +38,10 @@
         </form>
         <div id="output"></div>
 
-{% endblock %}
-
-{% block script %}
+{%- endblock -%}
+{% block script -%}
     <!-- Calendar JavaScript -->
     <script src="../static/overview.js"></script>
-
     <!-- Stats JavaScript -->
     <script src="../overview_page/emotions.js"></script>
 {% endblock %}

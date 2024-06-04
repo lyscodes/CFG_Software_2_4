@@ -3,19 +3,23 @@ from flask import Flask, render_template, request, flash, redirect, session
 from config import SECRET_KEY
 from helper_oop import QuoteAPI, JokeAPI, MoodDict
 from registration_form import RegistrationForm
-from datetime import datetime
+from datetime import datetime, timedelta
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = SECRET_KEY
-
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=15) # Any session will expire after 15 minutes
+# Settings to remove the whitespaces added by jinja blocks
+app.jinja_env.lstrip_blocks = True 
+app.jinja_env.trim_blocks = True
 
 # Choose how you feel
 @app.route('/', methods=['GET', 'POST'])
 def mood_checkin():
-    emotions_api = MoodDict()
-    emotions_dict = emotions_api.make_dict()
-    session['mood_dict'] = emotions_dict # in case we do want to save the giphy url - delete if not
-    return render_template("mood.html", emotions=emotions_dict)
+    if not 'mood_dict' in session:  # First check if the session has already a saved dictionary
+        emotions_api = MoodDict()
+        emotions_dict = emotions_api.make_dict()
+        session['mood_dict'] = emotions_dict # in case we do want to save the giphy url - delete if not
+    return render_template("mood.html", emotions=session['mood_dict'])
 
 
 # Accessed after choosing a feeling - allows user to choose between getting a joke or a quote
