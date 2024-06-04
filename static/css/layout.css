@@ -111,8 +111,10 @@ img {
 
 .notification-error {
     background: red;
+    z-index: 12;
 }
 
 .notification:not(.error) {
     background: green;
+    z-index: 12;
 }
