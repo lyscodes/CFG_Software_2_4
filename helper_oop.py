@@ -8,9 +8,6 @@ from abc import ABC, abstractmethod
 
 # This file is dedicated to classes used to make calls to the external APIs used in the app
 
-class APIExceptionError(Exception):
-    pass
-
 
 class APIRequest(ABC):
     def __init__(self, url, params=None, headers=None):
