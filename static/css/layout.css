@@ -93,3 +93,26 @@ img {
     width: 56px;
     float: left;
 }
+
+/* styling for notifications */
+
+
+.notification {
+    color: white;
+    padding: 20px 40px;
+    min-width: 420px;
+    position: absolute;
+    right: 500px;
+    text-align: center;
+    top: 10px;
+    border-radius: 4px;
+    border-left: 5px solid white;
+}
+
+.notification-error {
+    background: red;
+}
+
+.notification:not(.error) {
+    background: green;
+}
