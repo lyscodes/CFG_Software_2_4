@@ -1,6 +1,6 @@
 from db_utils import get_user_id, today_emotion, add_new_user, check_email, check_username, check_entry_journal, verify_cred, check_entry, add_journal, get_records
 from flask import Flask, render_template, request, flash, redirect, session
-from config import SECRET_KEY
+from _config import SECRET_KEY
 from helper_oop import QuoteAPI, JokeAPI, MoodDict
 from registration_form import RegistrationForm
 from datetime import datetime, timedelta

@@ -17,4 +17,4 @@ Werkzeug==3.0.3
 mock~=5.1.0
 WTForms~=3.1.2
 
-pip install bcrypt
+bcrypt==4.1.3

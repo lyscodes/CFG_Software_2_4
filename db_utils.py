@@ -1,5 +1,5 @@
 import mysql.connector
-from config import DB_CONFIG
+from _config import DB_CONFIG
 
 class DbConnectionError(Exception):
     pass
