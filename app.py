@@ -1,22 +1,27 @@
-from db_utils import get_user_id, today_emotion, add_new_user, check_email, check_username, check_entry_journal, verify_cred, check_entry, add_journal
+from db_utils import get_user_id, today_emotion, add_new_user, check_email, check_username, check_entry_journal, verify_cred, check_entry, add_journal, get_records
 from flask import Flask, render_template, request, flash, redirect, session
 from config import SECRET_KEY
 from helper_oop import QuoteAPI, JokeAPI, MoodDict
 from registration_form import RegistrationForm
-from datetime import datetime
+from datetime import datetime, timedelta
 import bcrypt
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = SECRET_KEY
-
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=15) # Any session will expire after 15 minutes
+# Settings to remove the whitespaces added by jinja blocks
+app.jinja_env.lstrip_blocks = True 
+app.jinja_env.trim_blocks = True
 
 # Choose how you feel
 @app.route('/', methods=['GET', 'POST'])
 def mood_checkin():
-    emotions_api = MoodDict()
-    emotions_dict = emotions_api.make_dict()
-    session['mood_dict'] = emotions_dict # in case we do want to save the giphy url - delete if not
-    return render_template("mood.html", emotions=emotions_dict)
+    if not 'mood_dict' in session:  # First check if the session has already a saved dictionary
+        emotions_api = MoodDict()
+        emotions_dict = emotions_api.make_dict()
+        session['mood_dict'] = emotions_dict # in case we do want to save the giphy url - delete if not
+    return render_template("mood.html", emotions=session['mood_dict'])
 
 
 # Accessed after choosing a feeling - allows user to choose between getting a joke or a quote
@@ -105,6 +110,24 @@ def show_overview():
     return render_template("overview.html")
 
 
+# Shows the saved records for a chosen date
+@app.route('/archive/<date>')
+def show_archive_by_date(date):
+    # Get the records from the database
+    saved_records = get_records(session['user_id'], date)
+    if saved_records is None:
+        flash(f"No records saved on {date}")
+        return redirect('/overview')
+    record = {}
+    record['emotion'] = saved_records[0]
+    record['gif_url'] = saved_records[1]
+    record['choice'] = saved_records[2]
+    record['quote_joke'] = saved_records[3]
+    record['diary'] = saved_records[4]
+    print(record)
+    return render_template("archive.html", date=date, record=record)
+
+
 # Register a new user
 @app.route('/register', methods=['GET', 'POST'])
 def register_user():
@@ -128,7 +151,8 @@ def register_user():
         else:
             add_new_user(content)
             if check_email(content['email']):
-                return redirect('/login/new')
+                flash("Your account has been created. Please login.", "notification")
+                return redirect('/login')
             else:
                 flash('We were unable to register you at this time. Please try again later', "error")
     return render_template("register.html", form=form)
@@ -136,32 +160,33 @@ def register_user():
 
 # Log in with credentials
 @app.route('/login', methods=['GET', 'POST'])
-@app.route('/login/<user>', methods=['GET', 'POST'])
-def user_login(user=""):
-    session.pop('_flashes', None)
-    if user == "new":
-        flash("Your account has been created. Please login.", "notification")
-    elif user == "out":
-        session.clear()
-        flash("You have been logged out. See you soon!", "notification")
+def user_login():
     if request.method == 'POST':
         session.clear()
         username = request.form.get('uname')
         password = request.form.get('password')
         if not check_username(username):
-            flash("This username does not exist", "error")
+            flash("This username does not exist")
         else:
             response = verify_cred(username, password)
             if not response:
-                flash("Username and Password do not match", "error")
+                flash("Username and Password do not match")
             elif response:
                 session['user'] = username
                 session['user_id'] = get_user_id(username)
                 session['date'] = datetime.today().strftime('%Y-%m-%d')
                 return redirect('/')
             else:
-                flash("Something went wrong! Please try again later", "error")
+                flash("Something went wrong! Please try again later")
     return render_template("login.html")
+
+
+# Log out and clear the session
+@app.route('/logout')
+def user_logout():
+    session.clear()
+    flash("You have been logged out. See you soon!", "notification")
+    return redirect('/')
 
 
 if __name__ == '__main__':

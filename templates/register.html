@@ -1,6 +1,8 @@
-<title>Register</title>
+{% extends "layout.html" %}
 
-{% block style %}
+{% block title %} Register {% endblock %}
+
+{% block styles %}
 <!-- to do: add stylesheet <link> here -->
 <link rel="stylesheet" href="../static/css/register-page.css" />
 
@@ -11,14 +13,9 @@
   href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap"
   rel="stylesheet"/>
 
-{% endblock %} {% block main %}
+{% endblock %} 
 
-<div class ="flash">
-  {% with messages = get_flashed_messages() %} {% if messages %} {% for message
-  in messages %}
-  <span id="error">{{ message }}</span>
-  {% endfor %} {% endif %} {% endwith %}
-</div>
+{% block main %}
 
 <div class="wrapper">
   {% from "_formhelpers.html" import render_field %}
@@ -67,7 +64,9 @@
   </form>
 </div>
 
-{% endblock %} {% block script %}
+{% endblock %} 
+
+{% block script %}
 <!-- to do: add any script for the register page here (if needed) -->
 <link
   href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"

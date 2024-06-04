@@ -1,7 +1,6 @@
-{% extends "layout.html" %} {% block title %} Journal {% endblock %} {% block
-styles %}
-<link rel="stylesheet" href="../static/css/journal-page.css" />
-{% endblock %} {% block main %}
+{% extends "layout.html" -%} {%- block title %} Journal {% endblock %} {%- block
+styles -%}<link rel="stylesheet" href="../static/css/journal-page.css" />
+{% endblock -%} {%- block main -%}
 <!-- hero section -->
 <div class="hero-section">
   <section>
@@ -16,13 +15,6 @@ styles %}
     <div id="guy-journalling-image">
       <img src="../static/css/icons/guy (1).png" alt="" />
     </div>
-  </div>
-
-  <div>
-    {% with messages = get_flashed_messages() %} {% if messages %} {% for
-    message in messages %}
-    <span id="error">{{ message }}</span>
-    {% endfor %} {% endif %} {% endwith %}
   </div>
   <div class="form-floating">
     <form method="POST" id="journal_form">
@@ -42,5 +34,4 @@ styles %}
     </div>
   </div>
 </div>
-
-{% endblock %}
+{%- endblock %}

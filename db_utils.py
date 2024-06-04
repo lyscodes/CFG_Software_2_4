@@ -1,7 +1,5 @@
 import mysql.connector
 from config import DB_CONFIG
-from functools import wraps
-
 
 class DbConnectionError(Exception):
     pass
@@ -155,8 +153,10 @@ def get_records(user_id, date):
         WHERE User_ID = '{user}' 
         AND Entry_Date = '{date}';
         """.format(user=user_id, date=date)
-
-    return db.fetch_data(query)[0]
+    try:
+        return db.fetch_data(query)[0]
+    except Exception:
+        return None
 
 
 # Get journal entry from date
@@ -182,10 +182,8 @@ def get_user_id(username):
     return db.fetch_data(query)[0][0]
 
 
-def get_month_emotions(user_id, year, month):
-    month = month # need to pull month from the date inputted
-    year = year # need to pull year from the date inputted
-    dict = {'happy': 40,
+def get_month_emotions(user_id, month, year):
+    dict = {'happy': 3,
             'calm': 4,
             'sad': 5,
             'worried': 10,
