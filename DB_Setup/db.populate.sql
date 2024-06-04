@@ -1,6 +1,5 @@
 USE Mood_Tracker;
 
-USE Mood_Tracker;
 
 INSERT INTO Users
 (First_Name, Family_Name, User_Name, Email, Password)

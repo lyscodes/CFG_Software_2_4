@@ -3,7 +3,6 @@ from config import DB_CONFIG
 from functools import wraps
 
 
-
 class DbConnectionError(Exception):
     pass
 

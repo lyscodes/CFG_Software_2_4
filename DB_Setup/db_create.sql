@@ -10,8 +10,9 @@ CREATE TABLE Users (
 	Family_Name VARCHAR(50) NOT NULL,
 	User_Name VARCHAR(50) NOT NULL UNIQUE,
     Email VARCHAR(50) NOT NULL UNIQUE,
-	Password VARCHAR(50) NOT NULL
+	Password VARCHAR(200) NOT NULL
 );
+
 
 -- create table that stores entries in mood tracker app
 CREATE TABLE Entries (

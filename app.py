@@ -4,6 +4,7 @@ from config import SECRET_KEY
 from helper_oop import QuoteAPI, JokeAPI, MoodDict
 from registration_form import RegistrationForm
 from datetime import datetime
+import bcrypt
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = SECRET_KEY
@@ -112,9 +113,15 @@ def register_user():
         content = {}
         for item in ["FirstName", "LastName", "Username", "email", "password", "confirm", "accept_tos"]:
             content[item] = request.form.get(item)
+
         if content['password'] != content['confirm']:
             flash('Password and Password Confirmation do not match', "error")
-        elif check_email(content['email']):
+        else:
+            content['password'] = bcrypt.hashpw(content['password'].encode('utf-8'), bcrypt.gensalt())
+            content['password'] = content['password'].decode()
+            content['confirm'] = content['password']
+
+        if check_email(content['email']):
             flash('Email already registered')
         elif check_username(content['Username']):
             flash('Username already in use', "error")
