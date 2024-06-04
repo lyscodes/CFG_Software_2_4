@@ -8,6 +8,10 @@ from abc import ABC, abstractmethod
 
 # This file is dedicated to classes used to make calls to the external APIs used in the app
 
+class APIExceptionError(Exception):
+    pass
+
+
 class APIRequest(ABC):
     def __init__(self, url, params=None, headers=None):
         self.url = url
@@ -23,7 +27,11 @@ class APIRequest(ABC):
             self.params = {}
 
     def __call__(self): # put custom try and except here and return None is unsuccessful?
-        response = requests.get(self.url, params=self.params, headers=self.headers).json()
+        try:
+            response = requests.get(self.url, params=self.params, headers=self.headers)
+            response.raise_for_status()
+        except requests.exceptions.HTTPError as e:
+            print(e)
         return response
 
     @abstractmethod
@@ -37,11 +45,13 @@ class QuoteAPI(APIRequest):
         self.url = 'https://zenquotes.io/api/today'
 
     def unpack(self):
-        response = self.__call__()
-        if response:
-            quote = response[0]['q']
-            author = response[0]['a']
-        else:
+        try:
+            response = self.__call__()
+            clean_response = response.json()
+            quote = clean_response[0]['q']
+            author = clean_response[0]['a']
+        except Exception as e:
+            print(e)
             random_quote = random.choice(list(default_quotes))
             quote = random_quote['q']
             author = random_quote['a']
@@ -53,10 +63,12 @@ class JokeAPI(APIRequest):
         self.url = 'https://icanhazdadjoke.com/'
 
     def unpack(self):
-        response = self.__call__()
-        if response:
-            joke = response['joke']
-        else:
+        try:
+            response = self.__call__()
+            clean_response = response.json()
+            joke = clean_response['joke']
+        except Exception as e:
+            print(e)
             joke = random.choice(default_jokes)
         return joke
 
@@ -71,13 +83,16 @@ class MoodAPI(APIRequest):
             "offset": randint(0, 300)}
 
     def unpack(self):
-        response = self.__call__()
-        list = response['data']
-        if list:
+        try:
+            response = self.__call__()
+            clean_response = response.json()
+            list = clean_response['data']
             item = list[0]
             gif_url = item['images']['fixed_width']['mp4']
-        else:
-            gif_url = None
+        except Exception as e:
+            print(e)
+            mood = self.params['q']
+            gif_url = default_gifs[mood]
         return gif_url
 
 
@@ -89,10 +104,7 @@ class MoodDict(object):
 
     def make_dict(self):
         for mood in self.list:
-            gif_url = MoodAPI(mood).unpack()
-            if gif_url:
-                self.dict[mood] = gif_url
-            else:
-                self.dict[mood] = default_gifs[mood]
+            self.dict[mood] = MoodAPI(mood).unpack()
         return self.dict
+
 
