@@ -1,7 +1,6 @@
 import mysql.connector
 from config import DB_CONFIG
 
-
 class DbConnectionError(Exception):
     pass
 
