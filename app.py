@@ -139,7 +139,8 @@ def register_user():
         else:
             add_new_user(content)
             if check_email(content['email']):
-                return redirect('/login/new')
+                flash("Your account has been created. Please login.", "notification")
+                return redirect('/login')
             else:
                 flash('We were unable to register you at this time. Please try again later', "error")
     return render_template("register.html", form=form)
@@ -147,33 +148,33 @@ def register_user():
 
 # Log in with credentials
 @app.route('/login', methods=['GET', 'POST'])
-@app.route('/login/<user>', methods=['GET', 'POST'])
-def user_login(user=""):
-    session.pop('_flashes', None)
-    if user == "new":
-        flash("Your account has been created. Please login.", "notification")
-    elif user == "out":
-        session.clear()
-        flash("You have been logged out. See you soon!", "notification")
+def user_login():
     if request.method == 'POST':
         session.clear()
-        print("session has been cleared as the login method was post")
         username = request.form.get('uname')
         password = request.form.get('password')
         if not check_username(username):
-            flash("This username does not exist", "error")
+            flash("This username does not exist")
         else:
             response = verify_cred(username, password)
             if not response:
-                flash("Username and Password do not match", "error")
+                flash("Username and Password do not match")
             elif response:
                 session['user'] = username
                 session['user_id'] = get_user_id(username)
                 session['date'] = datetime.today().strftime('%Y-%m-%d')
                 return redirect('/')
             else:
-                flash("Something went wrong! Please try again later", "error")
+                flash("Something went wrong! Please try again later")
     return render_template("login.html")
+
+
+# Log out and clear the session
+@app.route('/logout')
+def user_logout():
+    session.clear()
+    flash("You have been logged out. See you soon!", "notification")
+    return redirect('/')
 
 
 if __name__ == '__main__':
