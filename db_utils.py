@@ -154,8 +154,10 @@ def get_records(user_id, date):
         WHERE User_ID = '{user}' 
         AND Entry_Date = '{date}';
         """.format(user=user_id, date=date)
-
-    return db.fetch_data(query)[0]
+    try:
+        return db.fetch_data(query)[0]
+    except Exception:
+        return None
 
 
 # Get journal entry from date
