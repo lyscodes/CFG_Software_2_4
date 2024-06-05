@@ -53,7 +53,7 @@ def quote_of_the_day():
             try:
                 response = check_entry(session['user_id'], session['date'])
                 if response == True:
-                    flash("You have already saved an entry for today", "notification")
+                    flash("You have already saved an entry for today", "error")
                 elif response == False:
                     today_emotion(session['user_id'], session['emotion'], session['mood_url'], session['date'], 'Quote', quote)
                     response_two = check_entry(session['user_id'], session['date'])
@@ -79,7 +79,7 @@ def joke_generator():
             try:
                 has_entry = check_entry(session['user_id'], session['date'])
                 if has_entry:
-                    flash("You have already saved an entry for today", "notification")
+                    flash("You have already saved an entry for today", "error")
                 else:
                     today_emotion(session['user_id'], session['emotion'], session['mood_url'], session['date'], 'Joke', session['result'])
                     entry_is_added = check_entry(session['user_id'], session['date'])
