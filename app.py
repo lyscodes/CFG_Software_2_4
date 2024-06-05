@@ -1,4 +1,4 @@
-from db_utils import get_month_emotions, get_user_id, today_emotion, add_new_user, check_email, check_username, get_password, check_entry_journal, verify_cred, check_entry, add_journal, get_records
+from db_utils import get_month_emotions, get_user_id, today_emotion, add_new_user, check_email, check_username, get_password, check_entry_journal, check_entry, add_journal, get_records
 from flask import Flask, render_template, request, flash, redirect, session, jsonify
 from config import SECRET_KEY
 from helper_oop import QuoteAPI, JokeAPI, MoodDict
@@ -188,8 +188,6 @@ def register_user():
                 add_new_user(content)
                 if check_email(content['email']):
                     return redirect('/login')
-        except Exception as e:
-            print(e)
             flash('We were unable to register you at this time. Please try again later', "error")
     return render_template("register.html", form=form)
 
