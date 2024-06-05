@@ -68,17 +68,16 @@
       <!-- HTML for the login form -->
       {%- with messages = get_flashed_messages(with_categories=true) -%} {%- for
       category, message in messages -%} {%- if category == 'error' -%}
-      <div class="flash-messages">
-        <div class="notification-error">
-          <span>{{ message }}</span>
-        </div>
-        {% else %}
-        <div class="notification">
-          <span>{{ message }}</span>
-        </div>
-        {%- endif -%} {%- endfor -%} {%- endwith %}
+
+      <div class="notification-error">
+        <span>{{ message }}</span>
       </div>
-      {%- block main -%}{%- endblock %}
+      {% else %}
+      <div class="notification">
+        <span>{{ message }}</span>
+      </div>
+      {%- endif -%} {%- endfor -%} {%- endwith %} {%- block main -%}{%- endblock
+      %}
     </main>
 
     <!-- Footer for all pages -->
@@ -88,7 +87,10 @@
       </div>
       
       <div class="icons">
-        <a class="fa-brands fa-square-github fa-3x" href="https://github.com/lyscodes/CFG_Software_2_4"></a>
+        <a
+          class="fa-brands fa-square-github fa-3x"
+          href="https://github.com/lyscodes/CFG_Software_2_4"
+        ></a>
       </div>
       
     </footer>

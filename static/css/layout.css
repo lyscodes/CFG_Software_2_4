@@ -22,7 +22,6 @@
 .nav {
     margin-left: auto;
     color: #A77A01;
-    
 }
 
 
@@ -54,8 +53,7 @@ a.nav-link:hover {
     text-align: center;
 }
 
-.fa-square-github {
-    color: rgba(111, 111, 111, 0.736);
+.fa-square-github { color: rgba(111, 111, 111, 0.736); 
     font-weight: 100;
     padding-top: 24px;
     margin-bottom: 16px;
@@ -76,6 +74,7 @@ a {
 }
 
 
+
 .logo-image {
     height: 64px;
     width: 80px;
@@ -88,22 +87,19 @@ a {
 
 .notification {
     color: white;
-    padding: 20px 40px;
-    min-width: 420px;
-    position: absolute;
-    right: 500px;
+    padding: 16px 6px;
+    width: 420px;
+    position: sticky;
     text-align: center;
-    top: 10px;
+    top: 8px;
     border-radius: 4px;
-    border-left: 5px solid white;
+    margin:auto;
 }
 
 .notification-error {
     background: red;
-    z-index: 12;
 }
 
 .notification:not(.error) {
-    background: green;
-    z-index: 12;
+    background: rgba(0, 128, 0, 0.685);
 }
