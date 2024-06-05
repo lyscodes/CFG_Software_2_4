@@ -1,6 +1,8 @@
 import mysql.connector
 from config import DB_CONFIG
 
+
+
 class DbConnectionError(Exception):
     pass
 
@@ -84,34 +86,15 @@ def check_username(username):
     validation_check = False
     try:
         db = DbConnection()
-        query = """SELECT EXISTS (SELECT User_Name FROM users
+        query = """SELECT EXISTS (SELECT User_Name FROM Users
                 WHERE User_Name = '{input_to_check}');""".format(
             input_to_check=username
         )
-        print(query)
         validation_check = db.fetch_data(query)[0][0]
     except Exception as e:
         print('Validation check error', e)
     finally:
         return validation_check
-
-
-def verify_cred(username, password):
-    validation_check = False
-    try:
-        db = DbConnection()
-        query = """SELECT EXISTS (SELECT User_Name FROM Users
-                    WHERE User_Name = '{Username}' AND Password = '{password}');""".format(
-                Username=username,
-                password=password
-            )
-
-        validation_check = db.fetch_data(query)
-    except Exception as e:
-        print('Unable to verify password', e)
-    finally:
-        return validation_check
-
 
 
 def check_entry_journal(user, date):
@@ -154,7 +137,7 @@ def get_records(user_id, date):
     try:
         return db.fetch_data(query)[0]
     except Exception as e:
-        print(e)
+        print('Get records function:', e)
         return None
 
 
@@ -185,14 +168,46 @@ def get_user_id(username):
         return None
 
 
+# Retrieve hashed_password
+def get_password(username):
+    try:
+        db = DbConnection()
+        query = """SELECT Password FROM Users
+                    WHERE User_Name = '{Username}'""".format(
+                Username=username
+            )
+        return db.fetch_data(query)[0][0]
+    except Exception as e:
+        print('Unable to verify password', e)
+        return None
+
+
 def get_month_emotions(user_id, month, year):
-    dict = {'happy': 3,
-            'calm': 4,
-            'sad': 5,
-            'worried': 10,
-            'frustrated': 12,
-            'angry': 1}
-    return dict
+    query = """SELECT
+            emotion, COUNT(Emotion)
+            FROM Entries
+            WHERE  User_ID = {user_id}
+            AND MONTH(Entry_Date) = {month}
+            AND YEAR(Entry_Date) = {year}
+            group by emotion""".format(user_id=user_id, month=month, year=year)
+    try:
+        db = DbConnection()
+        return order_month_data(db.fetch_data(query))
+    except Exception as e:
+        print(e)
+        return None
+
+
+# Organise the month data in the order needed for the frontend
+def order_month_data(data):
+    my_data = dict(data)
+    myList = ["angry", "calm", "frustrated", "happy", "sad", "worried"]
+    for i in range(len(myList)):
+        if myList[i] not in my_data:
+            myList[i] = 0
+        else:
+            myList[i] = my_data[myList[i]]
+    return myList
 
 
 # COMMIT QUERIES:
@@ -219,13 +234,13 @@ def add_new_user(user):
     try:
         db = DbConnection()
         query = """INSERT INTO Users (First_Name, Family_Name, User_Name, Email, Password)
-                VALUES('{FirstName}', '{LastName}', '{Username}', '{email}', '{password}');""".format(
+                VALUES('{FirstName}', '{LastName}', '{Username}', '{email}', "{password}")""".format(
             FirstName=user['FirstName'],
             LastName=user['LastName'],
             Username=user['Username'],
             email=user['email'],
-            password=user['password']
-        )
+            password=user['hashed_password'])
+        print(query)
         db.commit_data(query)
     except Exception as e:
         print('Unable to add new user', e)
@@ -244,4 +259,3 @@ def add_journal(entry, user, date):
     except Exception as e:
         print("Some exception was raised when trying to add entry", e)
 
-check_email('rachel.tookey@gmail.com')

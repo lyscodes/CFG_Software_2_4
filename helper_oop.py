@@ -27,9 +27,9 @@ class APIRequest(ABC):
         try:
             response = requests.get(self.url, params=self.params, headers=self.headers)
             response.raise_for_status()
+            return response
         except requests.exceptions.HTTPError as e:
             print(e)
-        return response
 
     @abstractmethod
     def unpack(self):
