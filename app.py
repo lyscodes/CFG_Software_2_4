@@ -139,7 +139,6 @@ def show_overview():
                 return jsonify({'output': myList, 'label': f'Your moods for {month_name} {year} were...'})
         except Exception as e:
             print('Overview: ', e)
-            flash("Something has gone wrong, try again later!", 'error')
     return render_template("overview.html")
 
 
