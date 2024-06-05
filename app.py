@@ -108,15 +108,17 @@ def show_overview():
     if 'user' not in session:
         return redirect('/login')
     if request.method == "POST":
-        date = request.form.get('month')
-        clean_date = datetime.strptime(date, "%Y-%m-%d")
-        if clean_date:
+        try:
+            date = request.form.get('month')
+            clean_date = datetime.strptime(date, "%Y-%m-%d")
             month = int(clean_date.month)
             year = int(clean_date.year)
             print(month, year)
             myList = (get_month_emotions(session['user_id'], month, year))
             return jsonify({'output': myList, 'label': f'Your moods for {month} {year} are...'})
-        return jsonify({'error':'Error!'})
+        except Exception as e:
+            print(e)
+            flash("Something has gone wrong, try again later", 'error')
     return render_template("overview.html")
 
 
@@ -126,7 +128,7 @@ def show_archive_by_date(date):
     # Get the records from the database
     saved_records = get_records(session['user_id'], date)
     if saved_records is None:
-        flash(f"No records saved on {date}")
+        flash(f"No records saved on {date}", 'notification')
         return redirect('/overview')
     record = {}
     record['emotion'] = saved_records[0]
