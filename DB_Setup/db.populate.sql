@@ -4,8 +4,8 @@ USE Mood_Tracker;
 INSERT INTO Users
 (First_Name, Family_Name, User_Name, Email, Password)
 VALUES
-('John', 'Doe', 'JoDoe', 'johndoes@example.com', 'password123'),
-('Lucy', 'Smith', 'LSmith', 'lsmith@example.com', 'hello123');
+('John', 'Doe', 'JoDoe', 'johndoes@example.com', "$2b$12$.VxfEmaBgIMwLNuhfZxmVOXjfo2Xm8K5i1bADqYJmCSu/aTst6IAW"),
+('Lucy', 'Smith', 'LSmith', 'lsmith@example.com', "$2b$12$6Y6aUmThOUKmf0DHxEv26OiL/5YfAPMzCLzjKoZ6lHhBW5u3hn0ym");
 
 
 INSERT INTO Entries
