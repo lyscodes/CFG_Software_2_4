@@ -10,9 +10,7 @@ CREATE TABLE Users (
 	Family_Name VARCHAR(50) NOT NULL,
 	User_Name VARCHAR(50) NOT NULL UNIQUE,
     Email VARCHAR(50) NOT NULL UNIQUE,
-	Password VARCHAR(50) NOT NULL,
-    Salt VARCHAR(100),
-    Hashed_Password VARCHAR(200)
+	Password VARCHAR(72) NOT NULL
 );
 
 
