@@ -183,8 +183,7 @@ def get_password(username):
 
 
 def get_month_emotions(user_id, month, year):
-    query = """SELECT
-            emotion, COUNT(Emotion)
+    query = """SELECT emotion, COUNT(Emotion)
             FROM Entries
             WHERE  User_ID = {user_id}
             AND MONTH(Entry_Date) = {month}
