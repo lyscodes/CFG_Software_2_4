@@ -136,7 +136,7 @@ def show_overview():
                 month = int(cleaner_date.month)
                 year = int(cleaner_date.year)
                 myList = get_month_emotions(session['user_id'], month, year)
-                return jsonify({'output': myList, 'label': f'Your moods for {month_name} {year} were...'})
+                return jsonify({'output': myList, 'label': f'Your moods for {month_name} {year}...'})
         except Exception as e:
             print('Overview: ', e)
     return render_template("overview.html")
