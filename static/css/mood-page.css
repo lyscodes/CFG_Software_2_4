@@ -66,6 +66,7 @@ footer {
 .nav {
   margin-left: auto;
   color: #A77A01;
+  margin-top: 20px;
 }
 
 a.nav-link {
@@ -194,18 +195,6 @@ body {
   color: #A77A01;
   margin-top: 5px;
   text-align: center;
-}
-
-/* GIPHY IMAGE */
-.giphy {
-  position: fixed;
-  bottom: 10px;
-  left: 10px;
-}
-
-.giphy img {
-  width: 100px;
-  height: auto;
 }
 
 /* MOBILE VIEW */

@@ -5,41 +5,6 @@
     font-family: "Outfit", sans-serif;
 }
 
-/* NAV BAR */
-.container {
-    margin-top: auto;
-    position: fixed;
-    display: flex;
-    top: 0;
-    left: 0;
-    right: 0;
-    margin-bottom: 10px;
-    width: 100%;
-    background-color: white;
-    overflow: auto;
-    height: 60px;
-    align-items: center;
-    font-family: "Outfit", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 400;
-    font-size: 1.2rem;
-    font-style: normal;
-    z-index: 1;
-}
-
-/* ENSURE NAV BAR STRETCHES ACROSS THE SCREEN */
-body::before {
-    position: fixed;
-    content: "";
-    display: block;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 60px;
-    background-color: white;
-    z-index: 0;
-}
-
 main {
     display: flex;
     justify-content: center;
@@ -47,6 +12,7 @@ main {
     min-height: 100vh;
     background: #F2E7C4;
 }
+
 
 .wrapper {
     width: 100%;
@@ -58,9 +24,7 @@ main {
     color: #7A5A01;
     border-radius: 10px;
     padding: 40px 35px 45px;
-    margin: 10px;
-    z-index: 0;
-    margin: 80px auto 10px;
+    margin: -50px auto 10px;
 }
 
 .wrapper h1 {

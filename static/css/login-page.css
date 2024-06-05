@@ -7,39 +7,39 @@
 
 /* NAV BAR */
 .container {
-    margin-top: auto;
-    position: fixed;
-    display: flex;
-    top: 0px;
-    left: 0px;
-    right: 0px;
-    margin-bottom: 10px;
-    width: 100%;
-    background-color: white;
-    overflow: auto;
-    height: 60px;
-    align-items: center;
-    font-family: "Outfit", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 400;
-    font-size: 1.2rem;
-    font-style: normal;
-  }
-  
-  /* ENSURE NAV BAR STRETCHES ACROSS THE SCREEN */
-  body::before {
-    position: fixed;
-    content: "";
-    display: block;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 60px;
-    /* Height should match the height of the navigation bar */
-    background-color: white;
-    z-index: 0;
-    /* Ensure the strip appears behind the navigation bar */
-  }
+  margin-top: auto;
+  position: fixed;
+  display: flex;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  margin-top: 5px;
+  width: 100%;
+  background-color: white;
+  overflow:hidden;
+  height: 60px;
+  align-items: center;
+  font-family: "Outfit", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: 1.2rem;
+  font-style: normal;
+}
+
+/* ENSURE NAV BAR STRETCHES ACROSS THE SCREEN */
+body::before {
+  position: fixed;
+  content: "";
+  display: block;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 65px;
+  /* Height should match the height of the navigation bar */
+  background-color: white;
+  z-index: -2;
+  /* Ensure the strip appears behind the navigation bar */
+}
   
   footer {
     position: fixed;
@@ -60,6 +60,7 @@
   .nav {
     margin-left: auto;
     color: #A77A01;
+    margin-top: 20px;
   }
   
   a.nav-link {
@@ -95,10 +96,6 @@
   }
   
   /*BODY*/
-  body {
-    background-color: #F2E7C4;
-    margin-top: auto;
-  }
 
 body {
     display: flex;
@@ -106,6 +103,7 @@ body {
     align-items: center;
     min-height: 100vh;
     background: #F2E7C4;
+    margin-top: auto;
 }
 
 .wrapper {
@@ -156,27 +154,6 @@ body {
     top: 50%;
     transform: translateY(-50%);
     font-size: 20px;
-}
-
-.wrapper .remember-forgot {
-    display: flex;
-    justify-content: space-between;
-    font-size: 14.5px;
-    margin: -15px 0 15px;
-}
-
-.remember-forgot label input {
-    accent-color: #7A5A01;
-    margin-right: 3px;
-}
-
-.remember-forgot a {
-    color: #7A5A01;
-    text-decoration: none;
-}
-
-.remember-forgot a:hover {
-    text-decoration: underline;
 }
 
 .wrapper .btn {
