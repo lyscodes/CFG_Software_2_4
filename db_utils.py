@@ -186,13 +186,8 @@ def get_user_id(username):
 
 
 def get_month_emotions(user_id, month, year):
-    dict = {'happy': 3,
-            'calm': 4,
-            'sad': 5,
-            'worried': 10,
-            'frustrated': 12,
-            'angry': 1}
-    return dict
+    myList = [40, 40, 40, 40 , 40 ,40]
+    return myList
 
 
 # COMMIT QUERIES:

@@ -1,5 +1,5 @@
-from db_utils import get_user_id, today_emotion, add_new_user, check_email, check_username, check_entry_journal, verify_cred, check_entry, add_journal, get_records
-from flask import Flask, render_template, request, flash, redirect, session
+from db_utils import get_month_emotions, get_user_id, today_emotion, add_new_user, check_email, check_username, check_entry_journal, verify_cred, check_entry, add_journal, get_records
+from flask import Flask, render_template, request, flash, redirect, session, jsonify
 from config import SECRET_KEY
 from helper_oop import QuoteAPI, JokeAPI, MoodDict
 from registration_form import RegistrationForm
@@ -103,10 +103,20 @@ def add_journal_entry():
 
 
 # Get calendar view of your entries + stats of moods
-@app.route('/overview', methods=['GET'])
+@app.route('/overview', methods=['GET', 'POST'])
 def show_overview():
     if 'user' not in session:
         return redirect('/login')
+    if request.method == "POST":
+        date = request.form.get('month')
+        clean_date = datetime.strptime(date, "%Y-%m-%d")
+        if clean_date:
+            month = int(clean_date.month)
+            year = int(clean_date.year)
+            print(month, year)
+            myList = (get_month_emotions(session['user_id'], month, year))
+            return jsonify({'output': myList, 'label': f'Your moods for {month} {year} are...'})
+        return jsonify({'error':'Error!'})
     return render_template("overview.html")
 
 
