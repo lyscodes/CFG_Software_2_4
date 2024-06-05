@@ -53,19 +53,11 @@ a.nav-link:hover {
     text-align: center;
 }
 
-.fa-square-github {
-    color: rgba(111, 111, 111, 0.736);
+.fa-square-github { color: rgba(111, 111, 111, 0.736); 
     font-weight: 100;
-    margin-top: 24px;
-    padding: 48px;
-}
+    margin-top: 24px; 
+    padding: 48px; }
 
-/* a {
-    text-align: center;
-    color: rgba(111, 111, 111, 0.809);
-    text-decoration: none;
-    text-align: center;
-} */
 
 
 img {
