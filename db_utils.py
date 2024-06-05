@@ -1,6 +1,8 @@
 import mysql.connector
 from _config import DB_CONFIG
 
+
+
 class DbConnectionError(Exception):
     pass
 
@@ -19,6 +21,10 @@ class DbConnection:
             )
         self.cur = self.connection.cursor()        
 
+    def close_connection(self):
+        if self.connection:
+            self.connection.close()
+            return "DB connection closed."
 
     def commit_data(self, query):
         try:
@@ -33,22 +39,17 @@ class DbConnection:
     def fetch_data(self, query):
         try:
             self.cur.execute(query)
-            return self.cur.fetchall()
         except Exception:
             raise DbConnectionError
         finally:
+            value = self.cur.fetchall()
             print(self.close_connection())
+            return value
 
-
-    def close_connection(self):
-        if self.connection:
-            self.connection.close()
-            return "DB connection closed."
 
 
 # VALIDATION QUERIES:
 
-# check if already in
 def check_entry(user_id, date):
     validation_check = False
     try:
@@ -59,8 +60,8 @@ def check_entry(user_id, date):
             user_id=user_id
         )
         validation_check = db.fetch_data(query)[0][0]
-    except Exception:
-        print('Validation check error')
+    except Exception as e:
+        print('Validation check error', e)
     finally:
         return validation_check
 
@@ -75,8 +76,8 @@ def check_email(email):
         )
         
         validation_check = db.fetch_data(query)[0][0]
-    except Exception:
-        print('Validation check error')
+    except Exception as e:
+        print('Validation check error', e)
     finally:
         return validation_check
 
@@ -85,33 +86,15 @@ def check_username(username):
     validation_check = False
     try:
         db = DbConnection()
-        query = """SELECT EXISTS (SELECT User_Name FROM users
+        query = """SELECT EXISTS (SELECT User_Name FROM Users
                 WHERE User_Name = '{input_to_check}');""".format(
             input_to_check=username
         )
         validation_check = db.fetch_data(query)[0][0]
-    except Exception:
-        print('Validation check error')
+    except Exception as e:
+        print('Validation check error', e)
     finally:
         return validation_check
-
-
-def verify_cred(username, password):
-    validation_check = False
-    try:
-        db = DbConnection()
-        query = """SELECT EXISTS (SELECT User_Name FROM Users
-                    WHERE User_Name = '{Username}' AND Password = '{password}');""".format(
-                Username=username,
-                password=password
-            )
-
-        validation_check = db.fetch_data(query)[0][0]
-    except Exception:
-        print('Unable to verify password')
-    finally:
-        return validation_check
-
 
 
 def check_entry_journal(user, date):
@@ -128,9 +111,8 @@ def check_entry_journal(user, date):
             """.format(user_id=user, date=date)
 
         validation_check = db.fetch_data(query)[0][0]
-
-    except Exception:
-        print("Something went wrong when trying to get the entry")
+    except Exception as e:
+        print("Something went wrong when trying to validate the entry", e)
 
     finally:
         return validation_check
@@ -141,7 +123,6 @@ def check_entry_journal(user, date):
 # Get all the records for a date
 def get_records(user_id, date):
     db = DbConnection()
-    
     query = """
         SELECT 
         Emotion,
@@ -155,31 +136,50 @@ def get_records(user_id, date):
         """.format(user=user_id, date=date)
     try:
         return db.fetch_data(query)[0]
-    except Exception:
+    except Exception as e:
+        print(e)
         return None
 
 
 # Get journal entry from date
 def get_journal_entry(user_id, date):
-    result_entry = "Oops! Looks like there is no entry on this date"
-    db = DbConnection()
     query = """
         SELECT Diary_Entry
         FROM Entries
         WHERE User_ID = '{user}' 
         AND Entry_Date = '{date}';
         """.format(user=user_id, date=date)
-    return db.fetch_data(query)[0][0]
-
+    try:
+        db = DbConnection()
+        return db.fetch_data(query)[0][0]
+    except Exception as e:
+        print(e)
+        return None
 
 # Get the user id from db
 def get_user_id(username):
-    db = DbConnection()
-
     query = """SELECT ID FROM Users
         WHERE User_Name = '{user}' LIMIT 1;""".format(user=username)
+    try:
+        db = DbConnection()
+        return db.fetch_data(query)[0][0]
+    except Exception as e:
+        print(e)
+        return None
 
-    return db.fetch_data(query)[0][0]
+
+# Retrieve hashed_password
+def get_password(username):
+    try:
+        db = DbConnection()
+        query = """SELECT Password FROM Users
+                    WHERE User_Name = '{Username}'""".format(
+                Username=username
+            )
+        return db.fetch_data(query)[0][0]
+    except Exception as e:
+        print('Unable to verify password', e)
+        return None
 
 
 def get_month_emotions(user_id, month, year):
@@ -208,24 +208,24 @@ def today_emotion(user_id, emotion, giphy_url, date, choice, response):
             Response=response
         )
         db.commit_data(query)
-    except Exception:
-        print('Unable to save emotion / response')
+    except Exception as e:
+        print('Unable to save emotion / response', e)
 
 
 def add_new_user(user):
     try:
         db = DbConnection()
         query = """INSERT INTO Users (First_Name, Family_Name, User_Name, Email, Password)
-                VALUES('{FirstName}', '{LastName}', '{Username}', '{email}', '{password}');""".format(
+                VALUES('{FirstName}', '{LastName}', '{Username}', '{email}', "{password}")""".format(
             FirstName=user['FirstName'],
             LastName=user['LastName'],
             Username=user['Username'],
             email=user['email'],
-            password=user['password']
-        )
+            password=user['hashed_password'])
+        print(query)
         db.commit_data(query)
-    except Exception:
-        print('Unable to add new user')
+    except Exception as e:
+        print('Unable to add new user', e)
 
 
 # Record new journal entry in db
@@ -238,7 +238,6 @@ def add_journal(entry, user, date):
                 WHERE User_ID = '{user_id}' AND Entry_Date = '{date}';
                 """.format(user_id=user, date=date, entry=entry)
         db.commit_data(query)
-    except Exception:
-        print("Some exception was raised when trying to add entry")
-
+    except Exception as e:
+        print("Some exception was raised when trying to add entry", e)
 

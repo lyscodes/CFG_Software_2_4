@@ -1,10 +1,10 @@
-from db_utils import get_user_id, today_emotion, add_new_user, check_email, check_username, check_entry_journal, verify_cred, check_entry, add_journal, get_records
+from db_utils import get_user_id, today_emotion, add_new_user, check_email, check_username, check_entry_journal, get_password, check_entry, add_journal, get_records
 from flask import Flask, render_template, request, flash, redirect, session
 from _config import SECRET_KEY
 from helper_oop import QuoteAPI, JokeAPI, MoodDict
 from registration_form import RegistrationForm
 from datetime import datetime, timedelta
-import bcrypt
+from flask_bcrypt import Bcrypt 
 
 
 app = Flask(__name__)
@@ -13,6 +13,9 @@ app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=15) # Any session w
 # Settings to remove the whitespaces added by jinja blocks
 app.jinja_env.lstrip_blocks = True 
 app.jinja_env.trim_blocks = True
+bcrypt = Bcrypt(app)
+
+
 
 # Choose how you feel
 @app.route('/', methods=['GET', 'POST'])
@@ -138,11 +141,15 @@ def register_user():
             content[item] = request.form.get(item)
         if content['password'] != content['confirm']:
             flash('Password and Password Confirmation do not match', "error")
-        elif check_email(content['email']):
+        if check_email(content['email']):
             flash('Email already registered')
         elif check_username(content['Username']):
             flash('Username already in use', "error")
         else:
+            # create hashed_password
+            hashed_password = bcrypt.generate_password_hash(content['password']).decode('utf-8')
+            print(hashed_password)
+            content['hashed_password'] = hashed_password
             add_new_user(content)
             if check_email(content['email']):
                 flash("Your account has been created. Please login.", "notification")
@@ -151,57 +158,28 @@ def register_user():
                 flash('We were unable to register you at this time. Please try again later', "error")
     return render_template("register.html", form=form)
 
-# salting of passwords - to be completed
 
-# @app.route('/register', methods=['GET', 'POST'])
-# def register_user():
-#     form = RegistrationForm(request.form)
-#     if request.method == 'POST':
-#         content = {}
-#         for item in ["FirstName", "LastName", "Username", "email", "password", "confirm", "accept_tos"]:
-#             content[item] = request.form.get(item)
+# Log in with credentials - salting attempt
 
-#         if content['password'] != content['confirm']:
-#             flash('Password and Password Confirmation do not match', "error")
-#         else:
-#             content['password'] = bcrypt.hashpw(content['password'].encode('utf-8'), bcrypt.gensalt())
-#             content['password'] = content['password'].decode()
-#             content['confirm'] = content['password']
-
-#         if check_email(content['email']):
-#             flash('Email already registered')
-#         elif check_username(content['Username']):
-#             flash('Username already in use', "error")
-#         else:
-#             add_new_user(content)
-#             if check_email(content['email']):
-#                 flash("Your account has been created. Please login.", "notification")
-#                 return redirect('/login')
-#             else:
-#                 flash('We were unable to register you at this time. Please try again later', "error")
-#     return render_template("register.html", form=form)
-
-
-# Log in with credentials
 @app.route('/login', methods=['GET', 'POST'])
 def user_login():
     if request.method == 'POST':
         session.clear()
         username = request.form.get('uname')
         password = request.form.get('password')
+        print(password)
         if not check_username(username):
             flash("This username does not exist")
         else:
-            response = verify_cred(username, password)
-            if not response:
+            # verify password matches
+            stored_password = get_password(username)
+            if not bcrypt.check_password_hash(stored_password, password):
                 flash("Username and Password do not match")
-            elif response:
+            else:
                 session['user'] = username
                 session['user_id'] = get_user_id(username)
                 session['date'] = datetime.today().strftime('%Y-%m-%d')
                 return redirect('/')
-            else:
-                flash("Something went wrong! Please try again later")
     return render_template("login.html")
 
 
@@ -215,3 +193,7 @@ def user_logout():
 
 if __name__ == '__main__':
     app.run(debug=True, port=5500)
+
+
+
+
