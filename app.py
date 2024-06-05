@@ -68,25 +68,29 @@ def quote_of_the_day():
 # Get a joke
 @app.route('/joke', methods=['GET', 'POST'])
 def joke_generator():
-    joke_api = JokeAPI()
-    result = joke_api.unpack()
-    if request.method == "POST":
+    if request.method == "GET":
+        joke_api = JokeAPI()
+        result = joke_api.unpack()
+        session['result'] = result
+    else:
         if 'user' not in session:
             return redirect('/login')
         else:
             try:
-                response = check_entry(session['user_id'], session['date'])
-                if response == True:
+                has_entry = check_entry(session['user_id'], session['date'])
+                if has_entry:
                     flash("You have already saved an entry for today", "notification")
-                elif response == False:
-                    today_emotion(session['user_id'], session['emotion'], session['mood_url'], session['date'], 'Joke', result)
-                    response_two = check_entry(session['user_id'], session['date'])
-                    if response_two:
+                else:
+                    today_emotion(session['user_id'], session['emotion'], session['mood_url'], session['date'], 'Joke', session['result'])
+                    entry_is_added = check_entry(session['user_id'], session['date'])
+                    if entry_is_added:
+                        flash("Your mood and joke have been recorded!", "notification")
                         return redirect('/journal')
             except Exception as e:
                 print(e)
                 flash("Something went wrong. Please try again later", "error")
-    return render_template("joke.html", joke=result)
+    return render_template("joke.html", joke=session['result'])
+    
 
 
 # Save a journal entry
