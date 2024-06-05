@@ -129,9 +129,9 @@ def show_overview():
             year = int(clean_date.year)
             print(month, year)
             myList = (get_month_emotions(session['user_id'], month, year))
-            return jsonify({'output': myList, 'label': f'Your moods for {month} {year} are...'})
+            return jsonify({'output': myList, 'label': f'Your moods for {month} {year} were...'})
         except Exception as e:
-            print(e)
+            print('Overview: ', e)
             flash("Something has gone wrong, try again later!", 'error')
     return render_template("overview.html")
 
@@ -145,16 +145,11 @@ def show_archive_by_date(date):
         flash(f"No records saved on {date}", 'notification')
         return redirect('/overview')
     record = {}
-    myList = ['emotion', 'gif_url', 'choice', 'quote_joke', 'diary']
-    for item in myList:
-        record[item] = saved_records[myList.index(item)]
-    """    
     record['emotion'] = saved_records[0]
     record['gif_url'] = saved_records[1]
     record['choice'] = saved_records[2]
     record['quote_joke'] = saved_records[3]
-    record['diary'] = saved_records[4]"""
-    print(record)
+    record['diary'] = saved_records[4]
     return render_template("archive.html", date=date, record=record)
 
 

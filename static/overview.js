@@ -39,9 +39,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function renderGraph(date) {
+        $(document).ready(function(){
+        $.ajax({
+          data : {
+            month : date,
+          },
+          type : 'POST',
+          url : '/'})
+        .done (function(data){
+        theChart.data.datasets[0].data = data.output;
+        theChart.options.title.text = data.label;
+        theChart.update();
+            });
+        e.preventDefault();
+        });
+    };
+
     function changeMonth(delta) {
         currentDate.setMonth(currentDate.getMonth() + delta);
         renderCalendar();
+        renderGraph(currentDate);
     }
 
     prevMonthButton.addEventListener('click', () => changeMonth(-1));
@@ -74,6 +92,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     renderCalendar();
+
+    renderGraph();
 
     // Initial AJAX request for the current month
     fetchDataForMonthYear(currentDate.getMonth() + 1, currentDate.getFullYear());
