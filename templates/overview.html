@@ -61,7 +61,16 @@ const theChart = new Chart("myChart", {
     title: {
       display: true,
       text: ""
-    }
+    },
+    scales: {yAxes: [{display: true,
+                            ticks: {
+                                beginAtZero: true,
+                                steps: 10,
+                                precision: 0,
+                                min: 0
+                            }
+                        }]
+                },
   }
 });
 
