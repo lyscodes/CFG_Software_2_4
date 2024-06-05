@@ -1,4 +1,4 @@
-from _config import GIPHY_API_KEY
+from config import GIPHY_API_KEY
 from default import default_gifs, default_jokes, default_quotes
 from random import randint
 import random
