@@ -1,9 +1,16 @@
-.container {
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Outfit", sans-serif;
+}
 
+/* NAV BAR */
+.container {
     margin-top: 32px;
     display: flex;
     /* position: fixed; */
-    top:48px;
+    top: 48px;
     left: 48px;
     right: 48px;
     width: 100%;
@@ -14,9 +21,8 @@
     font-optical-sizing: auto;
     font-weight: 400;
     font-size: 1.2rem;
-    font-style: normal; 
-   
-  }
+    font-style: normal;
+}
 
 /* aligns nav items to the left using nav class */
 .nav {
@@ -24,11 +30,8 @@
     color: #A77A01;
 }
 
-
-
 a.nav-link {
     color: #A77A01;
-    margin-top: 8px;
 }
 
 a.nav-link:hover {
@@ -37,43 +40,24 @@ a.nav-link:hover {
 }
 
 .nav-pills .nav-link.active {
-    
     background: #7E70AA;
 }
 
 .nav-pills .nav-link.active:hover {
-    
     background: #665b8b;
 }
 
-
 /* Footer styles */
-
 .icons {
     text-align: center;
 }
 
-.fa-square-github { color: rgba(111, 111, 111, 0.736); 
+.fa-square-github {
+    color: rgba(111, 111, 111, 0.736);
     font-weight: 100;
-    padding-top: 24px;
-    margin-bottom: 16px;
-}
-
-.attributions {
-    margin:auto;
     margin-top: 24px;
-    text-align: center;
+    padding: 48px;
 }
-
-a {
-    text-align: center;
-    color: rgba(111, 111, 111, 0.809);
-    text-decoration: none;
-    text-align: center;
-    font-family: "Outfit";
-}
-
-
 
 .logo-image {
     height: 64px;
@@ -82,18 +66,19 @@ a {
     float: left;
 }
 
-/* styling for notifications */
+/* Styling for notifications */
 
-
-.notification {
+.notification, .notification-error {
     color: white;
-    padding: 16px 6px;
-    width: 420px;
-    position: sticky;
+    padding: 16px 24px;
+    max-width: 420px;
     text-align: center;
-    top: 8px;
+    position: absolute;
+    top: 70px;
+    left: 50%;
+    transform: translateX(-50%);
     border-radius: 4px;
-    margin:auto;
+    z-index: 1;
 }
 
 .notification-error {
