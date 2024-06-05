@@ -137,7 +137,7 @@ def get_records(user_id, date):
     try:
         return db.fetch_data(query)[0]
     except Exception as e:
-        print(e)
+        print('Get records function:', e)
         return None
 
 
@@ -183,13 +183,31 @@ def get_password(username):
 
 
 def get_month_emotions(user_id, month, year):
-    dict = {'happy': 3,
-            'calm': 4,
-            'sad': 5,
-            'worried': 10,
-            'frustrated': 12,
-            'angry': 1}
-    return dict
+    query = """SELECT
+            emotion, COUNT(Emotion)
+            FROM Entries
+            WHERE  User_ID = {user_id}
+            AND MONTH(Entry_Date) = {month}
+            AND YEAR(Entry_Date) = {year}
+            group by emotion""".format(user_id=user_id, month=month, year=year)
+    try:
+        db = DbConnection()
+        return order_month_data(db.fetch_data(query))
+    except Exception as e:
+        print(e)
+        return None
+
+
+# Organise the month data in the order needed for the frontend
+def order_month_data(data):
+    my_data = dict(data)
+    myList = ["angry", "calm", "frustrated", "happy", "sad", "worried"]
+    for i in range(len(myList)):
+        if myList[i] not in my_data:
+            myList[i] = 0
+        else:
+            myList[i] = my_data[myList[i]]
+    return myList
 
 
 # COMMIT QUERIES:

@@ -4,13 +4,29 @@
     font-family: "Outfit", sans-serif;
     font-weight: 700;
     color: #A77A01;
+    margin-top: 20px;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    padding: 20px;
+    justify-content: center;
+    align-items: start;
+}
+
+@media screen and (max-width: 768px) {
+    .grid-container {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* NAV BAR */
 .container {
     margin-top: auto;
-    display: flex;
     position: fixed;
+    display: flex;
     top: 0px;
     left: 0px;
     right: 0px;
@@ -25,21 +41,22 @@
     font-weight: 400;
     font-size: 1.2rem;
     font-style: normal;
-    z-index: 1; /* Ensure it stays above other content */
-}
+  }
 
 /* ENSURE NAV BAR STRETCHES ACROSS THE SCREEN */
 body::before {
+    position: fixed;
     content: "";
     display: block;
-    position: fixed;
     top: 0;
     left: 0;
     right: 0;
     height: 60px;
+    /* Height should match the height of the navigation bar */
     background-color: white;
-    z-index: -1; /* Ensure the strip appears behind the navigation bar */
-}
+    z-index: 0;
+    /* Ensure the strip appears behind the navigation bar */
+  }
 
 footer {
     position: fixed;
@@ -48,14 +65,11 @@ footer {
     right: 0;
     height: 150px;
     background-color: #ffffff;
-    box-sizing: border-box;
     display: block;
-    unicode-bidi: isolate;
     width: 100%;
-    z-index: 10; /* Ensure it stays above other content */
+    z-index: 10;
 }
 
-/* aligns nav items to the left using nav class */
 .nav {
     margin-left: auto;
     color: #A77A01;
@@ -66,7 +80,6 @@ a.nav-link {
 }
 
 a.nav-link:hover {
-    margin-left: auto;
     color: #7A5A01;
 }
 
@@ -78,7 +91,6 @@ a.nav-link:hover {
     background: #4E6A67;
 }
 
-/* NAV BAR MOBILE VIEW */
 @media screen and (max-width: 600px) {
     .nav {
         flex-direction: column;
@@ -90,7 +102,6 @@ a.nav-link:hover {
     }
 }
 
-/* BODY */
 body {
     background-color: #F2E7C4;
     margin: 0;
@@ -99,40 +110,22 @@ body {
     flex-direction: column;
     align-items: center;
     min-height: 100vh;
-    overflow-x: hidden; /* Prevent horizontal scrolling */
+    overflow-x: hidden;
 }
 
-/* Ensure body can scroll */
-body::before {
-    height: 60px;
-}
-
-body::after {
-    content: "";
-    display: block;
-    height: 150px;
-}
-
-/* MAIN CONTENT */
 main {
     flex: 1;
     width: 100%;
-    padding: 80px 20px 170px; /* Ensure there's space for the fixed header and footer */
+    padding: 80px 20px 170px;
     box-sizing: border-box;
 }
 
 /* Calendar Styles */
-
 .calendar-container {
-    width: 80%;
-    max-width: 600px;
     background: #fff;
     border-radius: 10px;
     box-shadow: 0 0 10px #0000001a;
     padding: 20px;
-    margin: 20px auto;
-    overflow: hidden;
-    margin: 0 auto;
 }
 
 .calendar-header {
@@ -143,7 +136,6 @@ main {
     background: #A77A01;
     border-radius: 10px;
     padding: 5px;
-
 }
 
 .calendar-header h2 {
@@ -157,7 +149,6 @@ main {
     border: none;
     color: #fff;
     font-size: 20px;
-    font-size: 20px; /* Adjust font size */
     cursor: pointer;
 }
 
@@ -172,47 +163,37 @@ main {
 .day-names div {
     width: 14.28%;
     text-align: center;
-    padding: 5px 0; 
+    padding: 5px 0;
     background: #f2f2f2;
     margin-top: 10px;
     font-family: "Outfit", sans-serif;
     font-weight: 400;
-    border-bottom: 1px solid #7A5A01;
-    border-right: 1px solid #7A5A01;
-    border-left: 1px solid #7A5A01;
-    border-top: 1px solid #7A5A01;
+    border: 1px solid #7A5A01;
     color: #7A5A01;
 }
 
 .days div {
     width: 14.28%;
     text-align: center;
-    padding: 5px 0; 
+    padding: 5px 0;
     background: #fff;
-    border-bottom: 1px dotted #7A5A01;
-    border-right: 1px dotted #7A5A01;
-    border-left: 1px dotted #7A5A01;
-    border-top: 1px dotted #7A5A01;
+    border: 1px dotted #7A5A01;
 }
 
-
-/* Style for the links inside the .days div */
-
 .days a {
-    color: #A77A01; /* Color of the link */
-    text-decoration: none; /* No underline */
+    color: #A77A01;
+    text-decoration: none;
 }
 
 .days a:hover {
-    color: #7E70AA; /* Color on hover */
-    text-decoration: underline; /* Underline on hover */
+    color: #7E70AA;
+    text-decoration: underline;
 }
 
 .days .empty {
     background: #fff;
 }
 
-/* AJAX Form */
 #ajax-form-container {
     text-align: center;
     margin: 20px auto;
@@ -220,18 +201,21 @@ main {
     font-family: "Outfit", sans-serif;
 }
 
-
 .btn #submit {
     width: 100%;
     height: 30px;
     background: #7E70AA;
     color: #ffffff;
     border: none;
-    outline: none;
     border-radius: 6px;
     cursor: pointer;
     font-size: 16px;
     font-weight: 400;
     margin-top: 5px;
     margin-bottom: 10px;
+}
+
+#myChart {
+    width: 100%;
+    max-width: 700px;
 }

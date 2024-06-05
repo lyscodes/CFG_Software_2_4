@@ -1,10 +1,19 @@
-{% extends "layout.html" %}{% block title %} Overview {% endblock -%}
-{%- block styles %}<link rel="stylesheet" type="text/css" href="../static/css/overview.css">
-{%- endblock %}{% block main -%}
-    <div class="overview">
-        <p>OVERVIEW</p>
+{% extends "layout.html" %}
+{% block title %} Overview {% endblock %}
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="../static/css/overview.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+{% endblock %}
+{% block main %}
+<div class="overview">
+    <p>OVERVIEW</p>
+</div>
 
-    </div>
+<!-- Grid Container -->
+<div class="grid-container">
+    <!-- Canvas tag for chart -->
+    <canvas id="myChart"></canvas>
 
     <!-- Calendar -->
     <div class="calendar-container">
@@ -26,22 +35,35 @@
             <div class="days" id="days"></div>
         </div>
     </div>
-    
-    <!-- AJAX Form for selecting a month -->
-    <div id="ajax-form-container">
-        <form id="form" method="POST">
-            <h2>Select month.</h2>
-            <input type="month" id="month" name="month">
-            <div class="btn">
-                <button type="submit" value="submit" id="submit">Submit</button>
-            </div>
-        </form>
-        <div id="output"></div>
+</div>
 
-{%- endblock -%}
-{% block script -%}
-    <!-- Calendar JavaScript -->
-    <script src="../static/overview.js"></script>
-    <!-- Stats JavaScript -->
-    <script src="../overview_page/emotions.js"></script>
+<!-- Form to input dates -->
+{% endblock %}
+{% block script %}
+<!-- Calendar JavaScript -->
+<script src="../static/overview.js"></script>
+
+<!-- Chart JavaScript-->
+<script type="text/javascript">
+
+
+const theChart = new Chart("myChart", {
+  type: "bar",
+  data: {
+    labels: ["Angry", "Calm", "Frustrated", "Happy", "Sad", "Worried"],
+    datasets: [{
+      backgroundColor: ["red", "yellow", "green", "blue", "brown", "orange"],
+      data: [0, 0, 0, 0, 0, 0]
+    }]
+  },
+  options: {
+    legend: {display: false},
+    title: {
+      display: true,
+      text: ""
+    }
+  }
+});
+
+</script>
 {% endblock %}
