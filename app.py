@@ -1,4 +1,4 @@
-from db_utils import get_user_id, today_emotion, add_new_user, check_email, check_username, check_entry_journal, verify_cred, check_entry, add_journal, get_records
+from db_utils import get_user_id, today_emotion, add_new_user, check_email, check_username, check_entry_journal, verify_cred, check_entry, add_journal, get_records, verify_password
 from flask import Flask, render_template, request, flash, redirect, session
 from config import SECRET_KEY
 from helper_oop import QuoteAPI, JokeAPI, MoodDict
@@ -138,7 +138,13 @@ def register_user():
             content[item] = request.form.get(item)
         if content['password'] != content['confirm']:
             flash('Password and Password Confirmation do not match', "error")
-        elif check_email(content['email']):
+        else:
+            bytes = content['password'].encode('utf-8')
+            content['salt'] = bcrypt.gensalt()
+            content['hashed_password'] = bcrypt.hashpw(bytes, content['salt'])
+            content['salt'] = content['salt'].decode()
+            content['hashed_password'] = content['hashed_password'].decode()
+        if check_email(content['email']):
             flash('Email already registered')
         elif check_username(content['Username']):
             flash('Username already in use', "error")
@@ -151,48 +157,22 @@ def register_user():
                 flash('We were unable to register you at this time. Please try again later', "error")
     return render_template("register.html", form=form)
 
-# salting of passwords - to be completed
 
-# @app.route('/register', methods=['GET', 'POST'])
-# def register_user():
-#     form = RegistrationForm(request.form)
-#     if request.method == 'POST':
-#         content = {}
-#         for item in ["FirstName", "LastName", "Username", "email", "password", "confirm", "accept_tos"]:
-#             content[item] = request.form.get(item)
+# Log in with credentials - salting attempt
 
-#         if content['password'] != content['confirm']:
-#             flash('Password and Password Confirmation do not match', "error")
-#         else:
-#             content['password'] = bcrypt.hashpw(content['password'].encode('utf-8'), bcrypt.gensalt())
-#             content['password'] = content['password'].decode()
-#             content['confirm'] = content['password']
-
-#         if check_email(content['email']):
-#             flash('Email already registered')
-#         elif check_username(content['Username']):
-#             flash('Username already in use', "error")
-#         else:
-#             add_new_user(content)
-#             if check_email(content['email']):
-#                 flash("Your account has been created. Please login.", "notification")
-#                 return redirect('/login')
-#             else:
-#                 flash('We were unable to register you at this time. Please try again later', "error")
-#     return render_template("register.html", form=form)
-
-
-# Log in with credentials
 @app.route('/login', methods=['GET', 'POST'])
 def user_login():
     if request.method == 'POST':
         session.clear()
         username = request.form.get('uname')
         password = request.form.get('password')
+
         if not check_username(username):
             flash("This username does not exist")
         else:
             response = verify_cred(username, password)
+            password_correct = verify_password(username, password)
+            print(password_correct)
             if not response:
                 flash("Username and Password do not match")
             elif response:
@@ -205,6 +185,30 @@ def user_login():
     return render_template("login.html")
 
 
+# Log in with credentials - not salted
+
+# @app.route('/login', methods=['GET', 'POST'])
+# def user_login():
+#     if request.method == 'POST':
+#         session.clear()
+#         username = request.form.get('uname')
+#         password = request.form.get('password')
+#         if not check_username(username):
+#             flash("This username does not exist")
+#         else:
+#             response = verify_cred(username, password)
+#             if not response:
+#                 flash("Username and Password do not match")
+#             elif response:
+#                 session['user'] = username
+#                 session['user_id'] = get_user_id(username)
+#                 session['date'] = datetime.today().strftime('%Y-%m-%d')
+#                 return redirect('/')
+#             else:
+#                 flash("Something went wrong! Please try again later")
+#     return render_template("login.html")
+
+
 # Log out and clear the session
 @app.route('/logout')
 def user_logout():
@@ -215,3 +219,7 @@ def user_logout():
 
 if __name__ == '__main__':
     app.run(debug=True, port=5500)
+
+
+
+

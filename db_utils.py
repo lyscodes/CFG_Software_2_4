@@ -103,15 +103,30 @@ def verify_cred(username, password):
         query = """SELECT EXISTS (SELECT User_Name FROM Users
                     WHERE User_Name = '{Username}' AND Password = '{password}');""".format(
                 Username=username,
-                password=password
+                password=password,
             )
-
         validation_check = db.fetch_data(query)
     except Exception as e:
         print('Unable to verify password', e)
     finally:
         return validation_check
+    
 
+# trying to get salt and hashed password out of db
+def verify_password(username, password):
+    validation_check = False
+    try:
+        db = DbConnection()
+        query = """SELECT Salt, Hashed_Password FROM Users
+                    WHERE User_Name = '{Username}' AND Password = '{password}');""".format(
+                Username=username,
+                password=password
+            )
+        validation_check = db.fetch_data(query)
+    except Exception as e:
+        print('Unable to verify password', e)
+    finally:
+        return validation_check
 
 
 def check_entry_journal(user, date):
@@ -218,13 +233,15 @@ def today_emotion(user_id, emotion, giphy_url, date, choice, response):
 def add_new_user(user):
     try:
         db = DbConnection()
-        query = """INSERT INTO Users (First_Name, Family_Name, User_Name, Email, Password)
-                VALUES('{FirstName}', '{LastName}', '{Username}', '{email}', '{password}');""".format(
+        query = """INSERT INTO Users (First_Name, Family_Name, User_Name, Email, Password, Salt, Hashed_Password)
+                VALUES('{FirstName}', '{LastName}', '{Username}', '{email}', '{password}', '{salt}', '{hashed_password}');""".format(
             FirstName=user['FirstName'],
             LastName=user['LastName'],
             Username=user['Username'],
             email=user['email'],
-            password=user['password']
+            password=user['password'],
+            salt = user['salt'],
+            hashed_password = user['hashed_password']
         )
         db.commit_data(query)
     except Exception as e:
