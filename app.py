@@ -201,12 +201,12 @@ def user_login():
         username = request.form.get('uname')
         password = request.form.get('password')
         if not check_username(username):
-            flash("This username does not exist")
+            flash("This username does not exist", "error")
         else:
             # verify password matches
             stored_password = get_password(username)
             if not bcrypt.check_password_hash(stored_password, password):
-                flash("Username and Password do not match")
+                flash("Username and Password do not match", "error")
             else:
                 session['user'] = username
                 session['user_id'] = get_user_id(username)
