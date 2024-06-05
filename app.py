@@ -132,7 +132,7 @@ def show_overview():
                 cleaner_date = datetime.strptime(clean_date, "%a %b %d %Y")
                 month_dt = str(cleaner_date.month)
                 datetime_object = datetime.strptime(month_dt, "%m")
-                month_name = datetime_object.strftime("%b")
+                month_name = datetime_object.strftime("%B")
                 month = int(cleaner_date.month)
                 year = int(cleaner_date.year)
                 myList = get_month_emotions(session['user_id'], month, year)
