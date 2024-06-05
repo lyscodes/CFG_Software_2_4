@@ -18,9 +18,13 @@ app.jinja_env.trim_blocks = True
 @app.route('/', methods=['GET', 'POST'])
 def mood_checkin():
     if not 'mood_dict' in session:  # First check if the session has already a saved dictionary
-        emotions_api = MoodDict()
-        emotions_dict = emotions_api.make_dict()
-        session['mood_dict'] = emotions_dict # in case we do want to save the giphy url - delete if not
+        try:
+            emotions_api = MoodDict()
+            emotions_dict = emotions_api.make_dict()
+            session['mood_dict'] = emotions_dict
+        except Exception as e:
+            print(e)
+            flash("Something went wrong. Please try again later", "error")
     return render_template("mood.html", emotions=session['mood_dict'])
 
 
@@ -28,7 +32,7 @@ def mood_checkin():
 @app.route('/choice/<id>', methods=['GET', 'POST'])
 def choice(id):
     session['emotion'] = id
-    session['mood_url'] = session['mood_dict'][id] # in case we do want to save the giphy url - delete if not
+    session['mood_url'] = session['mood_dict'][id]
     return render_template("choice.html", emotion=id)
 
 
@@ -43,15 +47,17 @@ def quote_of_the_day():
         if 'user' not in session:
             return redirect('/login')
         else:
-            response = check_entry(session['user_id'], session['date'])
-            if response == True:
-                flash("You have already saved an entry for today", "notification")
-            elif response == False:
-                today_emotion(session['user_id'], session['emotion'], session['mood_url'], session['date'], 'Quote', quote)
-                response_two = check_entry(session['user_id'], session['date'])
-                if response_two:
-                    return redirect('/journal')
-            else:
+            try:
+                response = check_entry(session['user_id'], session['date'])
+                if response == True:
+                    flash("You have already saved an entry for today", "notification")
+                elif response == False:
+                    today_emotion(session['user_id'], session['emotion'], session['mood_url'], session['date'], 'Quote', quote)
+                    response_two = check_entry(session['user_id'], session['date'])
+                    if response_two:
+                        return redirect('/journal')
+            except Exception as e:
+                print(e)
                 flash("Something went wrong. Please try again later", "error")
     return render_template("quote.html", quote=quote, author=author)
 
@@ -65,15 +71,17 @@ def joke_generator():
         if 'user' not in session:
             return redirect('/login')
         else:
-            response = check_entry(session['user_id'], session['date'])
-            if response == True:
-                flash("You have already saved an entry for today", "notification")
-            elif response == False:
-                today_emotion(session['user_id'], session['emotion'], session['mood_url'], session['date'], 'Joke', result)
-                response_two = check_entry(session['user_id'], session['date'])
-                if response_two:
-                    return redirect('/journal')
-            else:
+            try:
+                response = check_entry(session['user_id'], session['date'])
+                if response == True:
+                    flash("You have already saved an entry for today", "notification")
+                elif response == False:
+                    today_emotion(session['user_id'], session['emotion'], session['mood_url'], session['date'], 'Joke', result)
+                    response_two = check_entry(session['user_id'], session['date'])
+                    if response_two:
+                        return redirect('/journal')
+            except Exception as e:
+                print(e)
                 flash("Something went wrong. Please try again later", "error")
     return render_template("joke.html", joke=result)
 
@@ -89,15 +97,21 @@ def add_journal_entry():
         elif not content:
             flash('Journal is empty', "notification-error")
         else:
-            response = check_entry_journal(session['user_id'], session['date'])
-            if response == True:
-                flash('You have already submitted a diary entry for this date', "notification")
-            elif response == False:
-                add_journal(content, session['user_id'], session['date'])
-                response_two = check_entry_journal(session['user_id'], session['date'])
-                if response_two:
-                    return redirect('/overview')
-            else:
+            try:
+                response_zero = check_entry(session['user_id'], session['date'])
+                if response_zero == False:
+                    flash("You need to save today's emotion first!", "notification")
+                elif response_zero == True:
+                    response = check_entry_journal(session['user_id'], session['date'])
+                    if response == True:
+                        flash('You have already submitted a diary entry for this date', "notification")
+                    elif response == False:
+                        add_journal(content, session['user_id'], session['date'])
+                        response_two = check_entry_journal(session['user_id'], session['date'])
+                        if response_two:
+                            return redirect('/overview')
+            except Exception as e:
+                print(e)
                 flash('Something went wrong. Please try again later.', "error")
     return render_template("journal.html")
 
@@ -118,7 +132,7 @@ def show_overview():
             return jsonify({'output': myList, 'label': f'Your moods for {month} {year} are...'})
         except Exception as e:
             print(e)
-            flash("Something has gone wrong, try again later", 'error')
+            flash("Something has gone wrong, try again later!", 'error')
     return render_template("overview.html")
 
 
@@ -131,11 +145,15 @@ def show_archive_by_date(date):
         flash(f"No records saved on {date}", 'notification')
         return redirect('/overview')
     record = {}
+    myList = ['emotion', 'gif_url', 'choice', 'quote_joke', 'diary']
+    for item in myList:
+        record[item] = saved_records[myList.index(item)]
+    """    
     record['emotion'] = saved_records[0]
     record['gif_url'] = saved_records[1]
     record['choice'] = saved_records[2]
     record['quote_joke'] = saved_records[3]
-    record['diary'] = saved_records[4]
+    record['diary'] = saved_records[4]"""
     print(record)
     return render_template("archive.html", date=date, record=record)
 
@@ -146,21 +164,22 @@ def register_user():
     form = RegistrationForm(request.form)
     if request.method == 'POST':
         content = {}
-        for item in ["FirstName", "LastName", "Username", "email", "password", "confirm", "accept_tos"]:
-            content[item] = request.form.get(item)
-        if content['password'] != content['confirm']:
-            flash('Password and Password Confirmation do not match', "error")
-        elif check_email(content['email']):
-            flash('Email already registered')
-        elif check_username(content['Username']):
-            flash('Username already in use', "error")
-        else:
-            add_new_user(content)
-            if check_email(content['email']):
-                flash("Your account has been created. Please login.", "notification")
-                return redirect('/login')
+        try:
+            for item in ["FirstName", "LastName", "Username", "email", "password", "confirm", "accept_tos"]:
+                content[item] = request.form.get(item)
+            if content['password'] != content['confirm']:
+                flash('Password and Password Confirmation do not match', "error")
+            elif check_email(content['email']):
+                flash('Email already registered')
+            elif check_username(content['Username']):
+                flash('Username already in use', "error")
             else:
-                flash('We were unable to register you at this time. Please try again later', "error")
+                add_new_user(content)
+                if check_email(content['email']):
+                    return redirect('/login')
+        except Exception as e:
+            print(e)
+            flash('We were unable to register you at this time. Please try again later', "error")
     return render_template("register.html", form=form)
 
 # salting of passwords - to be completed
@@ -201,19 +220,21 @@ def user_login():
         session.clear()
         username = request.form.get('uname')
         password = request.form.get('password')
-        if not check_username(username):
-            flash("This username does not exist")
-        else:
-            response = verify_cred(username, password)
-            if not response:
-                flash("Username and Password do not match")
-            elif response:
-                session['user'] = username
-                session['user_id'] = get_user_id(username)
-                session['date'] = datetime.today().strftime('%Y-%m-%d')
-                return redirect('/')
+        try:
+            if not check_username(username):
+                flash("This username does not exist")
             else:
-                flash("Something went wrong! Please try again later")
+                response = verify_cred(username, password)
+                if not response:
+                    flash("Username and Password do not match")
+                elif response:
+                    session['user'] = username
+                    session['user_id'] = get_user_id(username)
+                    session['date'] = datetime.today().strftime('%Y-%m-%d')
+                    return redirect('/')
+        except Exception as e:
+            print(e)
+            flash("Something went wrong! Please try again later")
     return render_template("login.html")
 
 
