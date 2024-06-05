@@ -39,14 +39,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function renderGraph(date) {
+    function renderGraph() {
         $(document).ready(function(){
         $.ajax({
           data : {
-            month : date,
+            month : currentDate
           },
           type : 'POST',
-          url : '/'})
+          url : '/overview'})
         .done (function(data){
         theChart.data.datasets[0].data = data.output;
         theChart.options.title.text = data.label;
@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function changeMonth(delta) {
         currentDate.setMonth(currentDate.getMonth() + delta);
         renderCalendar();
-        renderGraph(currentDate);
+        renderGraph();
     }
 
     prevMonthButton.addEventListener('click', () => changeMonth(-1));

@@ -38,15 +38,6 @@
 </div>
 
 <!-- Form to input dates -->
-<div id="ajax-form-container">
-    <form id="form" method="Post">
-        <h2>Pick a month to see your stats</h2>
-        <input type="date" id="month" name="month">
-        <div class="btn">
-            <input type="submit" id="submit">
-        </div>
-    </form>
-</div>
 {% endblock %}
 {% block script %}
 <!-- Calendar JavaScript -->
@@ -54,22 +45,25 @@
 
 <!-- Chart JavaScript-->
 <script type="text/javascript">
-    const theChart = new Chart("myChart", {
-        type: "bar",
-        data: {
-            labels: ["Angry", "Calm", "Frustrated", "Happy", "Sad", "Worried"],
-            datasets: [{
-                backgroundColor: ["red", "yellow", "green", "blue", "brown", "orange"],
-                data: [0, 0, 0, 0, 0, 0]
-            }]
-        },
-        options: {
-            legend: {display: false},
-            title: {
-                display: true,
-                text: "Your moods are..."
-            }
-        }
-    });
+
+
+const theChart = new Chart("myChart", {
+  type: "bar",
+  data: {
+    labels: ["Angry", "Calm", "Frustrated", "Happy", "Sad", "Worried"],
+    datasets: [{
+      backgroundColor: ["red", "yellow", "green", "blue", "brown", "orange"],
+      data: [0, 0, 0, 0, 0, 0]
+    }]
+  },
+  options: {
+    legend: {display: false},
+    title: {
+      display: true,
+      text: ""
+    }
+  }
+});
+
 </script>
 {% endblock %}

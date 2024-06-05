@@ -124,12 +124,17 @@ def show_overview():
     if request.method == "POST":
         try:
             date = request.form.get('month')
-            clean_date = datetime.strptime(date, "%Y-%m-%d")
-            month = int(clean_date.month)
-            year = int(clean_date.year)
-            print(month, year)
-            myList = (get_month_emotions(session['user_id'], month, year))
-            return jsonify({'output': myList, 'label': f'Your moods for {month} {year} were...'})
+            clean_date = date[0:15]
+            if clean_date:
+                cleaner_date = datetime.strptime(clean_date, "%a %b %d %Y")
+                month_dt = str(cleaner_date.month)
+                datetime_object = datetime.strptime(month_dt, "%m")
+                month_name = datetime_object.strftime("%b")
+                month = int(cleaner_date.month)
+                year = int(cleaner_date.year)
+                myList = get_month_emotions(session['user_id'], month, year)
+                print(myList)
+                return jsonify({'output': myList, 'label': f'Your moods for {month_name} {year} were...'})
         except Exception as e:
             print('Overview: ', e)
             flash("Something has gone wrong, try again later!", 'error')
