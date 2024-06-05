@@ -1,38 +1,34 @@
 import unittest
-from requests import get
-# from flask_testing import TestCase
+from flask import url_for
+from flask_testing import TestCase
 from app import app
 
 BASE_URL = "http://localhost:5500"
 
-def get_file(file):
-  expected_response = open(file, "r").read()
-  return expected_response
 
-class TestFlaskApp(unittest.TestCase): # change back to unittest?
+# using Flask's test library
+class MyTest(TestCase):
+    def create_app(self):
+        app.config['TESTING'] = True
+        app.config['WTF_CSRF_ENABLED'] = False
+        return app
 
-  def test_login_status(self):
-    url = f"{BASE_URL}/login"
-    response = get(url)
-    self.assertEqual(response.status_code, 200)
+    def test_template_rendered_mood(self):
+        response = self.client.get('/')
+        self.assert_template_used('mood.html')
 
-  def test_login_message(self):
-      url = f"{BASE_URL}/login"
-      response = get(url)
-      expected_message =  get_file('responses/user_login.txt')
-      self.assertEqual(response.text, expected_message)
+    def test_template_rendered_quote(self):
+        response = self.client.get('/quote')
+        self.assert_template_used('quote.html')
 
-  def test_mood_status(self):
-    url = f"{BASE_URL}/"
-    response = get(url)
-    self.assertEqual(response.status_code, 200)
+    def test_form_submission_wrongpw(self): # check password validaiton and flash messages
+        response = self.client.post('/register', data={'FirstName': 'Rachel', 'LastName': 'Tookey', "Username": "Rachel1993", "email": "rachel@tookey.com", "password":"snow", "confirm":"rain", "accept_tos":True})
+        self.assert_message_flashed('Password and Password Confirmation do not match', "error")
 
-  def test_mood_message(self): # assert that if the connection fails, it goes to default?
-      url = f"{BASE_URL}/"
-      response = get(url)
-      expected_message = get_file('responses/mood.txt')
-      self.assertIn(expected_message, response.text)
+    def test_overview_redirect(self): # check it redirects if not logged in
+        response = self.client.get('/overview')
+        self.assert_status(response, 302, message=None)
 
 
 if __name__ == "__main__":
-  unittest.main()
+    unittest.main()
