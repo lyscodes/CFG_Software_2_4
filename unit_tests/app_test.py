@@ -2,6 +2,8 @@ import unittest
 from flask_testing import TestCase
 from app import app
 
+# Testing file for app.py and Flask ending points. It uses flask's customised library for testing.
+
 class MyTest(TestCase):
     def create_app(self):
         app.config['TESTING'] = True
@@ -25,9 +27,10 @@ class MyTest(TestCase):
         response = self.client.get('/overview')
         self.assert_status(response, 302)
 
-    def test_200(self): # check it redirects if not logged in
+    def test_form(self): # check it redirects if not logged in
         response = self.client.post('/register', data={'FirstName': 'Rachel', 'LastName': 'Tookey', "Username": "Rachel1993", "email": "rachel@tookey.com", "password":"snow", "confirm":"snow", "accept_tos":True})
         self.assert200(response)
+
 
     def test_404(self):
         response = self.client.get('/hello')

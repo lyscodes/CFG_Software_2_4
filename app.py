@@ -137,14 +137,17 @@ def show_overview():
     if request.method == "POST":
         try:
             date = request.form.get('month')
-            clean_date = date[0:15]
-            if clean_date:
-                cleaner_date = datetime.strptime(clean_date, "%a %b %d %Y")
-                month_dt = str(cleaner_date.month)
-                datetime_object = datetime.strptime(month_dt, "%m")
-                month_name = datetime_object.strftime("%B")
-                month = int(cleaner_date.month)
-                year = int(cleaner_date.year)
+            sliced_date = date[0:15]
+            if sliced_date:
+                date_object = datetime.strptime(sliced_date, "%a %b %d %Y")
+                # Get full month name:
+                month_dt = str(date_object.month)
+                month_object = datetime.strptime(month_dt, "%m")
+                month_name = month_object.strftime("%B")
+                # Get month and year as integers:
+                month = int(date_object.month)
+                year = int(date_object.year)
+                # Get array for user's emotions for that month/year
                 myList = get_month_emotions(session['user_id'], month, year)
                 return jsonify({'output': myList, 'label': f'Your moods for {month_name} {year}...'})
         except Exception as e:
@@ -239,7 +242,4 @@ def user_logout():
 
 if __name__ == '__main__':
     app.run(debug=True, port=5500)
-
-
-
 

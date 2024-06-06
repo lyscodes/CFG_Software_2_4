@@ -239,7 +239,6 @@ def add_new_user(user):
             Username=user['Username'],
             email=user['email'],
             password=user['hashed_password'])
-        print(query)
         db.commit_data(query)
     except Exception as e:
         print('Unable to add new user', e)
