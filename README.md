@@ -37,8 +37,8 @@ Password: hello123
 
 ### Developers
 
-Laura: https://github.com/Laura-Kam\
-Fabi:https://github.com/Fabi-P\
-Rachel: https://github.com/Tookles\
-Alyssa: https://github.com/lyscodes\
-Hannah: https://github.com/HannahTInsleyMcRink\
+Laura: https://github.com/Laura-Kam \
+Fabi: https://github.com/Fabi-P \
+Rachel: https://github.com/Tookles \
+Alyssa: https://github.com/lyscodes \
+Hannah: https://github.com/HannahTInsleyMcRink
