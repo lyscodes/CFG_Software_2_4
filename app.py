@@ -16,6 +16,8 @@ app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=15)
 # Settings to remove the whitespaces added by jinja blocks
 app.jinja_env.lstrip_blocks = True 
 app.jinja_env.trim_blocks = True
+
+# Sets up encryption for passwords:
 bcrypt = Bcrypt(app)
 
 
