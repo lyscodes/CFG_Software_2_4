@@ -35,8 +35,14 @@ def mood_checkin():
 # Accessed after choosing a feeling - allows user to choose between getting a joke or a quote
 @app.route('/choice/<id>', methods=['GET', 'POST'])
 def choice(id):
-    session['emotion'] = id
-    session['mood_url'] = session['mood_dict'][id]
+    try:
+        session['emotion'] = id
+        session['mood_url'] = session['mood_dict'][id]
+    except Exception as e:
+        print(e)
+        session.pop('_flashes', None)
+        flash("Something went wrong! Please submit a new choice", "error")
+        return redirect('/')
     return render_template("choice.html", emotion=id)
 
 
