@@ -1,7 +1,6 @@
 from config import GIPHY_API_KEY
 from default import default_gifs, default_jokes, default_quotes
-from random import randint
-import random
+from random import randint, choice
 import requests
 from abc import ABC, abstractmethod
 
@@ -49,7 +48,7 @@ class QuoteAPI(APIRequest):
             author = clean_response[0]['a']
         except Exception as e:
             print(e)
-            random_quote = random.choice(list(default_quotes))
+            random_quote = choice(list(default_quotes))
             quote = random_quote['q']
             author = random_quote['a']
         return [quote, author]
@@ -66,7 +65,7 @@ class JokeAPI(APIRequest):
             joke = clean_response['joke']
         except Exception as e:
             print(e)
-            joke = random.choice(default_jokes)
+            joke = choice(default_jokes)
         return joke
 
 
