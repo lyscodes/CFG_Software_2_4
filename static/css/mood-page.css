@@ -23,7 +23,7 @@ h1 {
   width: 100%;
   background-color: white;
   overflow: auto;
-  height: 60px;
+  height: auto;
   align-items: center;
   font-family: "Outfit", sans-serif;
   font-optical-sizing: auto;
@@ -40,7 +40,7 @@ body::before {
   top: 0;
   left: 0;
   right: 0;
-  height: 60px;
+  height: 100px;
   /* Height should match the height of the navigation bar */
   background-color: white;
   z-index: 0;

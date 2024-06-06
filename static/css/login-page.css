@@ -13,11 +13,11 @@
   top: 0px;
   left: 0px;
   right: 0px;
-  margin-top: 5px;
+  margin-bottom: 10px;
   width: 100%;
   background-color: white;
-  overflow:hidden;
-  height: 60px;
+  overflow: auto;
+  height: auto;
   align-items: center;
   font-family: "Outfit", sans-serif;
   font-optical-sizing: auto;
@@ -34,51 +34,66 @@ body::before {
   top: 0;
   left: 0;
   right: 0;
-  height: 65px;
+  height: 100px;
   /* Height should match the height of the navigation bar */
   background-color: white;
-  z-index: -2;
+  z-index: 0;
   /* Ensure the strip appears behind the navigation bar */
 }
-  
-  footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 150px;
-    background-color: #ffffff;
-    box-sizing: border-box;
-    display: block;
-    unicode-bidi: isolate;
-    width: 100%;
-  }
-  
-  
-  
-  /* aligns nav items to the left using nav class */
+
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 150px;
+  background-color: #ffffff;
+  box-sizing: border-box;
+  display: block;
+  unicode-bidi: isolate;
+  width: 100%;
+}
+
+
+
+/* aligns nav items to the left using nav class */
+.nav {
+  margin-left: auto;
+  color: #A77A01;
+  margin-top: 20px;
+}
+
+a.nav-link {
+  color: #A77A01;
+}
+
+a.nav-link:hover {
+  margin-left: auto;
+  color: #7A5A01;
+}
+
+.nav-pills .nav-link.active {
+  background: #7E70AA;
+}
+
+.nav-pills .nav-link.active:hover {
+  background: #4E6A67;
+}
+
+/* NAV BAR MOBILE VIEW */
+@media screen and (max-width: 600px) {
   .nav {
-    margin-left: auto;
-    color: #A77A01;
-    margin-top: 20px;
+    flex-direction: column;
+    /* Stack nav items vertically does this even work lol*/
+    align-items: center;
+    /* Center align nav items*/
   }
-  
-  a.nav-link {
-    color: #A77A01;
+
+  .nav-item {
+    margin-bottom: 5px;
+    /* Add space between nav items */
   }
-  
-  a.nav-link:hover {
-    margin-left: auto;
-    color: #7A5A01;
-  }
-  
-  .nav-pills .nav-link.active {
-    background: #7E70AA;
-  }
-  
-  .nav-pills .nav-link.active:hover {
-    background: #4E6A67;
-  }
+}
   
   /* NAV BAR MOBILE VIEW */
   @media screen and (max-width: 600px) {

@@ -5,6 +5,97 @@
     font-family: "Outfit", sans-serif;
 }
 
+
+/* NAV BAR */
+.container {
+  margin-top: auto;
+  position: fixed;
+  display: flex;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  margin-bottom: 10px;
+  width: 100%;
+  background-color: white;
+  overflow: auto;
+  height: auto;
+  align-items: center;
+  font-family: "Outfit", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: 1.2rem;
+  font-style: normal;
+}
+
+/* ENSURE NAV BAR STRETCHES ACROSS THE SCREEN */
+body::before {
+  position: fixed;
+  content: "";
+  display: block;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100px;
+  /* Height should match the height of the navigation bar */
+  background-color: white;
+  z-index: 0;
+  /* Ensure the strip appears behind the navigation bar */
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 150px;
+  background-color: #ffffff;
+  box-sizing: border-box;
+  display: block;
+  unicode-bidi: isolate;
+  width: 100%;
+}
+
+
+
+/* aligns nav items to the left using nav class */
+.nav {
+  margin-left: auto;
+  color: #A77A01;
+  margin-top: 20px;
+}
+
+a.nav-link {
+  color: #A77A01;
+}
+
+a.nav-link:hover {
+  margin-left: auto;
+  color: #7A5A01;
+}
+
+.nav-pills .nav-link.active {
+  background: #7E70AA;
+}
+
+.nav-pills .nav-link.active:hover {
+  background: #4E6A67;
+}
+
+/* NAV BAR MOBILE VIEW */
+@media screen and (max-width: 600px) {
+  .nav {
+    flex-direction: column;
+    /* Stack nav items vertically does this even work lol*/
+    align-items: center;
+    /* Center align nav items*/
+  }
+
+  .nav-item {
+    margin-bottom: 5px;
+    /* Add space between nav items */
+  }
+}
+
 main {
     display: flex;
     justify-content: center;
@@ -15,22 +106,22 @@ main {
 
 
 .wrapper {
-    width: 100%;
-    max-width: 720px;
+    width: 85%;
+    max-width: 612px;
     background: transparent;
-    border: 2px solid #7A5A01;
-    backdrop-filter: blur(20px);
-    box-shadow: 0 0 10px #7A5A01;
+    border: 1.7px solid #7A5A01;
+    backdrop-filter: blur(17px);
+    box-shadow: 0 0 8.5px #7A5A01;
     color: #7A5A01;
-    border-radius: 10px;
-    padding: 40px 35px 45px;
-    margin: -50px auto 10px;
+    border-radius: 8.5px;
+    padding: 34px 29.75px 38.25px;
+    margin: -42.5px auto 8.5px;
 }
 
 .wrapper h1 {
-    font-size: 36px;
+    font-size: 30.6px;
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 17px;
 }
 
 .wrapper .input-container {
@@ -41,22 +132,22 @@ main {
 
 .input-container .input-field {
     position: relative;
-    width: 48%;
-    height: 50px;
-    margin: 20px 0;
+    width: 40.8%;
+    height: 42.5px;
+    margin: 17px 0;
 }
 
 .input-container .input-field input {
     width: 100%;
     height: 100%;
     background: transparent;
-    border: 2px solid #7A5A01;
+    border: 1.7px solid #7A5A01;
     outline: none;
-    font-size: 16px;
+    font-size: 13.6px;
     color: #7A5A01;
-    border-radius: 6px;
-    padding: 15px 15px 15px 40px;
-    margin-top: -20px;
+    border-radius: 5.1px;
+    padding: 12.75px 12.75px 12.75px 34px;
+    margin-top: -17px;
 }
 
 .input-container .input-field input::placeholder {
@@ -65,30 +156,31 @@ main {
 
 .input-container .input-field i {
     position: absolute;
-    left: 15px;
-    top: 60%;
+    left: 12.75px;
+    top: 51%;
     transform: translateY(-50%);
-    font-size: 20px;
+    font-size: 17px;
 }
 
 .wrapper label {
     display: inline-block;
-    font-size: 14.5px;
-    margin: 10px 0 23px;
+    font-size: 12.325px;
+    margin: 8.5px 0 19.55px;
 }
 
 .check-box {
     accent-color: #7A5A01;
-    margin-top: 30px;
-    margin-right: 40px;
+    margin-top: 25.5px;
+    margin-right: 34px;
 }
 
 .wrapper .btn {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 20px; /* Add some margin to space it out from other elements */
+    margin-top: 17px;
 }
+
 
 .wrapper .btn #register-entry-btn {
     width: 100%;
