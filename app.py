@@ -8,22 +8,25 @@ from flask_bcrypt import Bcrypt
 
 
 app = Flask(__name__)
+
+# Setting session secret key and a session length of 15 minutes
 app.config['SECRET_KEY'] = SECRET_KEY
-app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=15) # Any session will expire after 15 minutes
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=15)
+
 # Settings to remove the whitespaces added by jinja blocks
 app.jinja_env.lstrip_blocks = True 
 app.jinja_env.trim_blocks = True
 bcrypt = Bcrypt(app)
 
 
-# Choose how you feel
-@app.route('/', methods=['GET', 'POST'])
+# Homepage displays gifs from the api for the user to select
+@app.route('/', methods=['GET', 'POST']) # DOES THIS NEED POST IN HERE?
 def mood_checkin():
-    if not 'mood_dict' in session:  # First check if the session has already a saved dictionary
+    if 'mood_dict' not in session:  # First check if the session has already a saved dictionary
         try:
             emotions_api = MoodDict()
             emotions_dict = emotions_api.make_dict()
-            session['mood_dict'] = emotions_dict
+            session['mood_dict'] = emotions_dict # saves the gif url dict to the session
         except Exception as e:
             print(e)
             session.pop('_flashes', None)
@@ -31,10 +34,10 @@ def mood_checkin():
     return render_template("mood.html", emotions=session['mood_dict'])
 
 
-# Accessed after choosing a feeling - allows user to choose between getting a joke or a quote
+# After choosing a feeling, user is redirected here where they can choose between getting a joke or a quote
 @app.route('/choice/<id>', methods=['GET', 'POST'])
 def choice(id):
-    try:
+    try: # saves selected mood and gif url into the session
         session['emotion'] = id
         session['mood_url'] = session['mood_dict'][id]
     except Exception as e:
@@ -45,26 +48,27 @@ def choice(id):
     return render_template("choice.html", emotion=id)
 
 
-# Get the quote of the day
+# Page displaying the quote of the day
 @app.route('/quote', methods=['GET', 'POST'])
 def quote_of_the_day():
     quote_api = QuoteAPI()
     result = quote_api.unpack()
     quote = result[0]
     author = result[1]
-    if request.method == "POST":
+    if request.method == "POST": # triggered when the user tries to save the quote
+        # following logic checks if they are able to save a quote (are they logged in -> have they already saved an entry for today -> did the entry save?)
         if 'user' not in session:
             return redirect('/login')
         else:
             try:
-                response = check_entry(session['user_id'], session['date'])
-                if response == True:
+                validation_check = check_entry(session['user_id'], session['date'])
+                if validation_check == True:
                     session.pop('_flashes', None)
                     flash("You have already saved an entry for today", "notification")
-                elif response == False:
+                elif validation_check == False:
                     today_emotion(session['user_id'], session['emotion'], session['mood_url'], session['date'], 'Quote', quote)
-                    response_two = check_entry(session['user_id'], session['date'])
-                    if response_two:
+                    validation_check_two = check_entry(session['user_id'], session['date'])
+                    if validation_check_two:
                         return redirect('/journal')
             except Exception as e:
                 print(e)
@@ -73,7 +77,7 @@ def quote_of_the_day():
     return render_template("quote.html", quote=quote, author=author)
 
 
-# Get a joke
+# Page displaying joke of the day. Follows the same logic:
 @app.route('/joke', methods=['GET', 'POST'])
 def joke_generator():
     joke_api = JokeAPI()
@@ -99,38 +103,39 @@ def joke_generator():
     return render_template("joke.html", joke=result)
 
 
-# Save a journal entry
+# Page allowed the user to write and save a journal entry
 @app.route('/journal', methods=['GET', 'POST'])
 def add_journal_entry():
     if request.method == 'POST':
         content = request.form.get('textarea')
+        # Series of validation checks before saving the entry
+        # (is the user logged in? -> is there content in the journal? -> is the content too long? -> have they saved their mood choice yet? -> have they saved a diary entry already?)
         if 'user' not in session:
             return redirect('/login')
         elif not content:
             session.pop('_flashes', None)
             flash('Journal is empty', "notification-error")
+        elif len(content) > 500:
+            session.pop('_flashes', None)
+            flash("Oops! Journal entries must be 500 characters or less...", "error")
         else:
             try:
-                response_zero = check_entry(session['user_id'], session['date'])
-                if response_zero == False:
+                validation_check = check_entry(session['user_id'], session['date'])
+                if validation_check == False:
                     session.pop('_flashes', None)
                     flash("You need to save today's emotion first!", "notification")
-                elif response_zero == True:
-                    response = check_entry_journal(session['user_id'], session['date'])
-                    if response == True:
+                elif validation_check == True:
+                    validation_check_two = check_entry_journal(session['user_id'], session['date'])
+                    if validation_check_two == True:
                         session.pop('_flashes', None)
                         flash('You have already submitted a diary entry for this date', "notification")
-                    elif response == False:
-                        if len(content) > 500:
+                    elif validation_check_two == False:
+                        add_journal(content, session['user_id'], session['date'])
+                        validation_check_three = check_entry_journal(session['user_id'], session['date'])
+                        if validation_check_three:
                             session.pop('_flashes', None)
-                            flash("Oops! Journal entries must be 500 characters or less...", "error")
-                        else:
-                            add_journal(content, session['user_id'], session['date'])
-                            response_two = check_entry_journal(session['user_id'], session['date'])
-                            if response_two:
-                                session.pop('_flashes', None)
-                                flash("Your entry has been saved.", "notification")
-                                return redirect('/overview')
+                            flash("Your entry has been saved.", "notification")
+                            return redirect('/overview')
             except Exception as e:
                 print(e)
                 session.pop('_flashes', None)
@@ -138,12 +143,12 @@ def add_journal_entry():
     return render_template("journal.html")
 
 
-# Get calendar view of your entries + stats of moods
+# This page gets calendar view of your entries + stats of moods
 @app.route('/overview', methods=['GET', 'POST'])
 def show_overview():
-    if 'user' not in session:
+    if 'user' not in session: # checks if the user is logged in, redirects if not
         return redirect('/login')
-    if request.method == "POST":
+    if request.method == "POST": # triggered by the calendar changing month
         try:
             date = request.form.get('month')
             sliced_date = date[0:15]
@@ -181,12 +186,13 @@ def show_archive_by_date(date):
     return render_template("archive.html", date=date, record=record)
 
 
-# Register a new user
+# Page to register a new user
 @app.route('/register', methods=['GET', 'POST'])
 def register_user():
     form = RegistrationForm(request.form)
-    if request.method == 'POST':
+    if request.method == 'POST': # Triggered when the form is submitted
         content = {}
+        # A series of validation checks:
         for item in ["FirstName", "LastName", "Username", "email", "password", "confirm", "accept_tos"]:
             content[item] = request.form.get(item)
         if content['password'] != content['confirm']:
@@ -199,7 +205,7 @@ def register_user():
             session.pop('_flashes', None)
             flash('Username already in use', "error")
         else:
-            # create hashed_password
+            # If checks passed, this creates a hashed_password
             try:
                 hashed_password = bcrypt.generate_password_hash(content['password']).decode('utf-8')
                 content['hashed_password'] = hashed_password
@@ -219,24 +225,24 @@ def register_user():
     return render_template("register.html", form=form)
 
 
-# Log in with credentials
+# Page for user to login
 @app.route('/login', methods=['GET', 'POST'])
 def user_login():
-    if request.method == 'POST':
+    if request.method == 'POST': # Triggered on form submission
         session.clear()
         username = request.form.get('uname')
         password = request.form.get('password')
-        if not check_username(username):
+        if not check_username(username): # Validation check for username
             session.pop('_flashes', None)
             flash("This username does not exist", "error")
         else:
             try:
-            # verify password matches
+            # Verifies password matches hashed password
                 stored_password = get_password(username)
                 if not bcrypt.check_password_hash(stored_password, password):
                     session.pop('_flashes', None)
                     flash("Username and Password do not match", "error")
-                else:
+                else: # If successful, username, id, and date added to the session:
                     session['user'] = username
                     session['user_id'] = get_user_id(username)
                     session['date'] = datetime.today().strftime('%Y-%m-%d')
