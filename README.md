@@ -25,7 +25,7 @@ You are able to visit the pages without loggin into the app, however this will n
 You can login as one of the mock users created, or register your own user following the instructions on screen.
 
 #### Mock users credentials
-1. username: JoeDoe
+1. username: JoDoe
     password: password123
 2. username: LSmith
     password: hello123
