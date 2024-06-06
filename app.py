@@ -20,7 +20,7 @@ bcrypt = Bcrypt(app)
 
 
 # Homepage displays gifs from the api for the user to select
-@app.route('/', methods=['GET', 'POST']) # DOES THIS NEED POST IN HERE?
+@app.route('/', methods=['GET'])
 def mood_checkin():
     if 'mood_dict' not in session:  # First check if the session has already a saved dictionary
         try:
