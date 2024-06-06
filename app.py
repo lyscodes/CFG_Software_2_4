@@ -201,19 +201,22 @@ def register_user():
             flash('Username already in use', "error")
         else:
             # create hashed_password
-            hashed_password = bcrypt.generate_password_hash(content['password']).decode('utf-8')
-            content['hashed_password'] = hashed_password
-            add_new_user(content)
-            if check_email(content['email']):
-                session.pop('_flashes', None)
-                flash("Your account has been created. Please login.", "notification")
-                return redirect('/login')
-            else:
+            try:
+                hashed_password = bcrypt.generate_password_hash(content['password']).decode('utf-8')
+                content['hashed_password'] = hashed_password
                 add_new_user(content)
                 if check_email(content['email']):
+                    session.pop('_flashes', None)
+                    flash("Your account has been created. Please login.", "notification")
                     return redirect('/login')
-            session.pop('_flashes', None)
-            flash('We were unable to register you at this time. Please try again later', "error")
+                else:
+                    add_new_user(content)
+                    if check_email(content['email']):
+                        return redirect('/login')
+            except Exception as e:
+                print(e)
+                session.pop('_flashes', None)
+                flash('We were unable to register you at this time. Please try again later', "error")
     return render_template("register.html", form=form)
 
 
@@ -229,16 +232,20 @@ def user_login():
             session.pop('_flashes', None)
             flash("This username does not exist", "error")
         else:
+            try:
             # verify password matches
-            stored_password = get_password(username)
-            if not bcrypt.check_password_hash(stored_password, password):
-                session.pop('_flashes', None)
-                flash("Username and Password do not match", "error")
-            else:
-                session['user'] = username
-                session['user_id'] = get_user_id(username)
-                session['date'] = datetime.today().strftime('%Y-%m-%d')
-                return redirect('/')
+                stored_password = get_password(username)
+                if not bcrypt.check_password_hash(stored_password, password):
+                    session.pop('_flashes', None)
+                    flash("Username and Password do not match", "error")
+                else:
+                    session['user'] = username
+                    session['user_id'] = get_user_id(username)
+                    session['date'] = datetime.today().strftime('%Y-%m-%d')
+                    return redirect('/')
+            except Exception as e:
+                print(e)
+                flash("Something has gone wrong. Please try again later", "error")
     return render_template("login.html")
 
 
