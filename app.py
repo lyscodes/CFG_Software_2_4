@@ -16,7 +16,6 @@ app.jinja_env.trim_blocks = True
 bcrypt = Bcrypt(app)
 
 
-
 # Choose how you feel
 @app.route('/', methods=['GET', 'POST'])
 def mood_checkin():
@@ -217,8 +216,7 @@ def register_user():
     return render_template("register.html", form=form)
 
 
-# Log in with credentials - salting attempt
-
+# Log in with credentials
 @app.route('/login', methods=['GET', 'POST'])
 def user_login():
     if request.method == 'POST':
