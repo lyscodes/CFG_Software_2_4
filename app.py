@@ -192,9 +192,10 @@ def register_user():
     form = RegistrationForm(request.form)
     if request.method == 'POST': # Triggered when the form is submitted
         content = {}
-        # A series of validation checks:
+        # Collect user input from the form:
         for item in ["FirstName", "LastName", "Username", "email", "password", "confirm", "accept_tos"]:
             content[item] = request.form.get(item)
+        # A series of validation checks:
         if content['password'] != content['confirm']:
             session.pop('_flashes', None)
             flash('Password and Password Confirmation do not match', "error")
@@ -205,19 +206,16 @@ def register_user():
             session.pop('_flashes', None)
             flash('Username already in use', "error")
         else:
-            # If checks passed, this creates a hashed_password
+            # If checks passed, it now tries to create a hashed_password
             try:
                 hashed_password = bcrypt.generate_password_hash(content['password']).decode('utf-8')
                 content['hashed_password'] = hashed_password
                 add_new_user(content)
+                # Check that the new user is in the db
                 if check_email(content['email']):
                     session.pop('_flashes', None)
                     flash("Your account has been created. Please login.", "notification")
                     return redirect('/login')
-                else:
-                    add_new_user(content)
-                    if check_email(content['email']):
-                        return redirect('/login')
             except Exception as e:
                 print(e)
                 session.pop('_flashes', None)
