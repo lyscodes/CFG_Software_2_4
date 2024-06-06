@@ -2,7 +2,6 @@ import mysql.connector
 from config import DB_CONFIG
 
 
-
 class DbConnectionError(Exception):
     pass
 
@@ -45,7 +44,6 @@ class DbConnection:
             value = self.cur.fetchall()
             print(self.close_connection())
             return value
-
 
 
 # VALIDATION QUERIES:
@@ -155,6 +153,7 @@ def get_journal_entry(user_id, date):
     except Exception as e:
         print(e)
         return None
+
 
 # Get the user id from db
 def get_user_id(username):

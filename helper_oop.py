@@ -22,7 +22,7 @@ class APIRequest(ABC):
         else:
             self.params = {}
 
-    def __call__(self): # put custom try and except here and return None is unsuccessful?
+    def __call__(self):
         try:
             response = requests.get(self.url, params=self.params, headers=self.headers)
             response.raise_for_status()
