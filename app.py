@@ -27,6 +27,7 @@ def mood_checkin():
             session['mood_dict'] = emotions_dict
         except Exception as e:
             print(e)
+            session.pop('_flashes', None)
             flash("Something went wrong. Please try again later", "error")
     return render_template("mood.html", emotions=session['mood_dict'])
 
@@ -53,6 +54,7 @@ def quote_of_the_day():
             try:
                 response = check_entry(session['user_id'], session['date'])
                 if response == True:
+                    session.pop('_flashes', None)
                     flash("You have already saved an entry for today", "notification")
                 elif response == False:
                     today_emotion(session['user_id'], session['emotion'], session['mood_url'], session['date'], 'Quote', quote)
@@ -61,6 +63,7 @@ def quote_of_the_day():
                         return redirect('/journal')
             except Exception as e:
                 print(e)
+                session.pop('_flashes', None)
                 flash("Something went wrong. Please try again later", "error")
     return render_template("quote.html", quote=quote, author=author)
 
@@ -77,6 +80,7 @@ def joke_generator():
             try:
                 response = check_entry(session['user_id'], session['date'])
                 if response == True:
+                    session.pop('_flashes', None)
                     flash("You have already saved an entry for today", "notification")
                 elif response == False:
                     today_emotion(session['user_id'], session['emotion'], session['mood_url'], session['date'], 'Joke', result)
@@ -85,6 +89,7 @@ def joke_generator():
                         return redirect('/journal')
             except Exception as e:
                 print(e)
+                session.pop('_flashes', None)
                 flash("Something went wrong. Please try again later", "error")
     return render_template("joke.html", joke=result)
 
@@ -92,29 +97,34 @@ def joke_generator():
 # Save a journal entry
 @app.route('/journal', methods=['GET', 'POST'])
 def add_journal_entry():
-    session.pop('_flashes', None)
     if request.method == 'POST':
         content = request.form.get('textarea')
         if 'user' not in session:
             return redirect('/login')
         elif not content:
+            session.pop('_flashes', None)
             flash('Journal is empty', "notification-error")
         else:
             try:
                 response_zero = check_entry(session['user_id'], session['date'])
                 if response_zero == False:
+                    session.pop('_flashes', None)
                     flash("You need to save today's emotion first!", "notification")
                 elif response_zero == True:
                     response = check_entry_journal(session['user_id'], session['date'])
                     if response == True:
+                        session.pop('_flashes', None)
                         flash('You have already submitted a diary entry for this date', "notification")
                     elif response == False:
                         add_journal(content, session['user_id'], session['date'])
                         response_two = check_entry_journal(session['user_id'], session['date'])
                         if response_two:
+                            session.pop('_flashes', None)
+                            flash("Your entry has been saved.", "notification")
                             return redirect('/overview')
             except Exception as e:
                 print(e)
+                session.pop('_flashes', None)
                 flash('Something went wrong. Please try again later.', "error")
     return render_template("journal.html")
 
@@ -168,24 +178,28 @@ def register_user():
         for item in ["FirstName", "LastName", "Username", "email", "password", "confirm", "accept_tos"]:
             content[item] = request.form.get(item)
         if content['password'] != content['confirm']:
+            session.pop('_flashes', None)
             flash('Password and Password Confirmation do not match', "error")
         if check_email(content['email']):
+            session.pop('_flashes', None)
             flash('Email already registered')
         elif check_username(content['Username']):
+            session.pop('_flashes', None)
             flash('Username already in use', "error")
         else:
             # create hashed_password
             hashed_password = bcrypt.generate_password_hash(content['password']).decode('utf-8')
-            print(hashed_password)
             content['hashed_password'] = hashed_password
             add_new_user(content)
             if check_email(content['email']):
+                session.pop('_flashes', None)
                 flash("Your account has been created. Please login.", "notification")
                 return redirect('/login')
             else:
                 add_new_user(content)
                 if check_email(content['email']):
                     return redirect('/login')
+            session.pop('_flashes', None)
             flash('We were unable to register you at this time. Please try again later', "error")
     return render_template("register.html", form=form)
 
@@ -199,11 +213,13 @@ def user_login():
         username = request.form.get('uname')
         password = request.form.get('password')
         if not check_username(username):
+            session.pop('_flashes', None)
             flash("This username does not exist", "error")
         else:
             # verify password matches
             stored_password = get_password(username)
             if not bcrypt.check_password_hash(stored_password, password):
+                session.pop('_flashes', None)
                 flash("Username and Password do not match", "error")
             else:
                 session['user'] = username
