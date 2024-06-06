@@ -10,7 +10,7 @@ A simple mood tracker.
 - A virtual environment to install requirements from requirements.txt
 
 #### Setup 
-1. Config file: in [_config.py](/_config.py), add your GIPHY API key and MySQL user and password.
+1. Config file: in [_config.py](/_config.py), add your GIPHY API key, MySQL user and password where indicated
 2. Change the name from _config.py to config.py 
 3. Create and activate a virtual environment, then install all requirements from [requirements.txt](/requirements.txt)
 4. Create the database using the query in [db_create.sql](/DB_Setup/db_create.sql)
