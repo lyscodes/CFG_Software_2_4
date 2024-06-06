@@ -116,12 +116,16 @@ def add_journal_entry():
                         session.pop('_flashes', None)
                         flash('You have already submitted a diary entry for this date', "notification")
                     elif response == False:
-                        add_journal(content, session['user_id'], session['date'])
-                        response_two = check_entry_journal(session['user_id'], session['date'])
-                        if response_two:
+                        if len(content) > 500:
                             session.pop('_flashes', None)
-                            flash("Your entry has been saved.", "notification")
-                            return redirect('/overview')
+                            flash("Oops! Journal entries must be 500 characters or less...", "error")
+                        else:
+                            add_journal(content, session['user_id'], session['date'])
+                            response_two = check_entry_journal(session['user_id'], session['date'])
+                            if response_two:
+                                session.pop('_flashes', None)
+                                flash("Your entry has been saved.", "notification")
+                                return redirect('/overview')
             except Exception as e:
                 print(e)
                 session.pop('_flashes', None)
