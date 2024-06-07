@@ -1,11 +1,13 @@
 USE Mood_Tracker;
 
 
+
 INSERT INTO Users
 (First_Name, Family_Name, User_Name, Email, Password)
 VALUES
 ('John', 'Doe', 'JoDoe', 'johndoes@example.com', "$2b$12$.VxfEmaBgIMwLNuhfZxmVOXjfo2Xm8K5i1bADqYJmCSu/aTst6IAW"),
 ('Lucy', 'Smith', 'LSmith', 'lsmith@example.com', "$2b$12$6Y6aUmThOUKmf0DHxEv26OiL/5YfAPMzCLzjKoZ6lHhBW5u3hn0ym");
+
 
 
 INSERT INTO Entries
@@ -27,7 +29,7 @@ VALUES
 (1, 20240520, 'angry', 'https://media2.giphy.com/media/7b5Wo64Jw53UI/200w.mp4?cid=0303f60arxkaehjyqbslmmb4gt7nqo503w9z4iags4fqze0k&ep=v1_gifs_search&rid=200w.mp4&ct=g', 'Joke', 'What is this movie about? It is about 2 hours long.', 'GRRRR!'),
 (1, 20240519, 'sad', 'https://media3.giphy.com/media/RIXdN6jjGtRd7dtIMC/200w.mp4?cid=0303f60aivbtq55ms46g8x2r7g2khant5gznuzmqzvkcmdh6&ep=v1_gifs_search&rid=200w.mp4&ct=g', 'Joke', 'Why did the miner get fired from his job? He took it for granite...', 'Today I feel sad!'),
 (1, 20240518, 'happy', 'https://media0.giphy.com/media/9tzXBdylmxKve/200w.mp4?cid=0303f60alvi8xdy3zog6n5giftaphhaji8f23jdf6z3i9ubr&ep=v1_gifs_search&rid=200w.mp4&ct=g', 'Quote', 'I felt my lungs inflate with the onrush of scenery—air, mountains, trees, people. I thought, "This is what it is to be happy.', 'Today I feel happy!'),
-(1, 20240517, 'calm', 'https://media1.giphy.com/media/FUORMziFnjV2tvAbPt/200w.mp4?cid=0303f60ashtpsucec3us1scxxit5nmk1rt2mgbxdr49lw8tv&ep=v1_gifs_search&rid=200w.mp4&ct=g', 'Quote', 'Let us be grateful to the people who make us happy; they are the charming gardeners who make our souls blossom.', 'Zen!'),
+(1, 20240517, 'calm', "https://media1.giphy.com/media/FUORMziFnjV2tvAbPt/200w.mp4?cid=0303f60ashtpsucec3us1scxxit5nmk1rt2mgbxdr49lw8tv&ep=v1_gifs_search&rid=200w.mp4&ct=g", 'Quote', 'Let us be grateful to the people who make us happy; they are the charming gardeners who make our souls blossom.', 'Zen!'),
 (1, 20240516, 'happy', 'https://media0.giphy.com/media/9tzXBdylmxKve/200w.mp4?cid=0303f60alvi8xdy3zog6n5giftaphhaji8f23jdf6z3i9ubr&ep=v1_gifs_search&rid=200w.mp4&ct=g', 'Quote', 'No medicine cures what happiness cannot.', 'Today I feel happy!'),
 (1, 20240515, 'calm', 'https://media1.giphy.com/media/FUORMziFnjV2tvAbPt/200w.mp4?cid=0303f60ashtpsucec3us1scxxit5nmk1rt2mgbxdr49lw8tv&ep=v1_gifs_search&rid=200w.mp4&ct=g', 'Joke', 'What kind of tree fits in your hand? A palm tree!', 'Zen!'),
 (1, 20240514, 'angry', 'https://media2.giphy.com/media/7b5Wo64Jw53UI/200w.mp4?cid=0303f60arxkaehjyqbslmmb4gt7nqo503w9z4iags4fqze0k&ep=v1_gifs_search&rid=200w.mp4&ct=g', 'Joke', 'If a child refuses to sleep during nap time, are they guilty of resisting a rest?', 'GRRRR!'),

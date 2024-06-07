@@ -1,4 +1,4 @@
-from db_utils import get_month_emotions, get_user_id, today_emotion, add_new_user, check_email, check_username, get_password, check_entry_journal, check_entry, add_journal, get_records
+from db_utils import DbConnection, get_month_emotions, get_user_id, today_emotion, add_new_user, check_email, check_username, get_password, check_entry_journal, check_entry, add_journal, get_records
 from flask import Flask, render_template, request, flash, redirect, session, jsonify
 from config import SECRET_KEY
 from helper_oop import QuoteAPI, JokeAPI, MoodDict
@@ -14,6 +14,8 @@ app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=15) # Any session w
 app.jinja_env.lstrip_blocks = True 
 app.jinja_env.trim_blocks = True
 bcrypt = Bcrypt(app)
+
+
 
 
 
@@ -187,9 +189,11 @@ def show_archive_by_date(date):
 def register_user():
     form = RegistrationForm(request.form)
     if request.method == 'POST':
+        # Collect user input from the form
         content = {}
         for item in ["FirstName", "LastName", "Username", "email", "password", "confirm", "accept_tos"]:
             content[item] = request.form.get(item)
+        # Validate user input
         if content['password'] != content['confirm']:
             session.pop('_flashes', None)
             flash('Password and Password Confirmation do not match', "error")
@@ -199,21 +203,20 @@ def register_user():
         elif check_username(content['Username']):
             session.pop('_flashes', None)
             flash('Username already in use', "error")
+        # If all input is valid procede to register user in db
         else:
             # create hashed_password
             hashed_password = bcrypt.generate_password_hash(content['password']).decode('utf-8')
             content['hashed_password'] = hashed_password
             add_new_user(content)
+            # Check that the new user is in the db
             if check_email(content['email']):
                 session.pop('_flashes', None)
                 flash("Your account has been created. Please login.", "notification")
                 return redirect('/login')
             else:
-                add_new_user(content)
-                if check_email(content['email']):
-                    return redirect('/login')
-            session.pop('_flashes', None)
-            flash('We were unable to register you at this time. Please try again later', "error")
+                session.pop('_flashes', None)
+                flash('We were unable to register you at this time. Please try again later', "error")
     return render_template("register.html", form=form)
 
 
