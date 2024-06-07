@@ -151,6 +151,7 @@ def show_overview():
     if 'user' not in session: # checks if the user is logged in, redirects if not
         return redirect('/login')
     if request.method == "POST": # triggered by the calendar changing month
+        session.pop('_flashes', None)
         try:
             date = request.form.get('month')
             sliced_date = date[0:15]
