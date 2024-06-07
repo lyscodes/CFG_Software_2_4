@@ -20,11 +20,11 @@ class MyTest(TestCase):
         self.assert_template_used('quote.html')
 
     def test_template_rendered_choice(self):
-        with self.client.session_transaction() as test_sess:
-            test_sess['mood_dict'] = {'sad': ''}
-
-        self.client.get('/choice/sad')
-        self.assert_template_used('choice.html')
+        with self.client:
+            with self.client.session_transaction() as test_sess:
+                test_sess['mood_dict'] = {'sad': ''}
+            self.client.get('/choice/sad')
+            self.assert_template_used('choice.html')
 
     def test_template_rendered_joke(self):
         self.client.get('/joke')
@@ -42,7 +42,7 @@ class MyTest(TestCase):
         self.client.post('/register', data={'FirstName': 'Rachel', 'LastName': 'Tookey', "Username": "Rachel1993", "email": "rachel@tookey.com", "password":"snow", "confirm":"rain", "accept_tos":True})
         self.assert_message_flashed('Password and Password Confirmation do not match', "error")
 
-    def test_username(self): # check password validaiton and flash messages
+    def test_username_taken(self): # check password validaiton and flash messages
         self.client.post('/register', data={'FirstName': 'Rachel', 'LastName': 'Tookey', "Username": "JoDoe", "email": "r@tookey.com", "password":"snow", "confirm":"snow", "accept_tos":True})
         self.assert_message_flashed("Username already in use", "error")
 
