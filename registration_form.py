@@ -2,6 +2,8 @@ from flask_wtf import FlaskForm
 from wtforms import BooleanField, StringField, PasswordField, EmailField
 from wtforms.validators import Length, InputRequired, Email, EqualTo, ValidationError
 
+# Creates new user form using flask_wtf with validation checks
+
 class RegistrationForm(FlaskForm):
     FirstName = StringField('First Name', [InputRequired(), Length(min=1, max=25)])
     LastName = StringField('Last Name', [InputRequired(), Length(min=1, max=25)])

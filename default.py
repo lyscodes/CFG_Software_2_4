@@ -1,4 +1,5 @@
-# default gifs
+# default external API call responses to be used in the event of the API call failing
+
 default_gifs = {
     'happy': 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMndkcmhyd2M5ank0Yjk4NXFiazdxM2x4cXI1cDJyeThkdGxuNHh2ayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/fUQ4rhUZJYiQsas6WD/giphy.mp4',
     'calm': 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExaXpwOGlncXczODN3NGgxdmZnZnA0YWRxOGdkbm9sMnphNmZmODY2MyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/tF6Up66LsJ8q2LMCQe/giphy.mp4',

@@ -6,7 +6,7 @@ from abc import ABC, abstractmethod
 
 
 # This file is dedicated to classes used to make calls to the external APIs used in the app
-
+# One abstract base class for an API call is made, and our three external API calls inherit it
 
 class APIRequest(ABC):
     def __init__(self, url, params=None, headers=None):
