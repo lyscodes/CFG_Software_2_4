@@ -11,6 +11,10 @@ h1 {
   /* Prevent line break */
 }
 
+/** please keep this code for the nav bar and footer.
+have tried removing them and it made everything wonky. **/
+
+
 /* NAV BAR */
 .container {
   margin-top: auto;

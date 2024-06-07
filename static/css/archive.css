@@ -1,3 +1,4 @@
+
 .main-section {
   margin-top: 32px;
   width: 100%;
@@ -9,6 +10,7 @@
   text-align: center;
   margin-bottom: 50px;
 }
+
 
 .archive-body, .quote-body, .diary-body {
   width: 80%;
@@ -49,10 +51,6 @@
   color: #b48401;
   padding: 10px;
   text-align: center;
-}
-
-.container {
-  margin: auto;
 }
 
 h3 {

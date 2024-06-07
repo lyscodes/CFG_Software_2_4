@@ -5,6 +5,10 @@
     font-family: "Outfit", sans-serif;
 }
 
+/** please keep this code for the nav bar and footer.
+have tried removing them and it made everything wonky. **/
+
+
 /* NAV BAR */
 .container {
   margin-top: auto;
@@ -121,7 +125,7 @@ body {
     margin-top: auto;
 }
 
-.wrapper {
+.login-wrapper {
     width: 420px;
     background: transparent;
     border: 2px solid #7A5A01;
@@ -133,13 +137,13 @@ body {
     margin-bottom: 100px;
 }
 
-.wrapper h1 {
+.login-wrapper h1 {
     font-size: 36px;
     text-align: center;
     color: #7A5A01;
 }
 
-.wrapper .input-box {
+.login-wrapper .input-box {
     position: relative;
     width: 100%;
     height: 50px;
@@ -171,7 +175,7 @@ body {
     font-size: 20px;
 }
 
-.wrapper .btn {
+.login-wrapper .btn {
     width: 100%;
     height: 45px;
     background: #ffffff;
@@ -185,7 +189,7 @@ body {
     font-weight: 600;
 }
 
-.wrapper .register-link {
+.login-wrapper .register-link {
     font-size: 14.5px;
     text-align: center;
     margin: 20px 0 15px;

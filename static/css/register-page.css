@@ -5,6 +5,8 @@
     font-family: "Outfit", sans-serif;
 }
 
+/** please keep this code for the nav bar and footer.
+have tried removing them and it made everything wonky. **/
 
 /* NAV BAR */
 .container {
@@ -105,7 +107,7 @@ main {
 }
 
 
-.wrapper {
+.reg-wrapper {
     width: 85%;
     max-width: 612px;
     background: transparent;
@@ -118,13 +120,13 @@ main {
     margin: -42.5px auto 8.5px;
 }
 
-.wrapper h1 {
+.reg-wrapper h1 {
     font-size: 30.6px;
     text-align: center;
     margin-bottom: 17px;
 }
 
-.wrapper .input-container {
+.reg-wrapper .input-container {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
@@ -162,7 +164,7 @@ main {
     font-size: 17px;
 }
 
-.wrapper label {
+.reg-wrapper label {
     display: inline-block;
     font-size: 12.325px;
     margin: 8.5px 0 19.55px;
@@ -174,7 +176,7 @@ main {
     margin-right: 34px;
 }
 
-.wrapper .btn {
+.reg-wrapper .btn {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -182,7 +184,7 @@ main {
 }
 
 
-.wrapper .btn #register-entry-btn {
+.reg-wrapper .btn #register-entry-btn {
     width: 100%;
     max-width: 150px; /* Optional: Set a max-width for the button */
     height: 45px;
@@ -203,7 +205,7 @@ main {
         width: 100%;
         margin: 10px 0;
     }
-    .wrapper {
+    .reg-wrapper {
         padding: 20px;
     }
 }
@@ -212,13 +214,13 @@ main {
     .container {
         font-size: 1rem;
     }
-    .wrapper h1 {
+    .reg-wrapper h1 {
         font-size: 28px;
     }
-    .wrapper {
+    .reg-wrapper {
         padding: 15px;
     }
-    .wrapper .btn #register-entry-btn {
+    .reg-wrapper .btn #register-entry-btn {
         font-size: 14px;
     }
 }
