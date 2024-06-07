@@ -1,8 +1,8 @@
-{% extends "layout.html" %}{% block title %}Archive{% endblock %} 
+{% extends "layout.html" %}
+{% block title %}Archive{% endblock %} 
 {% block styles %} <link rel="stylesheet" href="../static/css/archive.css" />{% endblock %} 
 {%- block main -%}
-<!-- hero section -->
-<div class="hero-section">
+<div class="main-section">
 
     <section>
         <div class="heading-container">
@@ -12,50 +12,40 @@
     </section>
 
     <div class="container">
-
-        <div class="row text-center mx-auto gx-5">
+        <div class="row">
 
             <!-- Your saved emotion and gif for that date -->
-            <div class="col-lg-6">
-                <div class="card" style="width: 24rem">
-                    <div class="card-body">
+            <div class="col-6">
+                <div class="archive-body">
+                    <div id="feeling-body">
                         <h3>You were feeling</h3>
-                        <p class="card-text">
-                            {{record.emotion}}
-                        </p>
-                        <video id="{{ record.emotion }}-gif" width="200" autoplay muted loop>
+                        <p id="feeling-text">{{record.emotion}}</p>
+                        <video id="{{ record.emotion }}-gif" class="gif-video" autoplay muted loop>
                             <source src="{{ record.gif_url }}" type="video/mp4">
                         </video>
                     </div>
                 </div>
             </div>
 
-            <!-- Your saved quote / joke -->
-            <div class="col-lg-6">
-                <div class="card" style="width: 24rem">
-                    <div class="card-body">
-                        <h3>{{record.choice}}
-                        </h3>
-                        <p class="card-text">
-                            {{record.quote_joke}}
-                        </p>
-                    </div>
-                </div>
-            </div>
-
             <!-- Your diary entry -->
-            <div class="col-lg-6">
-                <div class="card" style="width: 24rem">
-                    <div class="card-body">
+            <div class="col-6">
+                <div class="diary">
+                    <div class="diary-body">
                         <h3>Diary entry</h3>
-                        <p class="card-text">
-                            {{record.diary}}
-                        </p>
+                        <p class="diary-text">{{record.diary}}</p>
                     </div>
                 </div>
-            </div>        
+            </div> 
+            
+        <!-- Your saved quote / joke -->
+        <div class="col-6">
+            <div class="quote-body">
+                <h3>{{record.choice}}</h3>
+                <p class="quote-text">{{record.quote_joke}}</p>
+            </div>
+        </div>
+    </div>       
         </div>
     </div>
 </div>
 {%- endblock %}
-

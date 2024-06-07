@@ -1,164 +1,85 @@
+.main-section {
+  margin-top: 32px;
+  width: 100%;
+  background-color: #fdfaf3;
+  overflow-y: auto; /* Add scrollbar if content exceeds container height */
+}
 
+.heading-container {
+  text-align: center;
+  margin-bottom: 50px;
+}
 
-  
-/* .card {
-    display:inline-block;
-  } */
+.archive-body, .quote-body, .diary-body {
+  width: 80%;
+  margin: auto; /* Center horizontally */
+  border-radius: 16px;
+  border: 1.5px solid #a77b0133;
+  box-shadow: 8px 8px 8px rgba(170, 90, 10, 0.727);
+  background: linear-gradient(#FFF0C6, #fcde83a6);
+  margin-top: 50px; /* Adjust spacing */
+  margin-bottom: 50px; /* Adjust spacing */
+  transition: transform .3s; /* Animation */
+  margin-right: 800px;
+}
 
-  img {
-    margin-top: 30%;
-    display: block;
-    max-width: 42%;
-    height: auto;
-    margin:auto;
-  }
-    
-  main {
-    display: flex;
-  }
-    
-  /* section {
-    margin-top: 200px;
-  }
-       */
-  
-    /* hero section */
-      
-  .hero-section {
-    margin-top: 32px;
-    width: 100%;
-    height: 720px;
-    display: block;
-    
-    box-sizing: border-box;
-    background-color: #fdfaf3;
-    column-gap: 56px;
-   
-  }
-       
-  /* card section */
-  
-  .card {
-      width: 80%;
-      /* margin: auto;  */
-     border-radius: 16px;
-    border: 1.5px solid #a77b0133;
-    box-shadow: 8px 8px 8px rgba(170, 90, 10, 0.727);
-    background: linear-gradient(#FFF0C6, #fcde83a6);
-    margin-top: 100px;
-    margin-bottom: 200px;
-    transition: transform .3s; /* Animation */
-  }
+.quote-body {
+  margin-top: 5px;
+}
 
-  .card:hover{
-    transform: scale(1.05);
-  }
-  
- 
-      
-  .card-text {
-     
-    font-family: "Outfit", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 450;
-    font-size: 1.5rem;
-    font-style: normal;
-    color: #b48401;
-  }
-  
-  /* links */
-  
+#feeling-text,
+#feeling-body {
+  text-align: center;
+  color:#8e6c10;
+}
 
+.archive-body:hover,
+.quote-body:hover,
+.diary-body:hover{
+  transform: scale(1.05);
+}
 
-   .btn-primary {
-    background-color: #8e6c10;
-    border: none;
-    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.092);
-    font-weight: 400;
-    font-size: 1.25rem;
-    padding-left:12px;
-    padding-right:12px;
-    margin-bottom: 24px;
-  } 
+.quote-text,
+.diary-text {
+  font-family: "Outfit", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 450;
+  font-size: 15px;
+  font-style: normal;
+  color: #b48401;
+  padding: 10px;
+  text-align: center;
+}
 
+.container {
+  margin: auto;
+}
 
-  .btn-primary:not(:disabled):not(:disabled):active {
-    background-color: #f2bc75;
-    border: none;
-    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.092);
-    font-weight: 400;
-    font-size: 1.25rem;
-    padding-left:12px;
-    padding-right:12px;
-    color: #8e6c10;
- } 
+h3 {
+  margin-top: 32px;
+  color: #daa002;
+  font-family: "Outfit", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 450;
+  font-size: 2rem;
+  font-style: normal;
+  text-align: center;
+  margin-top: 10px;
+}
 
- .btn-primary:hover {
-  background-color: #f2bc75;
-  border: none;
-  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.092);
-  font-weight: 400;
-  font-size: 1.25rem;
-  padding-left:12px;
-  padding-right:12px;
-  color: #8e6c10;
-} 
+h1 {
+  margin-top: 40px;
+  color: #a27701;
+  font-family: "Outfit", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 450;
+  font-size: 2.65rem;
+  font-style: normal;
+}
 
-
-
-
-
-  .container {
-      margin: auto;
-  }
-  
-  .heading-container{
-    text-align: center;
-    margin-top: 100px;
-    display: block;
-    margin:auto;
-
-  }
-
-  #chosen-feeling {
-    text-decoration-line: underline;
-    color: #a27701;
-    font-size: 2.05rem;
- 
-  }
-
-  h3 {
-    margin-top:32px;
-    color: #daa002;
-    font-family: "Outfit", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 450;
-    font-size:2rem;
-    font-style: normal;
-    /* color: #85650d; */
-  }
-
-
-  h1 {
-    margin-top:40px;
-    color: #a27701;
-    font-family: "Outfit", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 450;
-    font-size:2.65rem;
-    font-style: normal;
-    /* color: #85650d; */
-  }
-
-
-  .flaticon-attribute{
-    text-align: center;
-    justify-content: center;
-  }
-
-  .flaticon {
-    color: rgb(111, 111, 111);
-    font-weight: 100;
-    text-align: center;
-  }
+.gif-video {
+  width: 50%; /* Set the width to 50% */
+  height: auto; /* Maintain aspect ratio */
+  border-radius: 16px;
+}
 

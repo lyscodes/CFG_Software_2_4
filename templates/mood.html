@@ -4,7 +4,6 @@
 <div class="box">
   <h1>How are you feeling today?</h1>
 </div>
-
 <div class="grid-container">
     {%- for emotion, url in emotions | dictsort -%}
         <div class="emotion-container">
@@ -17,7 +16,6 @@
         </div>
     {% endfor %}
 </div>
-
 {% endblock %} <!-- end of the main block -->
 {% block script %} <!-- this block contains js scripts that are specific to this template -->
 <script src="../static/mood-page.js"></script>

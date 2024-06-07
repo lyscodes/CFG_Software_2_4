@@ -22,6 +22,7 @@
     }
 }
 
+
 /* NAV BAR */
 .container {
     margin-top: auto;
@@ -34,7 +35,7 @@
     width: 100%;
     background-color: white;
     overflow: auto;
-    height: 60px;
+    height: auto;
     align-items: center;
     font-family: "Outfit", sans-serif;
     font-optical-sizing: auto;
@@ -42,65 +43,75 @@
     font-size: 1.2rem;
     font-style: normal;
   }
-
-/* ENSURE NAV BAR STRETCHES ACROSS THE SCREEN */
-body::before {
+  
+  /* ENSURE NAV BAR STRETCHES ACROSS THE SCREEN */
+  body::before {
     position: fixed;
     content: "";
     display: block;
     top: 0;
     left: 0;
     right: 0;
-    height: 60px;
+    height: 100px;
     /* Height should match the height of the navigation bar */
     background-color: white;
     z-index: 0;
     /* Ensure the strip appears behind the navigation bar */
   }
-
-footer {
+  
+  footer {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
     height: 150px;
     background-color: #ffffff;
+    box-sizing: border-box;
     display: block;
+    unicode-bidi: isolate;
     width: 100%;
-    z-index: 10;
-}
-
-.nav {
+  }
+  
+  
+  
+  /* aligns nav items to the left using nav class */
+  .nav {
     margin-left: auto;
     color: #A77A01;
-}
-
-a.nav-link {
+    margin-top: 20px;
+  }
+  
+  a.nav-link {
     color: #A77A01;
-}
-
-a.nav-link:hover {
+  }
+  
+  a.nav-link:hover {
+    margin-left: auto;
     color: #7A5A01;
-}
-
-.nav-pills .nav-link.active {
+  }
+  
+  .nav-pills .nav-link.active {
     background: #7E70AA;
-}
-
-.nav-pills .nav-link.active:hover {
+  }
+  
+  .nav-pills .nav-link.active:hover {
     background: #4E6A67;
-}
-
-@media screen and (max-width: 600px) {
+  }
+  
+  /* NAV BAR MOBILE VIEW */
+  @media screen and (max-width: 600px) {
     .nav {
-        flex-direction: column;
-        align-items: center;
+      flex-direction: column;
+      /* Stack nav items vertically does this even work lol*/
+      align-items: center;
+      /* Center align nav items*/
     }
-
+  
     .nav-item {
-        margin-bottom: 5px;
+      margin-bottom: 5px;
+      /* Add space between nav items */
     }
-}
+  }
 
 body {
     background-color: #F2E7C4;

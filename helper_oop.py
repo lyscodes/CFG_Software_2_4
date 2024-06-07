@@ -1,13 +1,12 @@
 from config import GIPHY_API_KEY
 from default import default_gifs, default_jokes, default_quotes
-from random import randint
-import random
+from random import randint, choice
 import requests
 from abc import ABC, abstractmethod
 
 
 # This file is dedicated to classes used to make calls to the external APIs used in the app
-
+# One abstract base class for an API call is made, and our three external API calls inherit it
 
 class APIRequest(ABC):
     def __init__(self, url, params=None, headers=None):
@@ -23,7 +22,7 @@ class APIRequest(ABC):
         else:
             self.params = {}
 
-    def __call__(self): # put custom try and except here and return None is unsuccessful?
+    def __call__(self):
         try:
             response = requests.get(self.url, params=self.params, headers=self.headers)
             response.raise_for_status()
@@ -49,7 +48,7 @@ class QuoteAPI(APIRequest):
             author = clean_response[0]['a']
         except Exception as e:
             print(e)
-            random_quote = random.choice(list(default_quotes))
+            random_quote = choice(list(default_quotes))
             quote = random_quote['q']
             author = random_quote['a']
         return [quote, author]
@@ -66,7 +65,7 @@ class JokeAPI(APIRequest):
             joke = clean_response['joke']
         except Exception as e:
             print(e)
-            joke = random.choice(default_jokes)
+            joke = choice(default_jokes)
         return joke
 
 
