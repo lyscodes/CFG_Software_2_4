@@ -22,7 +22,50 @@ class quoteAPI(TestCase):
         self.assertEqual(result, 500)
 
 class jokeAPI(TestCase):
-    pass
+
+    @patch('helper_oop.JokeAPI.__call__')
+    def test_verify_client(self, mock_get_value: MagicMock) -> None:
+        mock_get_value.return_value = 'client'
+        response = JokeAPI().__call__()
+        self.assertTrue(response)
+
+    @patch('helper_oop.JokeAPI.__call__')
+    def test_request_response(self, mock_response: MagicMock) -> None:
+        mock_response.return_value = 200
+        result = JokeAPI().__call__()
+        self.assertEqual(result, 200)
+
+    @patch('helper_oop.JokeAPI.__call__')
+    def test_request_response_bad(self, mock_response: MagicMock) -> None:
+        mock_response.return_value = 500
+        result = JokeAPI().__call__()
+        self.assertEqual(result, 500)
+
+
+class gifAPI(TestCase):
+
+    @patch('helper_oop.MoodAPI.__call__')
+    def test_verify_client(self, mock_get_value: MagicMock) -> None:
+        mock_get_value.return_value = 'client'
+        response = MoodAPI('mood').__call__()
+        self.assertTrue(response)
+
+    @patch('helper_oop.MoodAPI.__call__')
+    def test_request_response(self, mock_response: MagicMock) -> None:
+        mock_response.return_value = 200
+        result = MoodAPI('mood').__call__()
+        self.assertEqual(result, 200)
+
+    @patch('helper_oop.MoodAPI.__call__')
+    def test_request_response_bad(self, mock_response: MagicMock) -> None:
+        mock_response.return_value = 500
+        result = MoodAPI('mood').__call__()
+        self.assertEqual(result, 500)
+
+class moodDict(TestCase):
+    def check_dict(self):
+        obj = MoodDict.make_dict()
+        self.assertIsInstance(obj, dict)
 
 if __name__ == "__main__":
     main()
