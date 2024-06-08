@@ -48,22 +48,33 @@ a.nav-link:hover {
 }
 
 /* Footer styles */
+
+.attributions {
+    text-align: center;
+    margin-top: 14px;
+}
+
+.attribution{
+    color: rgba(111, 111, 111, 0.736);
+    text-decoration: none;
+    font-weight: 100;
+    font-size: 0.5;
+}
 .icons {
     text-align: center;
+    justify-content: center;
 }
 
 .fa-square-github {
     color: rgba(111, 111, 111, 0.736);
     font-weight: 100;
-    margin-top: 24px;
-    padding: 48px;
+    margin-top: 8px;
+  
 }
 
 .logo-image {
     height: 64px;
     width: 80px;
-    float: left;
-    float: left;
 }
 
 /* Styling for notifications */
