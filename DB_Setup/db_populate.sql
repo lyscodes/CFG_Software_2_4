@@ -55,3 +55,5 @@ VALUES
 (1, 20240611, 'worried', 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcTNwdDNhaW8xanRnM2JzcWVxb2V5M25jZnN1dGRjam5zZnc0bmF4aiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/xUPJPzcdlbvaFUrF7y/giphy.mp4', 'Joke', 'Why are graveyards so noisy? Because of all the coffin.', 'I am worried!'),
 (1, 20240612, 'worried', 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcTNwdDNhaW8xanRnM2JzcWVxb2V5M25jZnN1dGRjam5zZnc0bmF4aiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/xUPJPzcdlbvaFUrF7y/giphy.mp4', 'Quote', 'Dreams are the touchstones of our characters.', 'I am worried!'),
 (1, 20240613, 'angry', 'https://media2.giphy.com/media/7b5Wo64Jw53UI/200w.mp4?cid=0303f60arxkaehjyqbslmmb4gt7nqo503w9z4iags4fqze0k&ep=v1_gifs_search&rid=200w.mp4&ct=g', 'Quote', 'If you want to be happy, do not dwell in the past, do not worry about the future, focus on living fully in the present.', 'GRRRR!');
+
+--- new line needed above to run db_builder.py
