@@ -202,7 +202,7 @@ h1 {
 }
 
 
-#save-entry-btn{
+#save-entry{
   margin-top: 16px;
   font-weight: 400;
   font-size: 1.3rem;
@@ -220,23 +220,20 @@ h1 {
     width: 135px;
     margin-left: 48px;
 }
-
-
-#save-entry-btn:hover {
-
-    font-weight: 400;
-    font-size: 1.3rem;
-    font-style: normal;
-    color: white;
-      font-family: "Outfit";
-      background-color: #d4071f90;
-   padding-top: 2px;
-   padding-bottom: 4px;
-      text-decoration: none;
-      border-radius: 16px;
-      width: 135px;
-      outline:none;
-}
+    #save-entry:hover {
+      font-weight: 400;
+      font-size: 1.3rem;
+      font-style: normal;
+      color: white;
+        font-family: "Outfit";
+        background-color: #d4071f90;
+     padding-top: 2px;
+     padding-bottom: 4px;
+        text-decoration: none;
+        border-radius: 16px;
+        width: 135px;
+        outline:none;
+    }
 
 /* button area */
 
