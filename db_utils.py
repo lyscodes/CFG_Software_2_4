@@ -58,7 +58,7 @@ def check_email(email):
         
         validation_check = db.fetch_data(query)[0][0]
     except Exception as e:
-        print('Validation check error', e)
+        print('Email validation check: ', e)
     finally:
         return validation_check
 
@@ -73,7 +73,7 @@ def check_username(username):
         )
         validation_check = db.fetch_data(query)[0][0]
     except Exception as e:
-        print('Validation check error', e)
+        print('Username validation check: ', e)
     finally:
         return validation_check
 
@@ -89,7 +89,7 @@ def check_entry(user_id, date):
         )
         validation_check = db.fetch_data(query)[0][0]
     except Exception as e:
-        print('Validation check error', e)
+        print('Entry validation check: ', e)
     finally:
         return validation_check
 
@@ -109,7 +109,7 @@ def check_entry_journal(user, date):
 
         validation_check = db.fetch_data(query)[0][0]
     except Exception as e:
-        print("Something went wrong when trying to validate the entry", e)
+        print("Journal validation check: ", e)
 
     finally:
         return validation_check
@@ -125,7 +125,7 @@ def get_user_id(username):
         db = DbConnection()
         return db.fetch_data(query)[0][0]
     except Exception as e:
-        print(e)
+        print("Retrieve User ID: ", e)
         return None
 
 
@@ -139,7 +139,7 @@ def get_password(username):
             )
         return db.fetch_data(query)[0][0]
     except Exception as e:
-        print('Unable to verify password', e)
+        print("Get user password: ", e)
         return None
 
 
@@ -160,7 +160,7 @@ def get_records(user_id, date):
     try:
         return db.fetch_data(query)[0]
     except Exception as e:
-        print('Get records function:', e)
+        print("Get user records: ", e)
         return None
 
 # Retrieve the count of each emotion recorded in a given month in Entries table
@@ -175,7 +175,7 @@ def get_month_emotions(user_id, month, year):
         db = DbConnection()
         return order_month_data(db.fetch_data(query))
     except Exception as e:
-        print(e)
+        print("Get month emotion stats", e)
 
 
 # Organise the month data in the order needed for the frontend
@@ -224,7 +224,7 @@ def today_emotion(user_id, emotion, giphy_url, date, choice, response):
         )
         db.commit_data(query)
     except Exception as e:
-        print('Unable to save emotion / response', e)
+        print('Unable to save record: ', e)
 
 
 # Record new journal entry in Entries table

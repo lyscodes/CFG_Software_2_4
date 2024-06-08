@@ -47,7 +47,7 @@ class QuoteAPI(APIRequest):
             quote = clean_response[0]['q']
             author = clean_response[0]['a']
         except Exception as e:
-            print(e)
+            print('QuoteAPI: ', e)
             random_quote = choice(list(default_quotes))
             quote = random_quote['q']
             author = random_quote['a']
@@ -64,7 +64,7 @@ class JokeAPI(APIRequest):
             clean_response = response.json()
             joke = clean_response['joke']
         except Exception as e:
-            print(e)
+            print('JokeAPI: ', e)
             joke = choice(default_jokes)
         return joke
 
@@ -86,7 +86,7 @@ class MoodAPI(APIRequest):
             item = list[0]
             gif_url = item['images']['fixed_width']['mp4']
         except Exception as e:
-            print(e)
+            print('MoodAPI: ', e)
             mood = self.params['q']
             gif_url = default_gifs[mood]
         return gif_url

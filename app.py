@@ -30,7 +30,7 @@ def mood_checkin():
             emotions_dict = emotions_api.make_dict()
             session['mood_dict'] = emotions_dict # saves the gif url dict to the session
         except Exception as e:
-            print(e)
+            print('Mood endpoint: ', e)
             session.pop('_flashes', None)
             flash("Something went wrong. Please try again later", "error")
     return render_template("mood.html", emotions=session['mood_dict'])
@@ -43,7 +43,7 @@ def choice(id):
         session['emotion'] = id
         session['mood_url'] = session['mood_dict'][id]
     except Exception as e:
-        print(e)
+        print('Choice endpoint: ', e)
         session.pop('_flashes', None)
         flash("Something went wrong! Please submit a new choice", "error")
         return redirect('/')
@@ -73,7 +73,7 @@ def quote_of_the_day():
                     if validation_check_two:
                         return redirect('/journal')
             except Exception as e:
-                print(e)
+                print('Quote endpoint: ', e)
                 session.pop('_flashes', None)
                 flash("Something went wrong. Please try again later", "error")
     return render_template("quote.html", quote=quote, author=author)
@@ -99,7 +99,7 @@ def joke_generator():
                     if response_two:
                         return redirect('/journal')
             except Exception as e:
-                print(e)
+                print('Joke endpoint: ', e)
                 session.pop('_flashes', None)
                 flash("Something went wrong. Please try again later", "error")
     return render_template("joke.html", joke=result)
@@ -132,14 +132,15 @@ def add_journal_entry():
                         session.pop('_flashes', None)
                         flash('You have already submitted a diary entry for this date', "notification")
                     elif validation_check_two == False:
-                        add_journal(content, session['user_id'], session['date'])
-                        validation_check_three = check_entry_journal(session['user_id'], session['date'])
-                        if validation_check_three:
+                        if add_journal(content, session['user_id'], session['date']) == "Diary entry added":
                             session.pop('_flashes', None)
                             flash("Your entry has been saved.", "notification")
                             return redirect('/overview')
+                        else:
+                            session.pop('_flashes', None)
+                            flash('Something went wrong. Please try again later.', "error")
             except Exception as e:
-                print(e)
+                print('Journal endpoint: ', e)
                 session.pop('_flashes', None)
                 flash('Something went wrong. Please try again later.', "error")
     return render_template("journal.html")
@@ -168,7 +169,7 @@ def show_overview():
                 myList = get_month_emotions(session['user_id'], month, year)
                 return jsonify({'output': myList, 'label': f'Your moods for {month_name} {year}...'})
         except Exception as e:
-            print('Overview: ', e)
+            print('Overview endpoint: ', e)
     return render_template("overview.html")
 
 
@@ -186,6 +187,7 @@ def show_archive_by_date(date):
     record['choice'] = saved_records[2]
     record['quote_joke'] = saved_records[3]
     record['diary'] = saved_records[4]
+    print(record)
     return render_template("archive.html", date=date, record=record)
 
 
@@ -213,14 +215,15 @@ def register_user():
             try:
                 hashed_password = bcrypt.generate_password_hash(content['password']).decode('utf-8')
                 content['hashed_password'] = hashed_password
-                add_new_user(content)
-                # Check that the new user is in the db
-                if check_email(content['email']):
+                if add_new_user(content) == 'New user added.':
                     session.pop('_flashes', None)
                     flash("Your account has been created. Please login.", "notification")
                     return redirect('/login')
+                else:
+                    session.pop('_flashes', None)
+                    flash('We were unable to register you at this time. Please try again later', "error")
             except Exception as e:
-                print(e)
+                print('New user endpoint: ', e)
                 session.pop('_flashes', None)
                 flash('We were unable to register you at this time. Please try again later', "error")
     return render_template("register.html", form=form)
@@ -249,7 +252,7 @@ def user_login():
                     session['date'] = datetime.today().strftime('%Y-%m-%d')
                     return redirect('/')
             except Exception as e:
-                print(e)
+                print('Login endpoint: ', e)
                 flash("Something has gone wrong. Please try again later", "error")
     return render_template("login.html")
 
