@@ -3,10 +3,12 @@ from mysql.connector import connection
 from DB_Setup import db_builder
 
 
+# Connector inherits from base class in db_builder
 class DbConnection(db_builder.BaseConnection):
 
     DB_NAME = 'Mood_Tracker'
 
+    # Add database name to the connection
     def __init__(self):
         super().__init__()
         self.cnx = connection.MySQLConnection(
@@ -17,6 +19,15 @@ class DbConnection(db_builder.BaseConnection):
             database=DbConnection.DB_NAME
             )
         self.cur = self.cnx.cursor()
+
+    def commit_data(self, query):
+        try:
+            self.cur.execute(query)
+            self.cnx.commit()
+        except Exception as e:
+            return f"Error with db: {e}"
+        finally:
+            self.close_connection()
 
     def fetch_data(self, query):
         try:

@@ -19,15 +19,6 @@ class BaseConnection():
             return "DB connection closed."
         return "No connection to close."
 
-    def commit_data(self, query):
-        try:
-            self.cur.execute(query)
-            self.cnx.commit()
-        except Exception as e:
-            return f"Error with db: {e}"
-        finally:
-            self.close_connection()
-
 
 def create_db_from_file(sql_file):
     with open(sql_file, encoding="cp437") as file:
@@ -37,7 +28,7 @@ def create_db_from_file(sql_file):
     for query in sql_queries:
         try:
             db.cur.execute(query)
-            print("Query run: ", query)
+            print("Query run: ", query)  # To verify in the terminal that all queries were executed
         except Exception as e:
             print(f"Failed to execute query: {query}", e)
     db.cnx.commit()
