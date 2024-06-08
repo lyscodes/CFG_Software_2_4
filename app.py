@@ -71,7 +71,12 @@ def quote_of_the_day():
                     today_emotion(session['user_id'], session['emotion'], session['mood_url'], session['date'], 'Quote', quote)
                     validation_check_two = check_entry(session['user_id'], session['date'])
                     if validation_check_two:
+                        session.pop('_flashes', None)
+                        flash("Your entry has been saved.", "notification")
                         return redirect('/journal')
+                    else:
+                        session.pop('_flashes', None)
+                        flash("Something went wrong. Please try again later", "error")
             except Exception as e:
                 print('Quote endpoint: ', e)
                 session.pop('_flashes', None)
@@ -89,15 +94,20 @@ def joke_generator():
             return redirect('/login')
         else:
             try:
-                response = check_entry(session['user_id'], session['date'])
-                if response == True:
+                v_check = check_entry(session['user_id'], session['date'])
+                if v_check == True:
                     session.pop('_flashes', None)
                     flash("You have already saved an entry for today", "notification")
-                elif response == False:
+                elif v_check == False:
                     today_emotion(session['user_id'], session['emotion'], session['mood_url'], session['date'], 'Joke', result)
-                    response_two = check_entry(session['user_id'], session['date'])
-                    if response_two:
+                    vc_two = check_entry(session['user_id'], session['date'])
+                    if vc_two:
+                        session.pop('_flashes', None)
+                        flash("Your entry has been saved.", "notification")
                         return redirect('/journal')
+                    else:
+                        session.pop('_flashes', None)
+                        flash("Something went wrong. Please try again later", "error")
             except Exception as e:
                 print('Joke endpoint: ', e)
                 session.pop('_flashes', None)
