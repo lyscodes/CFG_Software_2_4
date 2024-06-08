@@ -21,6 +21,8 @@ This app is built with MYSQL, Python and Flask for the back-end. The front-end i
 ### Running the app
 By running app.py in your IDE you will be able to launch http://127.0.0.1:5500 and go to the homepage of the app.
 
+Please note: the front-end design has been optimised for Google Chrome Browser and for the best experience, we'd recommend using this.
+
 The app will guide you through choosing how you feel and offer a choice for a joke or a quote. It will then allow you to add a journal entry.
 
 You are able to visit the pages without logging into the app, however this will not allow you to save entries or have an overview of the recorded entries.
