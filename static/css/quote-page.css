@@ -62,10 +62,8 @@ img {
       border-radius: 16px;
     border: 1.5px solid #a77b0133;
     box-shadow: 8px 8px 8px rgba(170, 90, 10, 0.727);
-    /* background-color: #f2bd413b; */
-    /* background: linear-gradient(#9ed9d23a, #9ed9d265); */
     height: 130px;
-  background: linear-gradient(#fdfaf3, #f7cf7066);
+  background: linear-gradient(#ff88106c,#fdfaf3);
 }
 
 .card-body{
@@ -73,12 +71,12 @@ img {
 }
 
 .card-subtitle {
-  font-family: "Outfit", sans-serif;
+  font-family: "Quicksand", sans-serif;
   font-optical-sizing: auto;
   font-weight: 300;
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   font-style: normal;
-  color: #565656;
+  color: #565656d3;
   margin-left: 8%;
   margin-right: 8%;
   
@@ -97,9 +95,9 @@ img {
     margin-top:3%;
     margin-left: 8%;
     margin-right: 8%;
-  font-family: "Outfit", sans-serif;
+  font-family: "Quicksand", sans-serif;
   font-optical-sizing: auto;
-  font-weight: 450;
+  font-weight: 600;
   font-size: 1.75rem;
   font-style: normal;
   color: #93700f;
