@@ -75,6 +75,7 @@ a.nav-link:hover {
 .logo-image {
     height: 64px;
     width: 80px;
+    margin: 0;
 }
 
 /* Styling for notifications */
