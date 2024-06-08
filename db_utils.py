@@ -222,6 +222,7 @@ def today_emotion(user_id, emotion, giphy_url, date, choice, response):
             Choice=choice,
             Response=response
         )
+        print(query)
         db.commit_data(query)
     except Exception as e:
         print('Unable to save record: ', e)
