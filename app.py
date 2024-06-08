@@ -189,7 +189,8 @@ def show_archive_by_date(date):
     record['choice'] = saved_records[2]
     record['quote_joke'] = saved_records[3]
     record['diary'] = saved_records[4]
-    print(record)
+    if record['diary'] is None:
+        record['diary'] = f"Looks like you didn't save one for {date}"
     return render_template("archive.html", date=date, record=record)
 
 
