@@ -73,7 +73,7 @@ class MyTest(TestCase):
             self.assert200(response)
 
     def test_logout(self):
-        response = self.client.get('/logout')
+        response = self.client.get('/logout', follow_redirects=False)
         self.assert_status(response, 302)
 
     def test_logout_flash(self):
