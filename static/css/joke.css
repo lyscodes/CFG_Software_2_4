@@ -66,25 +66,14 @@
     height: 130px;
   }
   
-  .card-subtitle {
-    font-family: "Outfit", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 300;
-    font-size: 1.4rem;
-    font-style: normal;
-    color: #565656;
-    margin-left: 8%;
-    margin-right: 8%;
-    
-  }
       
   .card-text {
       margin-top:4%;
       margin-left: 8%;
       margin-right: 8%;
-    font-family: "Outfit", sans-serif;
+    font-family: "Quicksand", sans-serif;
     font-optical-sizing: auto;
-    font-weight: 450;
+    font-weight: 600;
     font-size: 1.75rem;
     font-style: normal;
     color: #93700f;
