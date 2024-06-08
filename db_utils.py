@@ -1,6 +1,6 @@
 from config import DB_CONFIG
 from mysql.connector import connection
-from DB_Setup import db_builder
+from . import db_builder
 
 
 # Connector inherits from base class in db_builder
