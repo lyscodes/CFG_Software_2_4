@@ -77,6 +77,7 @@ def quote_of_the_day():
                     else:
                         session.pop('_flashes', None)
                         flash("Something went wrong. Please try again later", "error")
+                        print(len(session['mood_url']))
             except Exception as e:
                 print('Quote endpoint: ', e)
                 session.pop('_flashes', None)
@@ -108,6 +109,7 @@ def joke_generator():
                     else:
                         session.pop('_flashes', None)
                         flash("Something went wrong. Please try again later", "error")
+                        print(len(session['mood_url']))
             except Exception as e:
                 print('Joke endpoint: ', e)
                 session.pop('_flashes', None)
@@ -127,9 +129,9 @@ def add_journal_entry():
         elif not content:
             session.pop('_flashes', None)
             flash('Journal is empty', "notification-error")
-        elif len(content) > 500:
+        elif len(content) > 350:
             session.pop('_flashes', None)
-            flash("Oops! Journal entries must be 500 characters or less...", "error")
+            flash("Oops! Journal entries must be 350 characters or less...", "error")
         else:
             try:
                 validation_check = check_entry(session['user_id'], session['date'])
@@ -142,7 +144,9 @@ def add_journal_entry():
                         session.pop('_flashes', None)
                         flash('You have already submitted a diary entry for this date', "notification")
                     elif validation_check_two == False:
-                        if add_journal(content, session['user_id'], session['date']) == "Diary entry added":
+                        add_journal(content, session['user_id'], session['date'])
+                        validation_three = check_entry_journal(session['user_id'], session['date'])
+                        if validation_three:
                             session.pop('_flashes', None)
                             flash("Your entry has been saved.", "notification")
                             return redirect('/overview')
