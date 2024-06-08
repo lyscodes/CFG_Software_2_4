@@ -65,32 +65,6 @@ document.addEventListener('DOMContentLoaded', () => {
     prevMonthButton.addEventListener('click', () => changeMonth(-1));
     nextMonthButton.addEventListener('click', () => changeMonth(1));
 
-    // Function to make AJAX request for data based on selected month
-    function fetchDataForMonthYear(month, year) {
-        $.ajax({
-            type: 'POST',
-            url: '/overview',
-            contentType: 'application/json',
-            data: JSON.stringify({
-                month: month,
-                year: year
-            }),
-            success: function(data) {
-                // Update the calendar and stats based on the fetched data
-                console.log(data); // Just for testing, replace with actual logic
-                
-                // Update currentDate to the selected month and year
-                currentDate = new Date(year, month - 1); // month - 1 because months are 0-indexed in JS
-
-                // Re-render the calendar
-                renderCalendar();
-            },
-            error: function(xhr, status, error) {
-                console.error('Error:', error);
-            }
-        });
-    }
-
     renderCalendar();
 
     renderGraph();
