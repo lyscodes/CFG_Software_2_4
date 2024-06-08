@@ -220,7 +220,7 @@ def register_user():
         if content['password'] != content['confirm']:
             session.pop('_flashes', None)
             flash('Password and Password Confirmation do not match', "error")
-        if check_email(content['email']):
+        elif check_email(content['email']):
             session.pop('_flashes', None)
             flash('Email already registered')
         elif check_username(content['Username']):
