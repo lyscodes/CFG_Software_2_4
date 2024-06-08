@@ -154,7 +154,7 @@ margin-bottom: 40px;
       color: #4e6a67;      
     }
 
-
+/* error styling */
     .error {
         color: "red";
         text-align: center;
@@ -184,7 +184,8 @@ margin-bottom: 40px;
         padding-bottom: 16px;
         /* color: #85650d; */
       }
-      
+
+
       /* save entry button */
 
 
@@ -233,7 +234,7 @@ img {
   margin-bottom: 48px;
 }
 
-/* Button area */
+
 
 /* button area */
 

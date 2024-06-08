@@ -1,10 +1,4 @@
 
-
-/*   
-.card {
-  display:inline-block;
-} */
-  
 main {
   display: block;
 }
@@ -13,7 +7,6 @@ section {
   margin-top: 24px;
 }
    
-
   /* hero section */
     
 .hero-section {
@@ -26,6 +19,8 @@ section {
   background-color: #fdfaf3;
   column-gap: 56px;
 }
+
+/* images */
     
 img {
   width: 140px;
@@ -33,7 +28,6 @@ img {
 
   margin-top: 40px; 
   margin-bottom: 40px;
-    /* filter: drop-shadow(6px 6px 4px #f1f9f8); */
 }
     
 .quote {
@@ -83,13 +77,7 @@ img {
 }
 
 
-.heading-container{
-  text-align: center;
-  margin-top: 32px;
-  display: block;
-  margin:auto;
 
-}
     
 .card-text {
     margin-top:3%;
@@ -199,6 +187,7 @@ h1 {
   /* color: #85650d; */
 }
 
+/* buttons */
 
 #save-entry{
   margin-top: 16px;
