@@ -48,7 +48,7 @@ class MyTest(TestCase):
 
 
     def test_form(self): # check it redirects if not logged in
-        response = self.client.post('/register', data={'FirstName': 'Rachel', 'LastName': 'Tookey', "Username": "Rachel1993", "email": "rachel@tookey.com", "password":"snow", "confirm":"snow", "accept_tos":True},  follow_redirects=False)
+        response = self.client.post('/register', data={'FirstName': 'Rachel', 'LastName': 'Tookey', "Username": "Rachel1993", "email": "rachel@tookey.com", "password":"snow", "confirm":"snow", "accept_tos":True})
         self.assert_200(response)
 
 
