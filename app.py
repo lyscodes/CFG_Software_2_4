@@ -77,6 +77,7 @@ def quote_of_the_day():
                     else:
                         session.pop('_flashes', None)
                         flash("Something went wrong. Please try again later", "error")
+                        print(len(session['mood_url']))
             except Exception as e:
                 print('Quote endpoint: ', e)
                 session.pop('_flashes', None)
@@ -108,6 +109,7 @@ def joke_generator():
                     else:
                         session.pop('_flashes', None)
                         flash("Something went wrong. Please try again later", "error")
+                        print(len(session['mood_url']))
             except Exception as e:
                 print('Joke endpoint: ', e)
                 session.pop('_flashes', None)
