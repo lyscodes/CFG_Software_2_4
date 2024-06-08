@@ -1,10 +1,10 @@
 from config import DB_CONFIG
 from mysql.connector import connection
-from . import db_builder
+from db_builder import BaseConnection
 
 
 # Connector inherits from base class in db_builder
-class DbConnection(db_builder.BaseConnection):
+class DbConnection(BaseConnection):
 
     DB_NAME = 'Mood_Tracker'
 

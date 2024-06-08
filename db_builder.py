@@ -23,20 +23,23 @@ class BaseConnection():
 def create_db_from_file(sql_file):
     with open(sql_file, encoding="cp437") as file:
         sql_script = file.read()
+    queries = sql_script.split(';\n')
 
     db = BaseConnection()
-    db.cnx.autocommit = True
 
-    try:
-        db.cur.execute(sql_script, multi=True)
-        print("Query run: ", sql_script)  # To verify in the terminal that all queries were executed
-    except Exception as e:
-        print(f"Failed to execute query: {sql_script}", e)
+    for query in queries:
 
+        try:
+            db.cur.execute(query)
+            db.cnx.commit()
+            print("Query run: ", query)  # To verify in the terminal that all queries were executed
+        except Exception as e:
+            print(f"Failed to execute query: {query}", e)
+    
     db.close_connection()
-    return f"{sql_file} in DB"
+    return True
 
 
 if __name__ == "__main__":
-    if (create_db_from_file("DB_Setup/db_create.sql") == "DB_Setup/db_create.sql in DB"):
+    if create_db_from_file("DB_Setup/db_create.sql"):
         print(create_db_from_file("DB_Setup/db_populate.sql"))
