@@ -1,23 +1,32 @@
-{% extends "layout.html" %}{% block title %} GIFeels {% endblock %}
-{% block styles %}<link href="../static/css/mood-page.css" rel="stylesheet">
+{% extends "layout.html" %}{% block title %} GIFeels {% endblock %} {% block
+styles %}<link href="../static/css/mood-page.css" rel="stylesheet" />
 {% endblock %}{% block main %}
 <div class="box">
   <h1>How are you feeling today?</h1>
 </div>
 <div class="grid-container">
-    {%- for emotion, url in emotions | dictsort -%}
-        <div class="emotion-container">
-            <video id="{{ emotion }}-gif" width="200" autoplay muted loop onclick="location.href = '/choice/{{ emotion }}';">
-                <source src="{{ url }}" type="video/mp4">
-            </video>
-            <div class="gif-text">
-                <p>{{ emotion }}</p>
-            </div>
-        </div>
-    {% endfor %}
+  {%- for emotion, url in emotions | dictsort -%}
+  <div class="emotion-container">
+    <video
+      id="{{ emotion }}-gif"
+      width="200"
+      autoplay
+      muted
+      loop
+      onclick="location.href = '/choice/{{ emotion }}';"
+    >
+      <source src="{{ url }}" type="video/mp4" />
+    </video>
+    <div class="gif-text">
+      <p>{{ emotion }}</p>
+    </div>
+  </div>
+  {% endfor %}
 </div>
-{% endblock %} <!-- end of the main block -->
-{% block script %} <!-- this block contains js scripts that are specific to this template -->
+{% endblock %}
+<!-- end of the main block -->
+{% block script %}
+<!-- this block contains js scripts that are specific to this template -->
 <script src="../static/mood-page.js"></script>
 <script src="../static/mood-page-color.js"></script>
 {%endblock %}
