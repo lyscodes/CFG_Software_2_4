@@ -23,6 +23,20 @@ class DbUtilsTest(unittest.TestCase):
         self.assertEqual(db_instance.close_connection(), "DB connection closed.")
         self.mock_instance.close_connection.assert_called_once()
 
+    def test_quotation(self):
+        # test with double quotes
+        result = db_utils.quotation('She said, "Hello!"')
+        self.assertEqual(result, 'She said, \\"Hello!\\"')
+        # test without double quotes
+        result = db_utils.quotation('No quotes here.')
+        self.assertEqual(result, 'No quotes here.')
+        # test empty string
+        result = db_utils.quotation('')
+        self.assertEqual(result, '')
+        # test string with multiple double quotes
+        result = db_utils.quotation('He replied, "Yes," and then she said, "Okay."')
+        self.assertEqual(result, 'He replied, \\"Yes,\\" and then she said, \\"Okay.\\"')
+
 
     # TEST INSERTING FUNCTIONS
     def test_add_new_user(self):
