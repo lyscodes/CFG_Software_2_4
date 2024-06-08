@@ -99,6 +99,7 @@ def joke_generator():
                 session.pop('_flashes', None)
                 flash("You have already saved an entry for today", "notification")
             elif v_check == False:
+                print(session['joke'])
                 today_emotion(session['user_id'], session['emotion'], session['mood_url'], session['date'], 'Joke', session['joke'])
                 vc_two = check_entry(session['user_id'], session['date'])
                 if vc_two:

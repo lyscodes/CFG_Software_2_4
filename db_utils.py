@@ -211,7 +211,7 @@ def today_emotion(user_id, emotion, giphy_url, date, choice, response):
     try:
         db = DbConnection()
         query = """INSERT INTO Entries (User_ID, Entry_Date, Emotion, Giph_URL, Choice_J_or_Q, Response_J_or_Q )
-                VALUES('{UserID}', '{EntryDate}', '{Emotion}', '{URL}', '{Choice}', '{Response}');""".format(
+                VALUES('{UserID}', '{EntryDate}', '{Emotion}', '{URL}', '{Choice}', "{Response}");""".format(
             UserID=user_id,
             EntryDate=date,
             Emotion=emotion,
@@ -219,6 +219,7 @@ def today_emotion(user_id, emotion, giphy_url, date, choice, response):
             Choice=choice,
             Response=response
         )
+        print(query)
         db.commit_data(query)
     except Exception as e:
         print('Unable to save record: ', e)
@@ -230,9 +231,10 @@ def add_journal(entry, user, date):
         db = DbConnection()
         query = """
                 UPDATE Entries 
-                SET Diary_Entry = '{entry}'
+                SET Diary_Entry = "{entry}"
                 WHERE User_ID = '{user_id}' AND Entry_Date = '{date}';
                 """.format(user_id=user, date=date, entry=entry)
+        print(query)
         db.commit_data(query)
         return "Diary entry added"
     except Exception as e:
