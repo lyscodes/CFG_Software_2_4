@@ -26,5 +26,3 @@ CREATE TABLE Entries (
     Diary_Entry VARCHAR(500),
     CONSTRAINT FK_Users FOREIGN KEY (User_ID) REFERENCES Users(ID)
 );
-
--- new line above needed for the db_builder
