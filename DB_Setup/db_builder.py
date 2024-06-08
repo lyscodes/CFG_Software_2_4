@@ -1,14 +1,43 @@
-from db_utils import DbConnection
+from config import DB_CONFIG
+from mysql.connector import connection
+
+
+# create connector without db name
+class BaseConnection():
+    def __init__(self):
+        self.cnx = connection.MySQLConnection(
+            host=DB_CONFIG['host'],
+            user=DB_CONFIG['user'],
+            password=DB_CONFIG['password'],
+            auth_plugin='mysql_native_password'
+        )
+        self.cur = self.cnx.cursor()
+
+    def close_connection(self):
+        if self.cnx and self.cnx.is_connected():
+            self.cnx.close()
+            return "DB connection closed."
+        return "No connection to close."
+
+    def commit_data(self, query):
+        try:
+            self.cur.execute(query)
+            self.cnx.commit()
+        except Exception as e:
+            return f"Error with db: {e}"
+        finally:
+            self.close_connection()
 
 
 def create_db_from_file(sql_file):
     with open(sql_file, encoding="cp437") as file:
         sql_script = file.read()
     sql_queries = sql_script.split(';\n')
-    db = DbConnection()
+    db = BaseConnection()
     for query in sql_queries:
         try:
             db.cur.execute(query)
+            print("Query run: ", query)
         except Exception as e:
             print(f"Failed to execute query: {query}", e)
     db.cnx.commit()

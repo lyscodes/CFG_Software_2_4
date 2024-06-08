@@ -1,12 +1,14 @@
 from config import DB_CONFIG
 from mysql.connector import connection
+from DB_Setup import db_builder
 
 
-class DbConnection:
+class DbConnection(db_builder.BaseConnection):
 
     DB_NAME = 'Mood_Tracker'
 
     def __init__(self):
+        super().__init__()
         self.cnx = connection.MySQLConnection(
             host=DB_CONFIG['host'],
             user=DB_CONFIG['user'],
@@ -15,22 +17,6 @@ class DbConnection:
             database=DbConnection.DB_NAME
             )
         self.cur = self.cnx.cursor()
-
-    def close_connection(self):
-        if self.cnx and self.cnx.is_connected():
-            self.cnx.close()
-            return "DB connection closed."
-        return "No connection to close."
-
-    def commit_data(self, query):
-        try:
-            self.cur.execute(query)
-            self.cnx.commit()
-        except Exception as e:
-            return f"Error with db: {e}"
-        finally:
-            self.close_connection()
-
 
     def fetch_data(self, query):
         try:
