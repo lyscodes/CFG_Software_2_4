@@ -39,6 +39,12 @@ class DbConnection(db_builder.BaseConnection):
             self.close_connection()
             return value
 
+# This function ensures that strings with double quotation marks are saved correctly
+def quotation(content):
+    if '"' in content:
+        new_string = content.replace('"', '\\"')
+        return new_string
+    return content
 
 
 #### VALIDATION QUERIES ####
@@ -210,29 +216,36 @@ def add_new_user(user):
 def today_emotion(user_id, emotion, giphy_url, date, choice, response):
     try:
         db = DbConnection()
+        clean_response = quotation(response)
         query = """INSERT INTO Entries (User_ID, Entry_Date, Emotion, Giph_URL, Choice_J_or_Q, Response_J_or_Q )
-                VALUES('{UserID}', '{EntryDate}', '{Emotion}', '{URL}', '{Choice}', '{Response}');""".format(
+                VALUES('{UserID}', '{EntryDate}', '{Emotion}', '{URL}', '{Choice}', "{Response}");""".format(
             UserID=user_id,
             EntryDate=date,
             Emotion=emotion,
             URL=giphy_url,
             Choice=choice,
-            Response=response
+            Response=clean_response
         )
+        print(query)
         db.commit_data(query)
     except Exception as e:
         print('Unable to save record: ', e)
+
+
+
 
 
 # Record new journal entry in Entries table
 def add_journal(entry, user, date):
     try:
         db = DbConnection()
+        clean_entry = quotation(entry)
         query = """
                 UPDATE Entries 
-                SET Diary_Entry = '{entry}'
+                SET Diary_Entry = "{entry}"
                 WHERE User_ID = '{user_id}' AND Entry_Date = '{date}';
-                """.format(user_id=user, date=date, entry=entry)
+                """.format(user_id=user, date=date, entry=clean_entry)
+        print(query)
         db.commit_data(query)
         return "Diary entry added"
     except Exception as e:
