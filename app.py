@@ -61,58 +61,58 @@ def quote_of_the_day():
         # following logic checks if they are able to save a quote (are they logged in -> have they already saved an entry for today -> did the entry save?)
         if 'user' not in session:
             return redirect('/login')
-        else:
-            try:
-                validation_check = check_entry(session['user_id'], session['date'])
-                if validation_check == True:
-                    session.pop('_flashes', None)
-                    flash("You have already saved an entry for today", "notification")
-                elif validation_check == False:
-                    today_emotion(session['user_id'], session['emotion'], session['mood_url'], session['date'], 'Quote', quote)
-                    validation_check_two = check_entry(session['user_id'], session['date'])
-                    if validation_check_two:
-                        session.pop('_flashes', None)
-                        flash("Your entry has been saved.", "notification")
-                        return redirect('/journal')
-                    else:
-                        session.pop('_flashes', None)
-                        flash("Something went wrong. Please try again later", "error")
-            except Exception as e:
-                print('Quote endpoint: ', e)
+        try:
+            validation_check = check_entry(session['user_id'], session['date'])
+            if validation_check == True:
                 session.pop('_flashes', None)
-                flash("Something went wrong. Please try again later", "error")
+                flash("You have already saved an entry for today", "notification")
+            elif validation_check == False:
+                today_emotion(session['user_id'], session['emotion'], session['mood_url'], session['date'], 'Quote', quote)
+                validation_check_two = check_entry(session['user_id'], session['date'])
+                if validation_check_two:
+                    session.pop('_flashes', None)
+                    flash("Your entry has been saved.", "notification")
+                    return redirect('/journal')
+                else:
+                    session.pop('_flashes', None)
+                    flash("Something went wrong. Please try again later", "error")
+        except Exception as e:
+            print('Quote endpoint: ', e)
+            session.pop('_flashes', None)
+            flash("Something went wrong. Please try again later", "error")
     return render_template("quote.html", quote=quote, author=author)
 
 
 # Page displaying joke of the day. Follows the same logic:
 @app.route('/joke', methods=['GET', 'POST'])
 def joke_generator():
-    joke_api = JokeAPI()
-    result = joke_api.unpack()
+    if 'joke' not in session:  # First check if the session has already a saved joke
+        joke_api = JokeAPI()
+        result = joke_api.unpack()
+        session['joke'] = result
     if request.method == "POST":
         if 'user' not in session:
             return redirect('/login')
-        else:
-            try:
-                v_check = check_entry(session['user_id'], session['date'])
-                if v_check == True:
-                    session.pop('_flashes', None)
-                    flash("You have already saved an entry for today", "notification")
-                elif v_check == False:
-                    today_emotion(session['user_id'], session['emotion'], session['mood_url'], session['date'], 'Joke', result)
-                    vc_two = check_entry(session['user_id'], session['date'])
-                    if vc_two:
-                        session.pop('_flashes', None)
-                        flash("Your entry has been saved.", "notification")
-                        return redirect('/journal')
-                    else:
-                        session.pop('_flashes', None)
-                        flash("Something went wrong. Please try again later", "error")
-            except Exception as e:
-                print('Joke endpoint: ', e)
+        try:
+            v_check = check_entry(session['user_id'], session['date'])
+            if v_check == True:
                 session.pop('_flashes', None)
-                flash("Something went wrong. Please try again later", "error")
-    return render_template("joke.html", joke=result)
+                flash("You have already saved an entry for today", "notification")
+            elif v_check == False:
+                today_emotion(session['user_id'], session['emotion'], session['mood_url'], session['date'], 'Joke', session['joke'])
+                vc_two = check_entry(session['user_id'], session['date'])
+                if vc_two:
+                    session.pop('_flashes', None)
+                    flash("Your entry has been saved.", "notification")
+                    return redirect('/journal')
+                else:
+                    session.pop('_flashes', None)
+                    flash("Something went wrong. Please try again later", "error")
+        except Exception as e:
+            print('Joke endpoint: ', e)
+            session.pop('_flashes', None)
+            flash("Something went wrong. Please try again later", "error")
+    return render_template("joke.html", joke=session['joke'])
 
 
 # Page allowed the user to write and save a journal entry
@@ -127,9 +127,9 @@ def add_journal_entry():
         elif not content:
             session.pop('_flashes', None)
             flash('Journal is empty', "notification-error")
-        elif len(content) > 500:
+        elif len(content) > 350:
             session.pop('_flashes', None)
-            flash("Oops! Journal entries must be 500 characters or less...", "error")
+            flash("Oops! Journal entries must be 350 characters or less...", "error")
         else:
             try:
                 validation_check = check_entry(session['user_id'], session['date'])
@@ -142,7 +142,9 @@ def add_journal_entry():
                         session.pop('_flashes', None)
                         flash('You have already submitted a diary entry for this date', "notification")
                     elif validation_check_two == False:
-                        if add_journal(content, session['user_id'], session['date']) == "Diary entry added":
+                        add_journal(content, session['user_id'], session['date'])
+                        validation_three = check_entry_journal(session['user_id'], session['date'])
+                        if validation_three:
                             session.pop('_flashes', None)
                             flash("Your entry has been saved.", "notification")
                             return redirect('/overview')
