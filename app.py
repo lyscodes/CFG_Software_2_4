@@ -176,6 +176,8 @@ def show_overview():
 # Shows the saved records for a chosen date
 @app.route('/archive/<date>')
 def show_archive_by_date(date):
+    if 'user' not in session: # checks if the user is logged in, redirects if not
+        return redirect('/login')
     # Get the records from the database
     saved_records = get_records(session['user_id'], date)
     if saved_records is None:
