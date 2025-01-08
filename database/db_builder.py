@@ -41,5 +41,5 @@ def create_db_from_file(sql_file):
 
 
 if __name__ == "__main__":
-    if create_db_from_file("DB_Setup/db_create.sql"):
-        print(create_db_from_file("DB_Setup/db_populate.sql"))
+    if create_db_from_file("../DB_Setup/db_create.sql"):
+        print(create_db_from_file("../DB_Setup/db_populate.sql"))
