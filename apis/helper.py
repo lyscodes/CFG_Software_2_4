@@ -1,5 +1,5 @@
 from config import GIPHY_API_KEY
-from default import default_gifs, default_jokes, default_quotes
+from apis.default import default_gifs, default_jokes, default_quotes
 from random import randint, choice
 import requests
 from abc import ABC, abstractmethod

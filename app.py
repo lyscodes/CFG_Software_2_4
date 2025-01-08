@@ -1,8 +1,8 @@
-from db_utils import get_month_emotions, get_user_id, today_emotion, add_new_user, check_email, check_username, get_password, check_entry_journal, check_entry, add_journal, get_records
+from database.db_utils import get_month_emotions, get_user_id, today_emotion, add_new_user, check_email, check_username, get_password, check_entry_journal, check_entry, add_journal, get_records
 from flask import Flask, render_template, request, flash, redirect, session, jsonify
 from config import SECRET_KEY
-from helper_oop import QuoteAPI, JokeAPI, MoodDict
-from registration_form import RegistrationForm
+from apis.helper import QuoteAPI, JokeAPI, MoodDict
+from forms.registration_form import RegistrationForm
 from datetime import datetime, timedelta
 from flask_bcrypt import Bcrypt 
 

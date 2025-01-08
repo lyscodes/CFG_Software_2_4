@@ -14,8 +14,8 @@ This app is built with MYSQL, Python and Flask for the back-end. The front-end i
 
 ### Setup 
 1. Create a new file at root level called config.py. Copy and paste the template from [_config.py](/_config.py) and add your GIPHY API key, MySQL user and password where indicated. (Using config.py will keep your personal information secure)
-2. Create and activate a virtual environment, then install all requirements from [requirements.txt](/requirements.txt)
-3. Run ['db_builder.py'](/db_builder.py). This will automatically run the queries needed to create and populate the database.
+2. Create and activate a virtual environment, then install all requirements from [requirements.txt](/documentation/requirements.txt)
+3. Run ['db_builder.py'](/database/db_builder.py). This will automatically run the queries needed to create and populate the database.
 Another option for step 3:\
 3. Using MYSQL Workbench create the database by running the query in [db_create.sql](/DB_Setup/db_create.sql).
 4. Populate the database using the query in [db_populate.sql](/DB_Setup/db.populate.sql)
@@ -43,6 +43,6 @@ Password: hello123
 
 Laura: https://github.com/Laura-Kam \
 Fabi: https://github.com/Fabi-P \
-Rachel: https://github.com/Tookles \
+Rachel: https://github.com/Rachel-Tookey \
 Alyssa: https://github.com/lyscodes \
 Hannah: https://github.com/HannahTInsleyMcRink
