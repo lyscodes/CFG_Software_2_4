@@ -1,11 +1,14 @@
 from db_utils import get_month_emotions, get_user_id, today_emotion, add_new_user, check_email, check_username, get_password, check_entry_journal, check_entry, add_journal, get_records
-from flask import Flask, render_template, request, flash, redirect, session, jsonify
-from config import SECRET_KEY
+from flask import Flask, render_template, request, flash, redirect, session, jsonify, url_for
+from config import SECRET_KEY, AUTH0_CLIENT_SECRET, AUTH0_CLIENT_ID, AUTH0_DOMAIN
 from helper_oop import QuoteAPI, JokeAPI, MoodDict
 from registration_form import RegistrationForm
 from datetime import datetime, timedelta
 from flask_bcrypt import Bcrypt 
-
+import json
+from os import environ as env
+from urllib.parse import quote_plus, urlencode
+from authlib.integrations.flask_client import OAuth
 
 app = Flask(__name__)
 
@@ -19,6 +22,18 @@ app.jinja_env.trim_blocks = True
 
 # Sets up encryption for passwords:
 bcrypt = Bcrypt(app)
+
+# Sets up oauth
+oauth = OAuth(app)
+oauth.register(
+    "auth0",
+    client_id=AUTH0_CLIENT_ID,
+    client_secret=AUTH0_CLIENT_SECRET,
+    client_kwargs={
+        "scope": "openid profile email",
+    },
+    server_metadata_url=f'https://{AUTH0_DOMAIN}/.well-known/openid-configuration'
+)
 
 
 # Homepage displays gifs from the api for the user to select
@@ -263,6 +278,7 @@ def user_login():
                     session.pop('_flashes', None)
                     flash("Username and Password do not match", "error")
                 else: # If successful, username, id, and date added to the session:
+                    session['oauth'] = False
                     session['user'] = username
                     session['user_id'] = get_user_id(username)
                     session['date'] = datetime.today().strftime('%Y-%m-%d')
@@ -273,11 +289,44 @@ def user_login():
     return render_template("login.html")
 
 
+@app.route('/login/google')
+def autho_login():
+    return oauth.auth0.authorize_redirect(
+        redirect_uri=url_for("callback", _external=True)
+    )
+
+@app.route('/authorize/google')
+def authorize_google():
+    return
+
+
+# regulate this in comparison with the above?
+@app.route("/callback", methods=["GET", "POST"])
+def callback():
+    token = oauth.auth0.authorize_access_token()
+    session["auth"] = True
+    session["user"] = token
+    return redirect("/")
+
+
 # Log out and clear the session
 @app.route('/logout')
 def user_logout():
+    oauth = session["auth"]
     session.clear()
     flash("You have been logged out. See you soon!", "notification")
+    if oauth:
+        return redirect(
+            "https://" + AUTH0_DOMAIN
+            + "/v2/logout?"
+            + urlencode(
+                {
+                    "returnTo": url_for("home", _external=True),
+                    "client_id": AUTH0_CLIENT_ID,
+                },
+                quote_via=quote_plus,
+            )
+        )
     return redirect('/')
 
 
