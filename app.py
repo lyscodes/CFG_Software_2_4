@@ -1,34 +1,44 @@
 from database.db_utils import get_month_emotions, get_user_id, today_emotion, add_new_user, check_email, check_username, get_password, check_entry_journal, check_entry, add_journal, get_records
-from flask import Flask, render_template, request, flash, redirect, session, jsonify
-from config import SECRET_KEY
 from apis.helper import QuoteAPI, JokeAPI, MoodDict
 from forms.registration_form import RegistrationForm
+from flask import Flask, render_template, request, flash, redirect, session, jsonify, url_for
+from config import SECRET_KEY, AUTH0_CLIENT_SECRET, AUTH0_CLIENT_ID
 from datetime import datetime, timedelta
-from flask_bcrypt import Bcrypt 
-
+from flask_bcrypt import Bcrypt
+from urllib.parse import quote_plus, urlencode
+from authlib.integrations.flask_client import OAuth
+import json
+# from os import environ as env -> env emails
 
 app = Flask(__name__)
 
-# Setting session secret key and a session length of 15 minutes
 app.config['SECRET_KEY'] = SECRET_KEY
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=15)
 
-# Settings to remove the whitespaces added by jinja blocks
-app.jinja_env.lstrip_blocks = True 
+app.jinja_env.lstrip_blocks = True
 app.jinja_env.trim_blocks = True
 
-# Sets up encryption for passwords:
 bcrypt = Bcrypt(app)
 
+oauth = OAuth(app)
+googleOauth = oauth.register(
+    name="auth0",
+    client_id=AUTH0_CLIENT_ID,
+    client_secret=AUTH0_CLIENT_SECRET,
+    client_kwargs={
+        "scope": "openid profile email",
+    },
+    server_metadata_url=f'https://accounts.google.com/.well-known/openid-configuration'
+)
 
-# Homepage displays gifs from the api for the user to select
+
 @app.route('/', methods=['GET'])
 def mood_checkin():
-    if 'mood_dict' not in session:  # First check if the session has already a saved dictionary
+    if 'mood_dict' not in session:
         try:
             emotions_api = MoodDict()
             emotions_dict = emotions_api.make_dict()
-            session['mood_dict'] = emotions_dict # saves the gif url dict to the session
+            session['mood_dict'] = emotions_dict
         except Exception as e:
             print('Mood endpoint: ', e)
             session.pop('_flashes', None)
@@ -36,10 +46,9 @@ def mood_checkin():
     return render_template("mood.html", emotions=session['mood_dict'])
 
 
-# After choosing a feeling, user is redirected here where they can choose between getting a joke or a quote
 @app.route('/choice/<id>', methods=['GET', 'POST'])
 def choice(id):
-    try: # saves selected mood and gif url into the session
+    try:
         session['emotion'] = id
         session['mood_url'] = session['mood_dict'][id]
     except Exception as e:
@@ -50,15 +59,13 @@ def choice(id):
     return render_template("choice.html", emotion=id)
 
 
-# Page displaying the quote of the day
 @app.route('/quote', methods=['GET', 'POST'])
 def quote_of_the_day():
     quote_api = QuoteAPI()
     result = quote_api.unpack()
     quote = result[0]
     author = result[1]
-    if request.method == "POST": # triggered when the user tries to save the quote
-        # following logic checks if they are able to save a quote (are they logged in -> have they already saved an entry for today -> did the entry save?)
+    if request.method == "POST":
         if 'user' not in session:
             return redirect('/login')
         try:
@@ -83,10 +90,9 @@ def quote_of_the_day():
     return render_template("quote.html", quote=quote, author=author)
 
 
-# Page displaying joke of the day. Follows the same logic:
 @app.route('/joke', methods=['GET', 'POST'])
 def joke_generator():
-    if 'joke' not in session:  # First check if the session has already a saved joke
+    if 'joke' not in session:
         joke_api = JokeAPI()
         result = joke_api.unpack()
         session['joke'] = result
@@ -99,7 +105,6 @@ def joke_generator():
                 session.pop('_flashes', None)
                 flash("You have already saved an entry for today", "notification")
             elif v_check == False:
-                print(session['joke'])
                 today_emotion(session['user_id'], session['emotion'], session['mood_url'], session['date'], 'Joke', session['joke'])
                 vc_two = check_entry(session['user_id'], session['date'])
                 if vc_two:
@@ -116,13 +121,10 @@ def joke_generator():
     return render_template("joke.html", joke=session['joke'])
 
 
-# Page allowed the user to write and save a journal entry
 @app.route('/journal', methods=['GET', 'POST'])
 def add_journal_entry():
     if request.method == 'POST':
         content = request.form.get('textarea')
-        # Series of validation checks before saving the entry
-        # (is the user logged in? -> is there content in the journal? -> is the content too long? -> have they saved their mood choice yet? -> have they saved a diary entry already?)
         if 'user' not in session:
             return redirect('/login')
         elif not content:
@@ -134,15 +136,15 @@ def add_journal_entry():
         else:
             try:
                 validation_check = check_entry(session['user_id'], session['date'])
-                if validation_check == False:
+                if not validation_check:
                     session.pop('_flashes', None)
                     flash("You need to save today's emotion first!", "notification")
-                elif validation_check == True:
+                elif validation_check:
                     validation_check_two = check_entry_journal(session['user_id'], session['date'])
-                    if validation_check_two == True:
+                    if validation_check_two:
                         session.pop('_flashes', None)
                         flash('You have already submitted a diary entry for this date', "notification")
-                    elif validation_check_two == False:
+                    elif not validation_check_two:
                         add_journal(content, session['user_id'], session['date'])
                         validation_three = check_entry_journal(session['user_id'], session['date'])
                         if validation_three:
@@ -159,26 +161,22 @@ def add_journal_entry():
     return render_template("journal.html")
 
 
-# This page gets calendar view of your entries + stats of moods
 @app.route('/overview', methods=['GET', 'POST'])
 def show_overview():
-    if 'user' not in session: # checks if the user is logged in, redirects if not
+    if 'user' not in session:
         return redirect('/login')
-    if request.method == "POST": # triggered by the calendar changing month
+    if request.method == "POST":
         session.pop('_flashes', None)
         try:
             date = request.form.get('month')
             sliced_date = date[0:15]
             if sliced_date:
                 date_object = datetime.strptime(sliced_date, "%a %b %d %Y")
-                # Get full month name:
                 month_dt = str(date_object.month)
                 month_object = datetime.strptime(month_dt, "%m")
                 month_name = month_object.strftime("%B")
-                # Get month and year as integers:
                 month = int(date_object.month)
                 year = int(date_object.year)
-                # Get array for user's emotions for that month/year
                 myList = get_month_emotions(session['user_id'], month, year)
                 return jsonify({'output': myList, 'label': f'Your moods for {month_name} {year}...'})
         except Exception as e:
@@ -186,12 +184,10 @@ def show_overview():
     return render_template("overview.html")
 
 
-# Shows the saved records for a chosen date
 @app.route('/archive/<date>')
 def show_archive_by_date(date):
-    if 'user' not in session: # checks if the user is logged in, redirects if not
+    if 'user' not in session:
         return redirect('/login')
-    # Get the records from the database
     saved_records = get_records(session['user_id'], date)
     if saved_records is None:
         flash(f"No records saved on {date}", 'notification')
@@ -207,16 +203,13 @@ def show_archive_by_date(date):
     return render_template("archive.html", date=date, record=record)
 
 
-# Page to register a new user
 @app.route('/register', methods=['GET', 'POST'])
 def register_user():
     form = RegistrationForm(request.form)
-    if request.method == 'POST': # Triggered when the form is submitted
+    if request.method == 'POST':
         content = {}
-        # Collect user input from the form:
         for item in ["FirstName", "LastName", "Username", "email", "password", "confirm", "accept_tos"]:
             content[item] = request.form.get(item)
-        # A series of validation checks:
         if content['password'] != content['confirm']:
             session.pop('_flashes', None)
             flash('Password and Password Confirmation do not match', "error")
@@ -227,7 +220,6 @@ def register_user():
             session.pop('_flashes', None)
             flash('Username already in use', "error")
         else:
-            # If checks passed, it now tries to create a hashed_password
             try:
                 hashed_password = bcrypt.generate_password_hash(content['password']).decode('utf-8')
                 content['hashed_password'] = hashed_password
@@ -245,24 +237,22 @@ def register_user():
     return render_template("register.html", form=form)
 
 
-# Page for user to login
 @app.route('/login', methods=['GET', 'POST'])
 def user_login():
-    if request.method == 'POST': # Triggered on form submission
+    if request.method == 'POST':
         session.clear()
         username = request.form.get('uname')
         password = request.form.get('password')
-        if not check_username(username): # Validation check for username
+        if not check_username(username):
             session.pop('_flashes', None)
             flash("This username does not exist", "error")
         else:
             try:
-            # Verifies password matches hashed password
                 stored_password = get_password(username)
                 if not bcrypt.check_password_hash(stored_password, password):
                     session.pop('_flashes', None)
                     flash("Username and Password do not match", "error")
-                else: # If successful, username, id, and date added to the session:
+                else:
                     session['user'] = username
                     session['user_id'] = get_user_id(username)
                     session['date'] = datetime.today().strftime('%Y-%m-%d')
@@ -273,11 +263,48 @@ def user_login():
     return render_template("login.html")
 
 
-# Log out and clear the session
+@app.route('/login/google')
+def login_google():
+    try:
+        return googleOauth.authorize_redirect(
+        redirect_uri=url_for("authorize_google", _external=True)
+         )
+    except Exception as e:
+        app.logger.error(f"Error during google login {str(e)}")
+        return "Error occured during login", 500
+
+@app.route('/authorize/google')
+def authorize_google():
+    token = googleOauth.authorize_access_token()
+    userinfo_endpoint = googleOauth.server_metadata['userinfo_endpoint']
+    resp = googleOauth.get(userinfo_endpoint)
+    user_info = resp.json()
+    username = user_info['email']
+    print(user_info)
+    session['user_id'] = int(user_info['sub'])
+    session['date'] = datetime.today().strftime('%Y-%m-%d')
+    session['user'] = username
+    session['oauth_token'] = token
+    return redirect("/")
+
+
 @app.route('/logout')
 def user_logout():
+    oauth = session.get('oauth_token')
     session.clear()
     flash("You have been logged out. See you soon!", "notification")
+    # if oauth:
+    #     return redirect(
+    #         "https://accounts.google.com/."
+    #         + "/v2/logout?"
+    #         + urlencode(
+    #             {
+    #                 "returnTo": url_for("home", _external=True),
+    #                 "client_id": AUTH0_CLIENT_ID,
+    #             },
+    #             quote_via=quote_plus,
+    #         )
+    #     )
     return redirect('/')
 
 
