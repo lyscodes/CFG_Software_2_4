@@ -166,6 +166,7 @@ cython_debug/
 
 .vscode/
 
+certs
 certs.certificate.pem
 certs.csr.pem
 certs.private.pem

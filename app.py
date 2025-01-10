@@ -5,15 +5,17 @@ from flask import Flask, render_template, request, flash, redirect, session, jso
 from config import SECRET_KEY, AUTH0_CLIENT_SECRET, AUTH0_CLIENT_ID, AUTH0_CLIENT_DOMAIN
 from datetime import datetime, timedelta
 from flask_bcrypt import Bcrypt
-from urllib.parse import quote_plus, urlencode
 from authlib.integrations.flask_client import OAuth
-import json
 # from os import environ as env -> env emails
 
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = SECRET_KEY
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=15)
+app.config['SESSION_COOKIE_SECURE'] = True
+app.config['SESSION_COOKIE_SAMESITE'] = 'Strict'
+app.config['SESSION_COOKIE_SECURE'] = True
+
 
 app.jinja_env.lstrip_blocks = True
 app.jinja_env.trim_blocks = True
