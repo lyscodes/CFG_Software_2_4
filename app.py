@@ -2,8 +2,8 @@ from database.db_utils import get_month_emotions, get_user_id, today_emotion, ad
 from apis.helper import QuoteAPI, JokeAPI, MoodDict
 from forms.registration_form import RegistrationForm
 from flask import Flask, render_template, request, flash, redirect, session, jsonify, url_for
-from config import SECRET_KEY, AUTH0_CLIENT_SECRET, AUTH0_CLIENT_ID, AUTH0_CLIENT_DOMAIN
-from datetime import datetime, timedelta
+from config import SECRET_KEY, AUTH0_CLIENT_SECRET, AUTH0_CLIENT_ID, AUTH0_CLIENT_DOMAIN, GOOGLE_CLIENT_SECRET, GOOGLE_CLIENT_DOMAIN, GOOGLE_CLIENT_ID
+from datetime import datetime, timedelta, timezone
 from flask_bcrypt import Bcrypt
 from authlib.integrations.flask_client import OAuth
 # from os import environ as env -> env emails
@@ -13,9 +13,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = SECRET_KEY
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=15)
 app.config['SESSION_COOKIE_SECURE'] = True
-app.config['SESSION_COOKIE_SAMESITE'] = 'Strict'
-app.config['SESSION_COOKIE_SECURE'] = True
-
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 
 app.jinja_env.lstrip_blocks = True
 app.jinja_env.trim_blocks = True
@@ -25,12 +23,12 @@ bcrypt = Bcrypt(app)
 oauth = OAuth(app)
 googleOauth = oauth.register(
     name="auth0",
-    client_id=AUTH0_CLIENT_ID,
-    client_secret=AUTH0_CLIENT_SECRET,
+    client_id=GOOGLE_CLIENT_ID,
+    client_secret=GOOGLE_CLIENT_SECRET,
     client_kwargs={
         "scope": "openid profile email",
     },
-    server_metadata_url=f'https://{AUTH0_CLIENT_DOMAIN}/.well-known/openid-configuration'
+    server_metadata_url=f'https://{GOOGLE_CLIENT_DOMAIN}/.well-known/openid-configuration'
 )
 
 
@@ -233,7 +231,7 @@ def register_user():
                     session.pop('_flashes', None)
                     flash('We were unable to register you at this time. Please try again later', "error")
             except Exception as e:
-                print('New user endpoint: ', e)
+                app.logger.error('New user endpoint: ', e)
                 session.pop('_flashes', None)
                 flash('We were unable to register you at this time. Please try again later', "error")
     return render_template("register.html", form=form)
@@ -257,7 +255,7 @@ def user_login():
                 else:
                     session['user'] = username
                     session['user_id'] = get_user_id(username)
-                    session['date'] = datetime.today().strftime('%Y-%m-%d')
+                    session['date'] = datetime.now(timezone.utc).strftime('%Y-%m-%d')
                     return redirect('/')
             except Exception as e:
                 print('Login endpoint: ', e)
@@ -269,7 +267,7 @@ def user_login():
 def login_google():
     try:
         return googleOauth.authorize_redirect(
-        redirect_uri="https://127.0.0.1:443/authorize/google"
+        redirect_uri=url_for("authorize_google", _external=True)
          )
     except Exception as e:
         app.logger.error(f"Error during google login {str(e)}")
