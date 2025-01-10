@@ -218,7 +218,7 @@ def today_emotion(user_id, emotion, giphy_url, date, choice, response):
         db = DbConnection()
         clean_response = quotation(response)
         query = """INSERT INTO Entries (User_ID, Entry_Date, Emotion, Giph_URL, Choice_J_or_Q, Response_J_or_Q )
-                VALUES('{UserID}', '{EntryDate}', '{Emotion}', '{URL}', '{Choice}', "{Response}");""".format(
+                VALUES('{UserID}', '{EntryDate}', '{Emotion}', '{URL}', '{Choice}', '{Response}');""".format(
             UserID=user_id,
             EntryDate=date,
             Emotion=emotion,
