@@ -2,7 +2,7 @@ from database.db_utils import get_month_emotions, get_user_id, today_emotion, ad
 from apis.helper import QuoteAPI, JokeAPI, MoodDict
 from forms.registration_form import RegistrationForm
 from flask import Flask, render_template, request, flash, redirect, session, jsonify, url_for
-from config import SECRET_KEY, AUTH0_CLIENT_SECRET, AUTH0_CLIENT_ID
+from config import SECRET_KEY, AUTH0_CLIENT_SECRET, AUTH0_CLIENT_ID, AUTH0_CLIENT_DOMAIN
 from datetime import datetime, timedelta
 from flask_bcrypt import Bcrypt
 from urllib.parse import quote_plus, urlencode
@@ -28,7 +28,7 @@ googleOauth = oauth.register(
     client_kwargs={
         "scope": "openid profile email",
     },
-    server_metadata_url=f'https://accounts.google.com/.well-known/openid-configuration'
+    server_metadata_url=f'https://{AUTH0_CLIENT_DOMAIN}/.well-known/openid-configuration'
 )
 
 
@@ -267,11 +267,11 @@ def user_login():
 def login_google():
     try:
         return googleOauth.authorize_redirect(
-        redirect_uri=url_for("authorize_google", _external=True)
+        redirect_uri="https://127.0.0.1:443/authorize/google"
          )
     except Exception as e:
         app.logger.error(f"Error during google login {str(e)}")
-        return "Error occured during login", 500
+        return "Error occurred during login", 500
 
 @app.route('/authorize/google')
 def authorize_google():
@@ -280,8 +280,7 @@ def authorize_google():
     resp = googleOauth.get(userinfo_endpoint)
     user_info = resp.json()
     username = user_info['email']
-    print(user_info)
-    session['user_id'] = int(user_info['sub'])
+    session['user_id'] = user_info['sub']
     session['date'] = datetime.today().strftime('%Y-%m-%d')
     session['user'] = username
     session['oauth_token'] = token
@@ -290,24 +289,11 @@ def authorize_google():
 
 @app.route('/logout')
 def user_logout():
-    oauth = session.get('oauth_token')
     session.clear()
     flash("You have been logged out. See you soon!", "notification")
-    # if oauth:
-    #     return redirect(
-    #         "https://accounts.google.com/."
-    #         + "/v2/logout?"
-    #         + urlencode(
-    #             {
-    #                 "returnTo": url_for("home", _external=True),
-    #                 "client_id": AUTH0_CLIENT_ID,
-    #             },
-    #             quote_via=quote_plus,
-    #         )
-    #     )
     return redirect('/')
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5500)
+    app.run(ssl_context=('certs/certificate.pem', 'certs/private.pem'), host='0.0.0.0', port=443)
 
