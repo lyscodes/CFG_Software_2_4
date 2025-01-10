@@ -2,11 +2,13 @@ from database.db_utils import get_month_emotions, get_user_id, today_emotion, ad
 from apis.helper import QuoteAPI, JokeAPI, MoodDict
 from forms.registration_form import RegistrationForm
 from flask import Flask, render_template, request, flash, redirect, session, jsonify, url_for
-from config import SECRET_KEY, AUTH0_CLIENT_SECRET, AUTH0_CLIENT_ID, AUTH0_CLIENT_DOMAIN, GOOGLE_CLIENT_SECRET, GOOGLE_CLIENT_DOMAIN, GOOGLE_CLIENT_ID
+from config import SECRET_KEY, GOOGLE_CLIENT_SECRET, GOOGLE_CLIENT_DOMAIN, GOOGLE_CLIENT_ID, AUTH0_CLIENT_SECRET, AUTH0_CLIENT_ID, AUTH0_CLIENT_DOMAIN
 from datetime import datetime, timedelta, timezone
 from flask_bcrypt import Bcrypt
 from authlib.integrations.flask_client import OAuth
+import flask_sqlalchemy
 # from os import environ as env -> env emails
+
 
 app = Flask(__name__)
 
@@ -296,4 +298,3 @@ def user_logout():
 
 if __name__ == '__main__':
     app.run(ssl_context=('certs/certificate.pem', 'certs/private.pem'), host='0.0.0.0', port=443)
-
