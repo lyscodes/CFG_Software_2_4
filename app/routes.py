@@ -1,36 +1,15 @@
-import os
-
 from database.db_utils import get_month_emotions, get_user_id, today_emotion, add_new_user, check_email, check_username, get_password, check_entry_journal, check_entry, add_journal, get_records
-from apis.helper import QuoteAPI, JokeAPI, MoodDict
+from app.helper import QuoteAPI, JokeAPI, MoodDict
 from forms.registration_form import RegistrationForm
-from flask import Flask, render_template, request, flash, redirect, session, jsonify, url_for
+from flask import render_template, request, flash, redirect, session, url_for
 from datetime import datetime
-from flask_bcrypt import Bcrypt
-from authlib.integrations.flask_client import OAuth
 from utils.dateutils import get_utc_date, get_month_name
 from functools import wraps
-import flask_sqlalchemy
+from flask import Blueprint, jsonify
+from oauth_providers import googleOauth
+from app import bcrypt
 
-app = Flask(__name__)
-
-app.config.from_pyfile('settings.py')
-
-app.jinja_env.lstrip_blocks = True
-app.jinja_env.trim_blocks = True
-
-bcrypt = Bcrypt(app)
-
-oauth = OAuth(app)
-googleOauth = oauth.register(
-    name="auth0",
-    client_id=os.getenv('GOOGLE_CLIENT_ID'),
-    client_secret=os.getenv('GOOGLE_CLIENT_SECRET'),
-    client_kwargs={
-        "scope": "openid profile email",
-    },
-    server_metadata_url=f'https://{os.getenv('GOOGLE_CLIENT_DOMAIN')}/.well-known/openid-configuration'
-)
-
+main = Blueprint('main', __name__)
 
 def flash_error(error):
     session.pop('_flashes', None)
@@ -52,16 +31,16 @@ def login_required(f):
     return wrap
 
 
-@app.errorhandler(Exception)
+@main.errorhandler(Exception)
 def error_handler(error):
-    app.logger.error(f"Error occurred at route: {request.path} (method: {request.method}) - Error: {error}")
+    #main.logger.error(f"Error occurred at route: {request.path} (method: {request.method}) - Error: {error}")
     flash_error("Something went wrong. Please try again later")
     if request.referrer:
         return redirect(request.referrer)
     return redirect('/')
 
 
-@app.route('/', methods=['GET'])
+@main.route('/', methods=['GET'])
 def mood_checkin():
     if 'mood_dict' not in session:
         emotions_api = MoodDict()
@@ -70,14 +49,14 @@ def mood_checkin():
     return render_template("mood.html", emotions=session['mood_dict'])
 
 
-@app.route('/choice/<emotion_id>', methods=['GET', 'POST'])
+@main.route('/choice/<emotion_id>', methods=['GET', 'POST'])
 def choice(emotion_id):
     session['emotion'] = emotion_id
     session['mood_url'] = session['mood_dict'][emotion_id]
     return render_template("choice.html", emotion=emotion_id)
 
 
-@app.route('/save_choice', methods=['GET'])
+@main.route('/save_choice', methods=['GET'])
 @login_required
 def save_choice():
     choice = session['choice']
@@ -90,13 +69,13 @@ def save_choice():
             flash_notification("Your entry has been saved.")
             return redirect('/journal')
         else:
-            app.logger.error("Error in quote of the day")
+            #main.logger.error("Error in quote of the day")
             flash_error("Something went wrong. Please try again later")
             return redirect('/')
     return redirect(f'/{choice}')
 
 
-@app.route('/quote', methods=['GET', 'POST'])
+@main.route('/quote', methods=['GET', 'POST'])
 def quote_of_the_day():
     if 'quote' not in session:
         quote_api = QuoteAPI()
@@ -109,7 +88,7 @@ def quote_of_the_day():
     return render_template("quote.html", quote=session['quote'], author=session['author'])
 
 
-@app.route('/joke', methods=['GET', 'POST'])
+@main.route('/joke', methods=['GET', 'POST'])
 def joke_generator():
     if 'joke' not in session:
         joke_api = JokeAPI()
@@ -121,7 +100,7 @@ def joke_generator():
     return render_template("joke.html", joke=session['joke'])
 
 
-@app.route('/journal', methods=['GET', 'POST'])
+@main.route('/journal', methods=['GET', 'POST'])
 @login_required
 def add_journal_entry():
     if request.method == 'POST':
@@ -146,7 +125,7 @@ def add_journal_entry():
     return render_template("journal.html")
 
 
-@app.route('/overview', methods=['GET', 'POST'])
+@main.route('/overview', methods=['GET', 'POST'])
 @login_required
 def show_overview():
     if request.method == "POST":
@@ -159,7 +138,7 @@ def show_overview():
     return render_template("overview.html")
 
 
-@app.route('/archive/<date>')
+@main.route('/archive/<date>')
 @login_required
 def show_archive_by_date(date):
     saved_records = get_records(session['user_id'], date)
@@ -171,7 +150,7 @@ def show_archive_by_date(date):
     return render_template("archive.html", date=date, record=record)
 
 
-@app.route('/register', methods=['GET', 'POST'])
+@main.route('/register', methods=['GET', 'POST'])
 def register_user():
     form = RegistrationForm(request.form)
     if request.method == 'POST':
@@ -194,7 +173,7 @@ def register_user():
     return render_template("register.html", form=form)
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@main.route('/login', methods=['GET', 'POST'])
 def user_login():
     if request.method == 'POST':
         session.clear()
@@ -214,12 +193,12 @@ def user_login():
     return render_template("login.html")
 
 
-@app.route('/login/google')
+@main.route('/login/google')
 def login_google():
     return googleOauth.authorize_redirect(redirect_uri=url_for("authorize_google", _external=True))
 
 
-@app.route('/authorize/google')
+@main.route('/authorize/google')
 def authorize_google():
     token = googleOauth.authorize_access_token()
     userinfo_endpoint = googleOauth.server_metadata['userinfo_endpoint']
@@ -231,7 +210,7 @@ def authorize_google():
     return redirect("/")
 
 
-@app.route('/logout')
+@main.route('/logout')
 @login_required
 def user_logout():
     session.clear()
@@ -239,5 +218,3 @@ def user_logout():
     return redirect('/')
 
 
-if __name__ == '__main__':
-    app.run(ssl_context=('certs/certificate.pem', 'certs/private.pem'), host='0.0.0.0', port=443)

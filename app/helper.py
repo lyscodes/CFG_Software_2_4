@@ -1,12 +1,8 @@
-from config import GIPHY_API_KEY
-from apis.default import default_gifs, default_jokes, default_quotes
+from database.config import GIPHY_API_KEY
+from data.default import default_gifs, default_jokes, default_quotes
 from random import randint, choice
 import requests
 from abc import ABC, abstractmethod
-
-
-# This file is dedicated to classes used to make calls to the external APIs used in the app
-# One abstract base class for an API call is made, and our three external API calls inherit it
 
 class APIRequest(ABC):
     def __init__(self, url, params=None, headers=None):

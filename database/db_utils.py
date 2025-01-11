@@ -1,4 +1,4 @@
-from config import DB_CONFIG
+from database.config import DB_CONFIG
 from mysql.connector import connection
 from database.db_builder import BaseConnection
 

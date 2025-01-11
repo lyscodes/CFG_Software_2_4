@@ -2,7 +2,7 @@ import unittest
 from flask_testing import TestCase
 from app import app
 
-# Testing file for app.py and Flask ending points. It uses flask's customised library for testing.
+# Testing file for routes.py and Flask ending points. It uses flask's customised library for testing.
 
 class MyTest(TestCase):
     def create_app(self):
