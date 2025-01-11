@@ -9,7 +9,6 @@ from flask_bcrypt import Bcrypt
 from authlib.integrations.flask_client import OAuth
 from utils.dateutils import get_utc_date, get_month_name
 from functools import wraps
-import sqlalchemy
 import flask_sqlalchemy
 
 app = Flask(__name__)
