@@ -34,62 +34,83 @@ googleOauth = oauth.register(
 )
 
 
+def flash_error(error):
+    session.pop('_flashes', None)
+    flash(error, "error")
+
+
+def flash_notification(notification):
+    session.pop('_flashes', None)
+    flash(notification, 'notification')
+
+
+def get_utc_date():
+    return datetime.now(timezone.utc).strftime('%Y-%m-%d')
+
+
+def get_month_name(date_object):
+    month_dt = str(date_object.month)
+    month_object = datetime.strptime(month_dt, "%m")
+    return month_object.strftime("%B")
+
+
+@app.errorhandler(Exception)
+def error_handler(error):
+    app.logger.error(f"Error occurred at route: {request.path} (method: {request.method}) - Error: {error}")
+    flash_error("Something went wrong. Please try again later")
+    if request.referrer:
+        return redirect(request.referrer)
+    return redirect('/')
+
+
 @app.route('/', methods=['GET'])
 def mood_checkin():
     if 'mood_dict' not in session:
-        try:
-            emotions_api = MoodDict()
-            emotions_dict = emotions_api.make_dict()
-            session['mood_dict'] = emotions_dict
-        except Exception as e:
-            print('Mood endpoint: ', e)
-            session.pop('_flashes', None)
-            flash("Something went wrong. Please try again later", "error")
+        emotions_api = MoodDict()
+        emotions_dict = emotions_api.make_dict()
+        session['mood_dict'] = emotions_dict
     return render_template("mood.html", emotions=session['mood_dict'])
 
 
-@app.route('/choice/<id>', methods=['GET', 'POST'])
-def choice(id):
-    try:
-        session['emotion'] = id
-        session['mood_url'] = session['mood_dict'][id]
-    except Exception as e:
-        print('Choice endpoint: ', e)
-        session.pop('_flashes', None)
-        flash("Something went wrong! Please submit a new choice", "error")
-        return redirect('/')
-    return render_template("choice.html", emotion=id)
+@app.route('/choice/<emotion_id>', methods=['GET', 'POST'])
+def choice(emotion_id):
+    session['emotion'] = emotion_id
+    session['mood_url'] = session['mood_dict'][emotion_id]
+    return render_template("choice.html", emotion=emotion_id)
+
+
+@app.route('/save_choice', methods=['GET'])
+def save_choice():
+    if 'user' in session:
+        choice = session['choice']
+        entry_saved_already = check_entry(session['user_id'], session['date'])
+        if entry_saved_already:
+            flash_notification("You have already saved an entry for today")
+        else:
+            today_emotion(session['user_id'], session['emotion'], session['mood_url'], session['date'], session['choice'], session[choice])
+            has_entry_saved = check_entry(session['user_id'], session['date'])
+            if has_entry_saved:
+                flash_notification("Your entry has been saved.")
+                return redirect('/journal')
+            else:
+                app.logger.error("Error in quote of the day")
+                flash_error("Something went wrong. Please try again later")
+                return redirect('/')
+        return redirect(f'/{choice}')
+    return redirect('/login')
 
 
 @app.route('/quote', methods=['GET', 'POST'])
 def quote_of_the_day():
-    quote_api = QuoteAPI()
-    result = quote_api.unpack()
-    quote = result[0]
-    author = result[1]
+    if 'quote' not in session:
+        quote_api = QuoteAPI()
+        result = quote_api.unpack()
+        session['quote'] = result[0]
+        session['author'] = result[1]
     if request.method == "POST":
-        if 'user' not in session:
-            return redirect('/login')
-        try:
-            validation_check = check_entry(session['user_id'], session['date'])
-            if validation_check == True:
-                session.pop('_flashes', None)
-                flash("You have already saved an entry for today", "notification")
-            elif validation_check == False:
-                today_emotion(session['user_id'], session['emotion'], session['mood_url'], session['date'], 'Quote', quote)
-                validation_check_two = check_entry(session['user_id'], session['date'])
-                if validation_check_two:
-                    session.pop('_flashes', None)
-                    flash("Your entry has been saved.", "notification")
-                    return redirect('/journal')
-                else:
-                    session.pop('_flashes', None)
-                    flash("Something went wrong. Please try again later", "error")
-        except Exception as e:
-            print('Quote endpoint: ', e)
-            session.pop('_flashes', None)
-            flash("Something went wrong. Please try again later", "error")
-    return render_template("quote.html", quote=quote, author=author)
+        session['choice'] = "quote"
+        return redirect('/save_choice')
+    return render_template("quote.html", quote=session['quote'], author=session['author'])
 
 
 @app.route('/joke', methods=['GET', 'POST'])
@@ -99,27 +120,8 @@ def joke_generator():
         result = joke_api.unpack()
         session['joke'] = result
     if request.method == "POST":
-        if 'user' not in session:
-            return redirect('/login')
-        try:
-            v_check = check_entry(session['user_id'], session['date'])
-            if v_check == True:
-                session.pop('_flashes', None)
-                flash("You have already saved an entry for today", "notification")
-            elif v_check == False:
-                today_emotion(session['user_id'], session['emotion'], session['mood_url'], session['date'], 'Joke', session['joke'])
-                vc_two = check_entry(session['user_id'], session['date'])
-                if vc_two:
-                    session.pop('_flashes', None)
-                    flash("Your entry has been saved.", "notification")
-                    return redirect('/journal')
-                else:
-                    session.pop('_flashes', None)
-                    flash("Something went wrong. Please try again later", "error")
-        except Exception as e:
-            print('Joke endpoint: ', e)
-            session.pop('_flashes', None)
-            flash("Something went wrong. Please try again later", "error")
+        session['choice'] = "joke"
+        return redirect('/save_choice')
     return render_template("joke.html", joke=session['joke'])
 
 
@@ -130,36 +132,25 @@ def add_journal_entry():
         if 'user' not in session:
             return redirect('/login')
         elif not content:
-            session.pop('_flashes', None)
-            flash('Journal is empty', "notification-error")
+            flash_error('Journal is empty')
         elif len(content) > 350:
-            session.pop('_flashes', None)
-            flash("Oops! Journal entries must be 350 characters or less...", "error")
+            flash_error("Oops! Journal entries must be 350 characters or less...")
         else:
-            try:
-                validation_check = check_entry(session['user_id'], session['date'])
-                if not validation_check:
-                    session.pop('_flashes', None)
-                    flash("You need to save today's emotion first!", "notification")
-                elif validation_check:
-                    validation_check_two = check_entry_journal(session['user_id'], session['date'])
-                    if validation_check_two:
-                        session.pop('_flashes', None)
-                        flash('You have already submitted a diary entry for this date', "notification")
-                    elif not validation_check_two:
-                        add_journal(content, session['user_id'], session['date'])
-                        validation_three = check_entry_journal(session['user_id'], session['date'])
-                        if validation_three:
-                            session.pop('_flashes', None)
-                            flash("Your entry has been saved.", "notification")
-                            return redirect('/overview')
-                        else:
-                            session.pop('_flashes', None)
-                            flash('Something went wrong. Please try again later.', "error")
-            except Exception as e:
-                print('Journal endpoint: ', e)
-                session.pop('_flashes', None)
-                flash('Something went wrong. Please try again later.', "error")
+            has_saved_emotion = check_entry(session['user_id'], session['date'])
+            if not has_saved_emotion:
+                flash_notification("You need to save today's emotion first!")
+            else:
+                has_already_saved = check_entry_journal(session['user_id'], session['date'])
+                if has_already_saved:
+                    flash_notification('You have already submitted a diary entry for this date')
+                else:
+                    add_journal(content, session['user_id'], session['date'])
+                    did_entry_save = check_entry_journal(session['user_id'], session['date'])
+                    if did_entry_save:
+                        flash_notification("Your entry has been saved.")
+                        return redirect('/overview')
+                    else:
+                        flash_error('Something went wrong. Please try again later.')
     return render_template("journal.html")
 
 
@@ -169,20 +160,12 @@ def show_overview():
         return redirect('/login')
     if request.method == "POST":
         session.pop('_flashes', None)
-        try:
-            date = request.form.get('month')
-            sliced_date = date[0:15]
-            if sliced_date:
-                date_object = datetime.strptime(sliced_date, "%a %b %d %Y")
-                month_dt = str(date_object.month)
-                month_object = datetime.strptime(month_dt, "%m")
-                month_name = month_object.strftime("%B")
-                month = int(date_object.month)
-                year = int(date_object.year)
-                myList = get_month_emotions(session['user_id'], month, year)
-                return jsonify({'output': myList, 'label': f'Your moods for {month_name} {year}...'})
-        except Exception as e:
-            print('Overview endpoint: ', e)
+        date = request.form.get('month')
+        sliced_date = date[0:15]
+        if sliced_date:
+            date_object = datetime.strptime(sliced_date, "%a %b %d %Y")
+            emotion_list = get_month_emotions(session['user_id'], int(date_object.month), int(date_object.year))
+            return jsonify({'output': emotion_list, 'label': f'Your moods for {get_month_name(date_object)} {int(date_object.year)}...'})
     return render_template("overview.html")
 
 
@@ -192,16 +175,9 @@ def show_archive_by_date(date):
         return redirect('/login')
     saved_records = get_records(session['user_id'], date)
     if saved_records is None:
-        flash(f"No records saved on {date}", 'notification')
+        flash_notification(f"No records saved on {date}")
         return redirect('/overview')
-    record = {}
-    record['emotion'] = saved_records[0]
-    record['gif_url'] = saved_records[1]
-    record['choice'] = saved_records[2]
-    record['quote_joke'] = saved_records[3]
-    record['diary'] = saved_records[4]
-    if record['diary'] is None:
-        record['diary'] = f"You didn't feel like journaling on {date} and that's okay!"
+    record = {'emotion': saved_records[0], 'gif_url': saved_records[1], 'choice': saved_records[2], 'quote_joke': saved_records[3], 'diary': f"You didn't feel like journaling on {date} and that's okay!" if saved_records[4] is None else saved_records[4]}
     return render_template("archive.html", date=date, record=record)
 
 
@@ -213,29 +189,19 @@ def register_user():
         for item in ["FirstName", "LastName", "Username", "email", "password", "confirm", "accept_tos"]:
             content[item] = request.form.get(item)
         if content['password'] != content['confirm']:
-            session.pop('_flashes', None)
-            flash('Password and Password Confirmation do not match', "error")
+            flash_error('Password and Password Confirmation do not match')
         elif check_email(content['email']):
-            session.pop('_flashes', None)
-            flash('Email already registered')
+            flash_error('Email already registered')
         elif check_username(content['Username']):
-            session.pop('_flashes', None)
-            flash('Username already in use', "error")
+            flash_error('Username already in use')
         else:
-            try:
-                hashed_password = bcrypt.generate_password_hash(content['password']).decode('utf-8')
-                content['hashed_password'] = hashed_password
-                if add_new_user(content) == 'New user added.':
-                    session.pop('_flashes', None)
-                    flash("Your account has been created. Please login.", "notification")
-                    return redirect('/login')
-                else:
-                    session.pop('_flashes', None)
-                    flash('We were unable to register you at this time. Please try again later', "error")
-            except Exception as e:
-                app.logger.error('New user endpoint: ', e)
-                session.pop('_flashes', None)
-                flash('We were unable to register you at this time. Please try again later', "error")
+            hashed_password = bcrypt.generate_password_hash(content['password']).decode('utf-8')
+            content['hashed_password'] = hashed_password
+            if add_new_user(content) == 'New user added.':
+                flash_notification("Your account has been created. Please login.")
+                return redirect('/login')
+            else:
+                flash_error('We were unable to register you at this time. Please try again later')
     return render_template("register.html", form=form)
 
 
@@ -246,53 +212,40 @@ def user_login():
         username = request.form.get('uname')
         password = request.form.get('password')
         if not check_username(username):
-            session.pop('_flashes', None)
-            flash("This username does not exist", "error")
+            flash_error("This username does not exist")
         else:
-            try:
-                stored_password = get_password(username)
-                if not bcrypt.check_password_hash(stored_password, password):
-                    session.pop('_flashes', None)
-                    flash("Username and Password do not match", "error")
-                else:
-                    session['user'] = username
-                    session['user_id'] = get_user_id(username)
-                    session['date'] = datetime.now(timezone.utc).strftime('%Y-%m-%d')
-                    return redirect('/')
-            except Exception as e:
-                print('Login endpoint: ', e)
-                flash("Something has gone wrong. Please try again later", "error")
+            stored_password = get_password(username)
+            if not bcrypt.check_password_hash(stored_password, password):
+                flash_error("Username and Password do not match")
+            else:
+                session['user'] = username
+                session['user_id'] = get_user_id(username)
+                session['date'] = get_utc_date()
+                return redirect('/')
     return render_template("login.html")
 
 
 @app.route('/login/google')
 def login_google():
-    try:
-        return googleOauth.authorize_redirect(
-        redirect_uri=url_for("authorize_google", _external=True)
-         )
-    except Exception as e:
-        app.logger.error(f"Error during google login {str(e)}")
-        return "Error occurred during login", 500
+    return googleOauth.authorize_redirect(redirect_uri=url_for("authorize_google", _external=True))
+
 
 @app.route('/authorize/google')
 def authorize_google():
-    token = googleOauth.authorize_access_token()
     userinfo_endpoint = googleOauth.server_metadata['userinfo_endpoint']
-    resp = googleOauth.get(userinfo_endpoint)
-    user_info = resp.json()
+    user_info = googleOauth.get(userinfo_endpoint).json()
     username = user_info['email']
     session['user_id'] = user_info['sub']
-    session['date'] = datetime.today().strftime('%Y-%m-%d')
+    session['date'] = get_utc_date()
     session['user'] = username
-    session['oauth_token'] = token
+    session['oauth_token'] = googleOauth.authorize_access_token()
     return redirect("/")
 
 
 @app.route('/logout')
 def user_logout():
     session.clear()
-    flash("You have been logged out. See you soon!", "notification")
+    flash_notification("You have been logged out. See you soon!")
     return redirect('/')
 
 
