@@ -1,23 +1,20 @@
+import os
+
 from database.db_utils import get_month_emotions, get_user_id, today_emotion, add_new_user, check_email, check_username, get_password, check_entry_journal, check_entry, add_journal, get_records
 from apis.helper import QuoteAPI, JokeAPI, MoodDict
 from forms.registration_form import RegistrationForm
 from flask import Flask, render_template, request, flash, redirect, session, jsonify, url_for
-from config import SECRET_KEY, GOOGLE_CLIENT_SECRET, GOOGLE_CLIENT_DOMAIN, GOOGLE_CLIENT_ID, AUTH0_CLIENT_SECRET, AUTH0_CLIENT_ID, AUTH0_CLIENT_DOMAIN
-from datetime import datetime, timedelta, timezone
+from datetime import datetime
 from flask_bcrypt import Bcrypt
 from authlib.integrations.flask_client import OAuth
 from utils.dateutils import get_utc_date, get_month_name
+from functools import wraps
+import sqlalchemy
 import flask_sqlalchemy
-# from os import environ as env
-
 
 app = Flask(__name__)
 
-app.config['SECRET_KEY'] = SECRET_KEY
-app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=15)
-app.config['SESSION_COOKIE_SECURE'] = True
-app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
-# HTTP Only?
+app.config.from_pyfile('settings.py')
 
 app.jinja_env.lstrip_blocks = True
 app.jinja_env.trim_blocks = True
@@ -27,12 +24,12 @@ bcrypt = Bcrypt(app)
 oauth = OAuth(app)
 googleOauth = oauth.register(
     name="auth0",
-    client_id=GOOGLE_CLIENT_ID,
-    client_secret=GOOGLE_CLIENT_SECRET,
+    client_id=os.getenv('GOOGLE_CLIENT_ID'),
+    client_secret=os.getenv('GOOGLE_CLIENT_SECRET'),
     client_kwargs={
         "scope": "openid profile email",
     },
-    server_metadata_url=f'https://{GOOGLE_CLIENT_DOMAIN}/.well-known/openid-configuration'
+    server_metadata_url=f'https://{os.getenv('GOOGLE_CLIENT_DOMAIN')}/.well-known/openid-configuration'
 )
 
 
@@ -44,6 +41,16 @@ def flash_error(error):
 def flash_notification(notification):
     session.pop('_flashes', None)
     flash(notification, 'notification')
+
+
+def login_required(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        if 'user' in session:
+            return f(*args, **kwargs)
+        else:
+            return redirect(url_for('user_login'))
+    return wrap
 
 
 @app.errorhandler(Exception)
@@ -72,24 +79,22 @@ def choice(emotion_id):
 
 
 @app.route('/save_choice', methods=['GET'])
+@login_required
 def save_choice():
-    if 'user' in session:
-        choice = session['choice']
-        entry_saved_already = check_entry(session['user_id'], session['date'])
-        if entry_saved_already:
-            flash_notification("You have already saved an entry for today")
+    choice = session['choice']
+    entry_saved_already = check_entry(session['user_id'], session['date'])
+    if entry_saved_already:
+        flash_notification("You have already saved an entry for today")
+    else:
+        today_emotion(session['user_id'], session['emotion'], session['mood_url'], session['date'], session['choice'], session[choice])
+        if check_entry(session['user_id'], session['date']):
+            flash_notification("Your entry has been saved.")
+            return redirect('/journal')
         else:
-            today_emotion(session['user_id'], session['emotion'], session['mood_url'], session['date'], session['choice'], session[choice])
-            has_entry_saved = check_entry(session['user_id'], session['date'])
-            if has_entry_saved:
-                flash_notification("Your entry has been saved.")
-                return redirect('/journal')
-            else:
-                app.logger.error("Error in quote of the day")
-                flash_error("Something went wrong. Please try again later")
-                return redirect('/')
-        return redirect(f'/{choice}')
-    return redirect('/login')
+            app.logger.error("Error in quote of the day")
+            flash_error("Something went wrong. Please try again later")
+            return redirect('/')
+    return redirect(f'/{choice}')
 
 
 @app.route('/quote', methods=['GET', 'POST'])
@@ -118,52 +123,46 @@ def joke_generator():
 
 
 @app.route('/journal', methods=['GET', 'POST'])
+@login_required
 def add_journal_entry():
     if request.method == 'POST':
         content = request.form.get('textarea')
-        if 'user' not in session:
-            return redirect('/login')
-        elif not content:
+        if not content:
             flash_error('Journal is empty')
         elif len(content) > 350:
             flash_error("Oops! Journal entries must be 350 characters or less...")
         else:
-            has_saved_emotion = check_entry(session['user_id'], session['date'])
-            if not has_saved_emotion:
+            if not check_entry(session['user_id'], session['date']):
                 flash_notification("You need to save today's emotion first!")
+            elif check_entry_journal(session['user_id'], session['date']):
+                flash_notification('You have already submitted a diary entry for this date')
             else:
-                has_already_saved = check_entry_journal(session['user_id'], session['date'])
-                if has_already_saved:
-                    flash_notification('You have already submitted a diary entry for this date')
+                add_journal(content, session['user_id'], session['date'])
+                did_entry_save = check_entry_journal(session['user_id'], session['date'])
+                if did_entry_save:
+                    flash_notification("Your entry has been saved.")
+                    return redirect('/overview')
                 else:
-                    add_journal(content, session['user_id'], session['date'])
-                    did_entry_save = check_entry_journal(session['user_id'], session['date'])
-                    if did_entry_save:
-                        flash_notification("Your entry has been saved.")
-                        return redirect('/overview')
-                    else:
-                        flash_error('Something went wrong. Please try again later.')
+                    flash_error('Something went wrong. Please try again later.')
     return render_template("journal.html")
 
 
 @app.route('/overview', methods=['GET', 'POST'])
+@login_required
 def show_overview():
-    if 'user' not in session:
-        return redirect('/login')
     if request.method == "POST":
         session.pop('_flashes', None)
-        sliced_date = request.form.get('month')[0:15]
-        if sliced_date:
-            date_object = datetime.strptime(sliced_date, "%a %b %d %Y")
+        user_month = request.form.get('month')[0:15]
+        if user_month:
+            date_object = datetime.strptime(user_month, "%a %b %d %Y")
             emotion_list = get_month_emotions(session['user_id'], int(date_object.month), int(date_object.year))
             return jsonify({'output': emotion_list, 'label': f'Your moods for {get_month_name(date_object)} {int(date_object.year)}...'})
     return render_template("overview.html")
 
 
 @app.route('/archive/<date>')
+@login_required
 def show_archive_by_date(date):
-    if 'user' not in session:
-        return redirect('/login')
     saved_records = get_records(session['user_id'], date)
     if saved_records is None:
         flash_notification(f"No records saved on {date}")
@@ -177,18 +176,18 @@ def show_archive_by_date(date):
 def register_user():
     form = RegistrationForm(request.form)
     if request.method == 'POST':
-        content = {}
+        user_form = {}
         for item in ["FirstName", "LastName", "Username", "email", "password", "confirm", "accept_tos"]:
-            content[item] = request.form.get(item)
-        if content['password'] != content['confirm']:
+            user_form[item] = request.form.get(item)
+        if user_form['password'] != user_form['confirm']:
             flash_error('Password and Password Confirmation do not match')
-        elif check_email(content['email']):
+        elif check_email(user_form['email']):
             flash_error('Email already registered')
-        elif check_username(content['Username']):
+        elif check_username(user_form['Username']):
             flash_error('Username already in use')
         else:
-            content['password'] = bcrypt.generate_password_hash(content['password']).decode('utf-8')
-            if add_new_user(content) == 'New user added.':
+            user_form['password'] = bcrypt.generate_password_hash(user_form['password']).decode('utf-8')
+            if add_new_user(user_form) == 'New user added.':
                 flash_notification("Your account has been created. Please login.")
                 return redirect('/login')
             else:
@@ -223,9 +222,10 @@ def login_google():
 
 @app.route('/authorize/google')
 def authorize_google():
+    token = googleOauth.authorize_access_token()
     userinfo_endpoint = googleOauth.server_metadata['userinfo_endpoint']
     user_info = googleOauth.get(userinfo_endpoint).json()
-    session['oauth_token'] = googleOauth.authorize_access_token() #do i need this?
+    session['oauth_token'] = token
     session['user_id'] = user_info['sub']
     session['date'] = get_utc_date()
     session['user'] = user_info['email']
@@ -233,6 +233,7 @@ def authorize_google():
 
 
 @app.route('/logout')
+@login_required
 def user_logout():
     session.clear()
     flash_notification("You have been logged out. See you soon!")
