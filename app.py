@@ -6,8 +6,9 @@ from config import SECRET_KEY, GOOGLE_CLIENT_SECRET, GOOGLE_CLIENT_DOMAIN, GOOGL
 from datetime import datetime, timedelta, timezone
 from flask_bcrypt import Bcrypt
 from authlib.integrations.flask_client import OAuth
+from utils.dateutils import get_utc_date, get_month_name
 import flask_sqlalchemy
-# from os import environ as env -> env emails
+# from os import environ as env
 
 
 app = Flask(__name__)
@@ -16,6 +17,7 @@ app.config['SECRET_KEY'] = SECRET_KEY
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=15)
 app.config['SESSION_COOKIE_SECURE'] = True
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+# HTTP Only?
 
 app.jinja_env.lstrip_blocks = True
 app.jinja_env.trim_blocks = True
@@ -42,16 +44,6 @@ def flash_error(error):
 def flash_notification(notification):
     session.pop('_flashes', None)
     flash(notification, 'notification')
-
-
-def get_utc_date():
-    return datetime.now(timezone.utc).strftime('%Y-%m-%d')
-
-
-def get_month_name(date_object):
-    month_dt = str(date_object.month)
-    month_object = datetime.strptime(month_dt, "%m")
-    return month_object.strftime("%B")
 
 
 @app.errorhandler(Exception)
@@ -160,8 +152,7 @@ def show_overview():
         return redirect('/login')
     if request.method == "POST":
         session.pop('_flashes', None)
-        date = request.form.get('month')
-        sliced_date = date[0:15]
+        sliced_date = request.form.get('month')[0:15]
         if sliced_date:
             date_object = datetime.strptime(sliced_date, "%a %b %d %Y")
             emotion_list = get_month_emotions(session['user_id'], int(date_object.month), int(date_object.year))
@@ -177,7 +168,8 @@ def show_archive_by_date(date):
     if saved_records is None:
         flash_notification(f"No records saved on {date}")
         return redirect('/overview')
-    record = {'emotion': saved_records[0], 'gif_url': saved_records[1], 'choice': saved_records[2], 'quote_joke': saved_records[3], 'diary': f"You didn't feel like journaling on {date} and that's okay!" if saved_records[4] is None else saved_records[4]}
+    record = {'emotion': saved_records[0], 'gif_url': saved_records[1], 'choice': saved_records[2], 'quote_joke': saved_records[3],
+              'diary': f"You didn't feel like journaling on {date} and that's okay!" if saved_records[4] is None else saved_records[4]}
     return render_template("archive.html", date=date, record=record)
 
 
@@ -195,8 +187,7 @@ def register_user():
         elif check_username(content['Username']):
             flash_error('Username already in use')
         else:
-            hashed_password = bcrypt.generate_password_hash(content['password']).decode('utf-8')
-            content['hashed_password'] = hashed_password
+            content['password'] = bcrypt.generate_password_hash(content['password']).decode('utf-8')
             if add_new_user(content) == 'New user added.':
                 flash_notification("Your account has been created. Please login.")
                 return redirect('/login')
@@ -234,11 +225,10 @@ def login_google():
 def authorize_google():
     userinfo_endpoint = googleOauth.server_metadata['userinfo_endpoint']
     user_info = googleOauth.get(userinfo_endpoint).json()
-    username = user_info['email']
+    session['oauth_token'] = googleOauth.authorize_access_token() #do i need this?
     session['user_id'] = user_info['sub']
     session['date'] = get_utc_date()
-    session['user'] = username
-    session['oauth_token'] = googleOauth.authorize_access_token()
+    session['user'] = user_info['email']
     return redirect("/")
 
 

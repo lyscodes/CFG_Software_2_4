@@ -53,6 +53,7 @@ def check_email(email):
     finally:
         return validation_check
 
+
 def check_username(username):
     validation_check = False
     try:
@@ -66,6 +67,7 @@ def check_username(username):
     finally:
         return validation_check
 
+
 def check_entry(user_id, date):
     validation_check = False
     try:
@@ -78,6 +80,7 @@ def check_entry(user_id, date):
         print('Entry validation check: ', e)
     finally:
         return validation_check
+
 
 def check_entry_journal(user, date):
     validation_check = False
@@ -111,8 +114,6 @@ def get_user_id(username):
         return None
 
 
-
-
 def get_password(username):
     try:
         db = DbConnection()
@@ -123,8 +124,6 @@ def get_password(username):
     except Exception as e:
         print("Get user password: ", e)
         return None
-
-
 
 
 def get_records(user_id, date):
@@ -148,7 +147,6 @@ def get_records(user_id, date):
         return None
 
 
-
 def get_month_emotions(user_id, month, year):
     query = """SELECT emotion, COUNT(Emotion)
             FROM Entries
@@ -162,7 +160,6 @@ def get_month_emotions(user_id, month, year):
         return order_month_data(db.fetch_data(query, parameters))
     except Exception as e:
         print("Get month emotion stats", e)
-
 
 
 def order_month_data(data):
@@ -181,12 +178,11 @@ def add_new_user(user):
         db = DbConnection()
         query = """INSERT INTO Users (First_Name, Family_Name, User_Name, Email, Password)
                 VALUES(%s, %s, %s, %s, %s)"""
-        parameters = (user['FirstName'], user['LastName'], user['Username'], user['email'], user['hashed_password'])
+        parameters = (user['FirstName'], user['LastName'], user['Username'], user['email'], user['password'])
         db.commit_data(query, parameters)
         return "New user added."
     except Exception as e:
         return f'Unable to add new user. Error: {e}'
-
 
 
 def today_emotion(user_id, emotion, giphy_url, date, choice, response):
