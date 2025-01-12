@@ -33,13 +33,13 @@ def get_password(user_id):
 
 
 def add_new_global_user(email, username = None):
-    new_user = User(username=username, email=email)
+    new_user = User(email=email, username=username)
     db.session.add(new_user)
     db.session.commit()
 
 
 def add_new_local_user(user_id, user):
-    new_user = LocalUser(user_id=user_id, first_nanem=user['FirstName'], last_name=user['LastName'], password=user['password'])
+    new_user = LocalUser(user_id=user_id, first_name=user['FirstName'], last_name=user['LastName'], password=user['password'])
     db.session.add(new_user)
     db.session.commit()
 

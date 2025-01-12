@@ -164,7 +164,7 @@ def register_user():
             flash_error('Username already in use')
         else:
             user_form['password'] = bcrypt.generate_password_hash(user_form['password']).decode('utf-8')
-            add_new_global_user(user_form['Username'], user_form['email'])
+            add_new_global_user(user_form['email'], user_form['Username'])
             user_id = get_user_id_by_email(user_form["email"])
             add_new_local_user(user_id, user_form)
             flash_notification("Your account has been created. Please login.")
@@ -204,7 +204,7 @@ def authorize_google():
     user_info = googleOauth.get(userinfo_endpoint).json()
 
     if not check_email_exists(user_info['email']):
-        add_new_global_user(user_info['email'])
+        add_new_global_user(email=user_info['email'])
         user_id = get_user_id_by_email(user_info['email'])
         add_new_auth_user(user_id, user_info)
     else:
