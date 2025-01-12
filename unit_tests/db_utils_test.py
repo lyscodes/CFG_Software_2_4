@@ -104,23 +104,23 @@ class DbUtilsTest(unittest.TestCase):
 
     def test_check_username(self):
         self.mock_instance.fetch_data.return_value = [(1,)]
-        result = db_utils.check_username('johndoe')
+        result = db_utils.check_username_exists('johndoe')
         self.mock_instance.fetch_data.assert_called_once()
         self.assertTrue(result)
         # test user not found
         self.mock_instance.fetch_data.return_value = []
-        self.assertFalse(db_utils.check_username(1))
+        self.assertFalse(db_utils.check_username_exists(1))
 
     def test_check_email(self):
         self.mock_instance.fetch_data.return_value = [(1,)]
-        result = db_utils.check_email('john@example.com')
+        result = db_utils.check_email_exists('john@example.com')
         self.mock_instance.fetch_data.assert_called_once()
         self.assertTrue(result)
         # test for email not found
         self.mock_instance.fetch_data.return_value = []
-        self.assertFalse(db_utils.check_email('notevenanemail'))
-        self.assertRaises(Exception, db_utils.check_email([]))
-        self.assertEqual(0, db_utils.check_email('notinthere'))
+        self.assertFalse(db_utils.check_email_exists('notevenanemail'))
+        self.assertRaises(Exception, db_utils.check_email_exists([]))
+        self.assertEqual(0, db_utils.check_email_exists('notinthere'))
 
     def test_order_month_data(self):
         self.assertEqual([0, 0, 0, 0, 0, 0], db_utils.order_month_data([]))

@@ -8,8 +8,12 @@ class User(db.Model):
 
     id = Column(Integer, primary_key=True)
 
-    entries = relationship("Entries", back_populates="user")
-
-    username = Column(String(50), unique=True)
+    username = Column(String(50), unique=True, nullable=True)
 
     email = Column(String(50), unique=True)
+
+    entries = relationship("Entries", backref="user")
+
+    authuser = relationship("AuthUser", backref="user")
+
+    localuser = relationship("LocalUser", backref="user")

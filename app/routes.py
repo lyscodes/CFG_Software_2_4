@@ -3,7 +3,7 @@ from app.helper import QuoteAPI, JokeAPI, MoodDict
 from app.forms.registration_form import RegistrationForm
 from flask import render_template, request, flash, redirect, session, url_for
 from datetime import datetime
-from app.dateutils import get_utc_date, get_month_name
+from app.date_utils import get_utc_date, get_month_name
 from functools import wraps
 from flask import Blueprint, jsonify
 from app.oauth_providers import googleOauth
@@ -33,13 +33,13 @@ def login_required(f):
     return wrap
 
 
-@main.errorhandler(Exception)
-def error_handler(error):
-    print(f"Error occurred at route: {request.path} (method: {request.method}) - Error: {error}")
-    flash_error("Something went wrong. Please try again later")
-    if request.referrer:
-        return redirect(request.referrer)
-    return redirect('/')
+# @main.errorhandler(Exception)
+# def error_handler(error):
+#     print(f"Error occurred at route: {request.path} (method: {request.method}) - Error: {error}")
+#     flash_error("Something went wrong. Please try again later")
+#     if request.referrer:
+#         return redirect(request.referrer)
+#     return redirect('/')
 
 
 @main.route('/', methods=['GET'])
@@ -62,12 +62,12 @@ def choice(emotion_id):
 @login_required
 def save_choice():
     choice = session['choice']
-    entry_saved_already = check_entry(session['user_id'], session['date'])
+    entry_saved_already = check_entry_exists(session['user_id'], session['date'])
     if entry_saved_already:
         flash_notification("You have already saved an entry for today")
     else:
         today_emotion(session['user_id'], session['emotion'], session['mood_url'], session['date'], session['choice'], session[choice])
-        if check_entry(session['user_id'], session['date']):
+        if check_entry_exists(session['user_id'], session['date']):
             flash_notification("Your entry has been saved.")
             return redirect('/journal')
         else:
@@ -111,13 +111,13 @@ def add_journal_entry():
         elif len(content) > 350:
             flash_error("Oops! Journal entries must be 350 characters or less...")
         else:
-            if not check_entry(session['user_id'], session['date']):
+            if not check_entry_exists(session['user_id'], session['date']):
                 flash_notification("You need to save today's emotion first!")
-            elif check_journal_entry(session['user_id'], session['date']):
+            elif check_journal_entry_exists(session['user_id'], session['date']):
                 flash_notification('You have already submitted a diary entry for this date')
             else:
                 add_journal(content, session['user_id'], session['date'])
-                did_entry_save = check_journal_entry(session['user_id'], session['date'])
+                did_entry_save = check_journal_entry_exists(session['user_id'], session['date'])
                 if did_entry_save:
                     flash_notification("Your entry has been saved.")
                     return redirect('/overview')
@@ -160,17 +160,17 @@ def register_user():
             user_form[item] = request.form.get(item)
         if user_form['password'] != user_form['confirm']:
             flash_error('Password and Password Confirmation do not match')
-        elif check_email(user_form['email']):
+        elif check_email_exists(user_form['email']):
             flash_error('Email already registered')
-        elif check_username(user_form['Username']):
+        elif check_username_exists(user_form['Username']):
             flash_error('Username already in use')
         else:
             user_form['password'] = bcrypt.generate_password_hash(user_form['password']).decode('utf-8')
-            if add_new_user(user_form) == 'New user added.':
-                flash_notification("Your account has been created. Please login.")
-                return redirect('/login')
-            else:
-                flash_error('We were unable to register you at this time. Please try again later')
+            add_new_global_user(user_form['Username'], user_form['email'])
+            user_id = get_user_id_by_email(user_form["email"])
+            add_new_local_user(user_id, user_form)
+            flash_notification("Your account has been created. Please login.")
+            return redirect('/login')
     return render_template("register.html", form=form)
 
 
@@ -180,7 +180,7 @@ def user_login():
         session.clear()
         username = request.form.get('uname')
         password = request.form.get('password')
-        if not check_username(username):
+        if not check_username_exists(username):
             flash_error("This username does not exist")
         else:
             stored_password = get_password(username)
@@ -188,7 +188,7 @@ def user_login():
                 flash_error("Username and Password do not match")
             else:
                 session['user'] = username
-                session['user_id'] = get_user_id(username)
+                session['user_id'] = get_user_id_by_username(username)
                 session['date'] = get_utc_date()
                 return redirect('/')
     return render_template("login.html")
@@ -204,8 +204,16 @@ def authorize_google():
     token = googleOauth.authorize_access_token()
     userinfo_endpoint = googleOauth.server_metadata['userinfo_endpoint']
     user_info = googleOauth.get(userinfo_endpoint).json()
+    user_id = None
+
+    if not check_email_exists(user_info['email']):
+        add_new_global_user(user_info['email'])
+        user_id = get_user_id_by_email(user_info['email'])
+        add_new_auth_user(user_id, user_info)
+    else:
+        user_id = get_user_id_by_email(user_info['email'])
     session['oauth_token'] = token
-    session['user_id'] = user_info['sub']
+    session['user_id'] = user_id
     session['date'] = get_utc_date()
     session['user'] = user_info['email']
     return redirect("/")

@@ -4,6 +4,7 @@ from app.models.user import User
 from app.models.localuser import LocalUser
 from app.models.authuser import AuthUser
 from sqlalchemy.sql import exists
+from sqlalchemy import and_
 
 
 def today_emotion(user_id, emotion, giphy_url, date, choice, response):
@@ -12,9 +13,11 @@ def today_emotion(user_id, emotion, giphy_url, date, choice, response):
     db.session.commit()
 
 
-def add_journal(entry, user, date):
-    user_entry = Entries.query.filter_by(entry_date=date, user_id=user).all()
-    user_entry.diary_entry = entry
+def add_journal(journal_entry, user_id, date):
+    entry = Entries.query.filter(
+        and_(Entries.user_id == user_id, Entries.entry_date == date)
+    ).first()
+    entry.diary_entry = journal_entry
     db.session.commit()
 
 
@@ -30,43 +33,52 @@ def get_password(user_id):
     return LocalUser.query.filter_by(user_id=user_id).first().password
 
 
-def add_new_global_user(user):
-    new_user = User(user['username'], user['email'])
+def add_new_global_user(email, username = None):
+    new_user = User(username=username, email=email)
     db.session.add(new_user)
     db.session.commit()
 
 
-def add_new_local_user(user):
-    new_user = LocalUser(user['user_id'], user['FirstName'], user['LastName'], user['password'])
+def add_new_local_user(user_id, user):
+    new_user = LocalUser(user_id=user_id, first_nanem=user['FirstName'], last_name=user['LastName'], password=user['password'])
     db.session.add(new_user)
     db.session.commit()
 
 
-def add_new_auth_user(user):
-    new_user = AuthUser(user['user_id'], user['auth_id'], user['name'])
+def add_new_auth_user(user_id, user):
+    new_user = AuthUser(user_id=user_id, auth0_id=user['sub'], name=user['name'])
     db.session.add(new_user)
     db.session.commit()
 
 
-def check_email(email):
-    return db.session.query(exists().where(User.query.filter_by(email=email))).scalar()
+def check_email_exists(email):
+    user = User.query.filter_by(email=email).first()
+    return user is not None
 
 
-def check_username(username):
-    return db.session.query(exists().where(User.query.filter_by(username=username))).scalar()
+def check_username_exists(username):
+    user = User.query.filter_by(username=username).first()
+    return user is not None
 
 
-def check_entry(user_id, date):
-    entry = Entries.query.filter_by(user_id=user_id, diary_entry=date).first()
-    # db.session.query(exists().where // first()
+def check_entry_exists(user_id, date):
+    entry = Entries.query.filter(
+        and_(Entries.user_id == user_id, Entries.entry_date == date)
+    ).first()
     return entry is not None
 
+
 def get_records(user_id, date):
-    return Entries.query.filter_by(user_id=user_id, entry_date=date).First()
+    entry = Entries.query.filter(
+        and_(Entries.user_id == user_id, Entries.entry_date == date)
+    ).first()
+    return entry
 
 
-def check_journal_entry(user_id, date):
-    entry = Entries.query.filter_by(user_id=user_id, entry_date=date).First()
+def check_journal_entry_exists(user_id, date):
+    entry = Entries.query.filter(
+        and_(Entries.user_id == user_id, Entries.entry_date == date)
+    ).first()
     if entry is not None and entry.diary_entry is not None:
         return True
     return False
@@ -83,7 +95,7 @@ def order_month_data(data):
     return emotion_list
 
 
-def get_mont_emotions(user_id, month, year):
+def get_month_emotions(user_id, month, year):
     all_user_entries = Entries.query.filter_by(user_id=user_id).all()
     # filter by month and year here
     return order_month_data(all_user_entries)

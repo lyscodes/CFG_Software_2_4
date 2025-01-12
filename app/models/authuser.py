@@ -7,8 +7,9 @@ class AuthUser(db.Model):
 
     id = Column('id', Integer, primary_key=True)
 
-    user_id = mapped_column(ForeignKey("user.id"))
-    #user = relationship("User", back_populates="id")
+    user_id = Column(Integer, ForeignKey('user.id'))
+
+    #user = relationship("User", back_populates="authuser")
 
     auth0_id = Column('auth0_id', String(50), unique=True)
 

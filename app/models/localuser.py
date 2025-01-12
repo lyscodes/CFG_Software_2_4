@@ -7,8 +7,9 @@ class LocalUser(db.Model):
 
     id = Column('id', Integer, primary_key=True)
 
-    user_id = mapped_column(ForeignKey("user.id"))
-    #user = relationship("User", back_populates="id")
+    user_id = Column(Integer, ForeignKey('user.id'))
+
+    #user = relationship("User", back_populates="localuser")
 
     first_name = Column('first_name', String(50))
 
