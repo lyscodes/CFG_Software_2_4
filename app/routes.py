@@ -22,7 +22,6 @@ def flash_notification(notification):
     flash(notification, 'notification')
 
 
-
 def login_required(f):
     @wraps(f)
     def wrap(*args, **kwargs):
@@ -33,13 +32,13 @@ def login_required(f):
     return wrap
 
 
-# @main.errorhandler(Exception)
-# def error_handler(error):
-#     print(f"Error occurred at route: {request.path} (method: {request.method}) - Error: {error}")
-#     flash_error("Something went wrong. Please try again later")
-#     if request.referrer:
-#         return redirect(request.referrer)
-#     return redirect('/')
+@main.errorhandler(Exception)
+def error_handler(error):
+    print(f"Error occurred at route: {request.path} (method: {request.method}) - Error: {error}")
+    flash_error("Something went wrong. Please try again later")
+    if request.referrer:
+        return redirect(request.referrer)
+    return redirect('/')
 
 
 @main.route('/', methods=['GET'])
@@ -72,7 +71,7 @@ def save_choice():
             return redirect('/journal')
         else:
             flash_error("Something went wrong. Please try again later")
-            return redirect('/')
+            return redirect(request.referrer)
     return redirect(f'/{choice}')
 
 
@@ -117,8 +116,7 @@ def add_journal_entry():
                 flash_notification('You have already submitted a diary entry for this date')
             else:
                 add_journal(content, session['user_id'], session['date'])
-                did_entry_save = check_journal_entry_exists(session['user_id'], session['date'])
-                if did_entry_save:
+                if check_journal_entry_exists(session['user_id'], session['date']):
                     flash_notification("Your entry has been saved.")
                     return redirect('/overview')
                 else:
@@ -142,12 +140,12 @@ def show_overview():
 @main.route('/archive/<date>')
 @login_required
 def show_archive_by_date(date):
-    saved_records = get_records(session['user_id'], date)
-    if saved_records is None:
+    user_entry = get_records(session['user_id'], date)
+    if user_entry is None:
         flash_notification(f"No records saved on {date}")
         return redirect('/overview')
-    record = {'emotion': saved_records[0], 'gif_url': saved_records[1], 'choice': saved_records[2], 'quote_joke': saved_records[3],
-              'diary': f"You didn't feel like journaling on {date} and that's okay!" if saved_records[4] is None else saved_records[4]}
+    record = {'emotion': user_entry.emotion, 'gif_url': user_entry.giphy_url, 'choice': user_entry.choice, 'quote_joke': user_entry.content,
+              'diary': f"You didn't feel like journaling on {date} and that's okay!" if user_entry.diary_entry is None else user_entry.diary_entry}
     return render_template("archive.html", date=date, record=record)
 
 
@@ -204,7 +202,6 @@ def authorize_google():
     token = googleOauth.authorize_access_token()
     userinfo_endpoint = googleOauth.server_metadata['userinfo_endpoint']
     user_info = googleOauth.get(userinfo_endpoint).json()
-    user_id = None
 
     if not check_email_exists(user_info['email']):
         add_new_global_user(user_info['email'])
@@ -212,6 +209,7 @@ def authorize_google():
         add_new_auth_user(user_id, user_info)
     else:
         user_id = get_user_id_by_email(user_info['email'])
+
     session['oauth_token'] = token
     session['user_id'] = user_id
     session['date'] = get_utc_date()

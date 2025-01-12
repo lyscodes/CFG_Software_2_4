@@ -3,8 +3,7 @@ from app.models.entries import Entries
 from app.models.user import User
 from app.models.localuser import LocalUser
 from app.models.authuser import AuthUser
-from sqlalchemy.sql import exists
-from sqlalchemy import and_
+from sqlalchemy import and_, extract
 
 
 def today_emotion(user_id, emotion, giphy_url, date, choice, response):
@@ -84,21 +83,22 @@ def check_journal_entry_exists(user_id, date):
     return False
 
 
-def order_month_data(data):
-    emotion_data = dict(data)
-    emotion_list = ["angry", "calm", "frustrated", "happy", "sad", "worried"]
-    for i in range(len(emotion_list)):
-        if emotion_list[i] not in emotion_data:
-            emotion_list[i] = 0
-        else:
-            emotion_list[i] = emotion_data[emotion_list[i]]
-    return emotion_list
+def get_emotion_count(user_id, emotion, month, year):
+    emotion_count = Entries.query.filter(
+        and_(Entries.user_id == user_id, Entries.emotion == emotion,
+             extract('month', Entries.entry_date) == month,
+             extract('year', Entries.entry_date) == year,
+             )).count()
+    return emotion_count
 
 
 def get_month_emotions(user_id, month, year):
-    all_user_entries = Entries.query.filter_by(user_id=user_id).all()
-    # filter by month and year here
-    return order_month_data(all_user_entries)
+    emotion_count = []
+    emotion_list = ["angry", "calm", "frustrated", "happy", "sad", "worried"]
+    for emotion in emotion_list:
+        count = get_emotion_count(user_id, emotion, month, year)
+        emotion_count.append(count)
+    return emotion_count
 
 
 

@@ -1,8 +1,6 @@
 from sqlalchemy import Column, String, Integer
-from sqlalchemy.orm import mapped_column, Mapped, relationship
-from typing import List
+from sqlalchemy.orm import relationship
 from app import db
-from app.models.entries import Entries
 
 class User(db.Model):
 
