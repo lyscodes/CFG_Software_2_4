@@ -8,7 +8,7 @@ class User(db.Model):
 
     username = Column(String(50), unique=True, nullable=True)
 
-    email = Column(String(50), unique=True)
+    email = Column(String(50), unique=True, nullable=False)
 
     entries = relationship("Entries", backref="user")
 

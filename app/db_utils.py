@@ -45,7 +45,7 @@ def add_new_local_user(user_id, user):
 
 
 def add_new_auth_user(user_id, user):
-    new_user = AuthUser(user_id=user_id, auth0_id=user['sub'], name=user['name'])
+    new_user = AuthUser(user_id=user_id, auth0_id=user['sub'], name=user['name'], accept_tos=True)
     db.session.add(new_user)
     db.session.commit()
 

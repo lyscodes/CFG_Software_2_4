@@ -1,12 +1,9 @@
-import os
-from sqlalchemy import create_engine
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from authlib.integrations.flask_client import OAuth
 from flask_bcrypt import Bcrypt
 from settings import Config
-
 
 db = SQLAlchemy()
 oauth = OAuth()
