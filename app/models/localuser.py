@@ -1,13 +1,14 @@
 from sqlalchemy import Column, String, Integer, ForeignKey, Date
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 from app import db
+from app.models.user import User
 
 class LocalUser(db.Model):
 
     id = Column('id', Integer, primary_key=True)
 
-    user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
-    parent: Mapped["Parent"] = relationship(back_populates="children")
+    user_id = mapped_column(ForeignKey("user.id"))
+    #user = relationship("User", back_populates="id")
 
     first_name = Column('first_name', String(50))
 

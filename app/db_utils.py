@@ -6,9 +6,8 @@ from app.models.authuser import AuthUser
 from sqlalchemy.sql import exists
 
 
-
 def today_emotion(user_id, emotion, giphy_url, date, choice, response):
-    new_entry = Entries(user_id, emotion, giphy_url, date, choice, response)
+    new_entry = Entries(user_id=user_id, entry_date=date, emotion=emotion, giphy_url=giphy_url, choice=choice, content=response)
     db.session.add(new_entry)
     db.session.commit()
 
@@ -58,8 +57,9 @@ def check_username(username):
 
 
 def check_entry(user_id, date):
-    return db.session.query(exists().where(Entries.query.filter_by(user_id=user_id, diary_entry=date))).scalar()
-
+    entry = Entries.query.filter_by(user_id=user_id, diary_entry=date).first()
+    # db.session.query(exists().where // first()
+    return entry is not None
 
 def get_records(user_id, date):
     return Entries.query.filter_by(user_id=user_id, entry_date=date).First()

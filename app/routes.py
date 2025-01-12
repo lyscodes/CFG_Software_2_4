@@ -71,7 +71,6 @@ def save_choice():
             flash_notification("Your entry has been saved.")
             return redirect('/journal')
         else:
-            #main.logger.error("Error in quote of the day")
             flash_error("Something went wrong. Please try again later")
             return redirect('/')
     return redirect(f'/{choice}')
