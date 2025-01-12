@@ -12,12 +12,6 @@ if __name__ == "__main__":
     os.environ['FLASK_ENV'] = 'development'
 
     with app.app_context():
-        load_dotenv()
-        engine = create_engine(os.getenv('CONNECTION_STRING'))
-        if not database_exists(engine.url):
-            create_database(engine.url)
-
-        db.create_all()
         initialize_dummy_data()
 
     if 'liveconsole' not in gethostname():

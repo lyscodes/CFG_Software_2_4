@@ -1,8 +1,8 @@
-"""Init
+"""GIFeels Version1
 
-Revision ID: 2e618742a793
+Revision ID: 40c150421c14
 Revises: 
-Create Date: 2025-01-12 13:49:43.441270
+Create Date: 2025-01-12 15:03:25.621913
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '2e618742a793'
+revision = '40c150421c14'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -29,8 +29,8 @@ def upgrade():
     op.create_table('auth_user',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
-    sa.Column('auth0_id', sa.String(length=50), nullable=True),
-    sa.Column('name', sa.String(length=50), nullable=True),
+    sa.Column('auth0_id', sa.String(length=50), nullable=False),
+    sa.Column('name', sa.String(length=50), nullable=False),
     sa.Column('accept_tos', sa.Boolean(), nullable=False),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id'),
@@ -38,19 +38,19 @@ def upgrade():
     )
     op.create_table('entries',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('user_id', sa.Integer(), nullable=True),
-    sa.Column('entry_date', sa.Date(), nullable=True),
-    sa.Column('emotion', sa.String(length=50), nullable=True),
-    sa.Column('giphy_url', sa.String(length=250), nullable=True),
-    sa.Column('choice', sa.String(length=50), nullable=True),
-    sa.Column('response', sa.String(length=500), nullable=True),
+    sa.Column('user_id', sa.Integer(), nullable=False),
+    sa.Column('entry_date', sa.Date(), nullable=False),
+    sa.Column('emotion', sa.String(length=50), nullable=False),
+    sa.Column('giphy_url', sa.String(length=250), nullable=False),
+    sa.Column('choice', sa.String(length=50), nullable=False),
+    sa.Column('response', sa.String(length=500), nullable=False),
     sa.Column('diary_entry', sa.String(length=500), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('local_user',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('user_id', sa.Integer(), nullable=True),
+    sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('first_name', sa.String(length=50), nullable=False),
     sa.Column('family_name', sa.String(length=50), nullable=False),
     sa.Column('password', sa.String(length=250), nullable=False),

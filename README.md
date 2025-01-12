@@ -8,19 +8,27 @@ This app is built with MYSQL, Python and Flask for the back-end. The front-end i
 - A virtual environment on your IDE to install requirements from requirements.txt
 - MySQL Workbench for the database (or equivalent)
 - A developer API key from the [Giphy developers website](https://developers.giphy.com/)
-- A developer OAuth account with Google cloud 
+- Create an account with Google Cloud using their free trial and follow [this guide](/https://support.google.com/cloud/answer/6158849?hl=en&ref_topic=3473162&sjid=2552074629382520305-EU) to generate the correct credentials for using Oauth 
 
 
 ### Setup 
-1. Create a new file at root level called .env. Copy and paste the template from [template_env](/template_env) and add your GIPHY API key, MySQL user and password where indicated. (Using .env will keep your personal information secure)
+1. Create a new file at root level called .env. Copy and paste the template from [template_env](/template_env) and add your GIPHY API key, Google Auth Client Id, Key and Domain, MySQL user and password where indicated. (Using .env will keep your personal information secure)
 2. Create and activate a virtual environment, then install all requirements from [requirements.txt](/requirements.txt)
-3. Run ['db_builder.py'](/database/db_builder.py). This will automatically run the queries needed to create and populate the database.
-Another option for step 3:\
-3. Using MYSQL Workbench create the database by running the query in [db_create.sql](/DB_Setup/db_create.sql).
-4. Populate the database using the query in [db_populate.sql](/DB_Setup/db.populate.sql)
+3. Set up an SSL certificate using the terminal commands below (providing information when prompted), and save these in the directory [certs](/certs)
 
-// CREATE DATABASE AND RUN DATABASE SCHEMA 
-// SETUP SSL certificates 
+`$ pip install pyopenssl`
+
+`openssl req -x509 -newkey rsa:4096 -nodes -out cert.pem -keyout key.pem -days 365`
+
+4. Navigate to MySQL Workbench or equivalent GUI and run the following command: 
+
+`CREATE DATABASE Mood_Tracker`
+
+5. Run the following commands on terminal to migrate the database using Flask-Migrate:
+
+`flask db upgrade`
+
+6. Run [run.py](/run.py) to launch the app 
 
 ### Running the app
 By running app.py in your IDE you will be able to launch https://127.0.0.1:443 and go to the homepage of the app.

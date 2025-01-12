@@ -5,6 +5,7 @@ from app.models.localuser import LocalUser
 from app.models.user import User
 from app import db
 
+
 def initialize_dummy_data():
 
     if User.query.count() == 0 and Entries.query.count():
