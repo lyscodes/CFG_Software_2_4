@@ -1,4 +1,4 @@
-entries_data = [
+entries_dd = [
 (1, 20240531, 'frustrated', 'https://media4.giphy.com/media/xUNd9AWlNxNgnxiIxO/200w.mp4?cid=0303f60aw8n6rbf1tb5l49kgndy9ynu24ksk32rvhu477sdi&ep=v1_gifs_search&rid=200w.mp4&ct=g', 'Joke', 'What did the pirate say on his 80th birthday? Aye Matey!', 'Super frustrated!'),
 (1, 20240530, 'sad', 'https://media3.giphy.com/media/RIXdN6jjGtRd7dtIMC/200w.mp4?cid=0303f60aivbtq55ms46g8x2r7g2khant5gznuzmqzvkcmdh6&ep=v1_gifs_search&rid=200w.mp4&ct=g', 'Quote', 'They say a person needs just three things to be truly happy in this world: someone to love, something to do, and something to hope for.', 'Today I feel sad!'),
 (1, 20240529, 'worried', 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcTNwdDNhaW8xanRnM2JzcWVxb2V5M25jZnN1dGRjam5zZnc0bmF4aiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/xUPJPzcdlbvaFUrF7y/giphy.mp4', ' Quote', 'If more of us valued food and cheer and song above hoarded gold, it would be a merrier world.', 'I am worried!'),

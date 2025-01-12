@@ -19,4 +19,3 @@ class Entries(db.Model):
     content = Column('response', String(500))
 
     diary_entry = Column('diary_entry', String(500), nullable=True)
-

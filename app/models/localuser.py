@@ -12,6 +12,6 @@ class LocalUser(db.Model):
 
     family_name = Column('family_name', String(50))
 
-    password = Column('password', String(50))
+    password = Column('password', String(250))
 
     accept_tos = Column('accept_tos', Boolean)

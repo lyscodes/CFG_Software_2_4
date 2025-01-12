@@ -5,12 +5,11 @@ from flask import render_template, request, flash, redirect, session, url_for
 from datetime import datetime
 from app.date_utils import get_utc_date, get_month_name
 from functools import wraps
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, current_app
 from app.oauth_providers import googleOauth
 from app import bcrypt
 
 main = Blueprint('main', __name__)
-
 
 def flash_error(error):
     session.pop('_flashes', None)
@@ -34,7 +33,7 @@ def login_required(f):
 
 @main.errorhandler(Exception)
 def error_handler(error):
-    print(f"Error occurred at route: {request.path} (method: {request.method}) - Error: {error}")
+    current_app.logger.error(f"Error occurred at route: {request.path} (method: {request.method}) - Error: {error}")
     flash_error("Something went wrong. Please try again later")
     if request.referrer:
         return redirect(request.referrer)
@@ -181,7 +180,8 @@ def user_login():
         if not check_username_exists(username):
             flash_error("This username does not exist")
         else:
-            stored_password = get_password(username)
+            user_id = get_user_id_by_username(username)
+            stored_password = get_password(user_id)
             if not bcrypt.check_password_hash(stored_password, password):
                 flash_error("Username and Password do not match")
             else:
