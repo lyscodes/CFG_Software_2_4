@@ -1,5 +1,8 @@
 import os
 from app import oauth
+from dotenv import load_dotenv
+
+load_dotenv()
 
 googleOauth = oauth.register(
     name="auth0",

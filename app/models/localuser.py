@@ -4,11 +4,9 @@ from app import db
 
 class LocalUser(db.Model):
 
-    __tablename__='local_users'
-
     id = Column('id', Integer, primary_key=True)
 
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
     parent: Mapped["Parent"] = relationship(back_populates="children")
 
     first_name = Column('first_name', String(50))

@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch
-from database import db_utils
+from app import db_utils
 
 
 class DbUtilsTest(unittest.TestCase):

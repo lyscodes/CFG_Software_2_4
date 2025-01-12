@@ -1,8 +1,11 @@
-from database.config import GIPHY_API_KEY
+import os
+
 from data.default import default_gifs, default_jokes, default_quotes
 from random import randint, choice
 import requests
 from abc import ABC, abstractmethod
+from dotenv import load_dotenv
+
 
 class APIRequest(ABC):
     def __init__(self, url, params=None, headers=None):
@@ -67,10 +70,11 @@ class JokeAPI(APIRequest):
 
 class MoodAPI(APIRequest):
     def __init__(self, mood, headers=None):
+        load_dotenv()
         super().__init__(headers)
         self.url = "http://api.giphy.com/v1/gifs/search"
         self.params = {"q": mood,
-            "api_key": GIPHY_API_KEY,
+            "api_key": os.getenv('GIPHY_API_KEY'),
             "limit": "1",
             "offset": randint(0, 300)}
 

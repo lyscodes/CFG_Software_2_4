@@ -1,15 +1,16 @@
-from database.db_utils import get_month_emotions, get_user_id, today_emotion, add_new_user, check_email, check_username, get_password, check_entry_journal, check_entry, add_journal, get_records
+from app.db_utils import *
 from app.helper import QuoteAPI, JokeAPI, MoodDict
-from forms.registration_form import RegistrationForm
+from app.forms.registration_form import RegistrationForm
 from flask import render_template, request, flash, redirect, session, url_for
 from datetime import datetime
-from utils.dateutils import get_utc_date, get_month_name
+from app.dateutils import get_utc_date, get_month_name
 from functools import wraps
 from flask import Blueprint, jsonify
-from oauth_providers import googleOauth
+from app.oauth_providers import googleOauth
 from app import bcrypt
 
 main = Blueprint('main', __name__)
+
 
 def flash_error(error):
     session.pop('_flashes', None)
@@ -21,19 +22,20 @@ def flash_notification(notification):
     flash(notification, 'notification')
 
 
+
 def login_required(f):
     @wraps(f)
     def wrap(*args, **kwargs):
         if 'user' in session:
             return f(*args, **kwargs)
         else:
-            return redirect(url_for('user_login'))
+            return redirect(url_for('main.user_login'))
     return wrap
 
 
 @main.errorhandler(Exception)
 def error_handler(error):
-    #main.logger.error(f"Error occurred at route: {request.path} (method: {request.method}) - Error: {error}")
+    print(f"Error occurred at route: {request.path} (method: {request.method}) - Error: {error}")
     flash_error("Something went wrong. Please try again later")
     if request.referrer:
         return redirect(request.referrer)
@@ -112,11 +114,11 @@ def add_journal_entry():
         else:
             if not check_entry(session['user_id'], session['date']):
                 flash_notification("You need to save today's emotion first!")
-            elif check_entry_journal(session['user_id'], session['date']):
+            elif check_journal_entry(session['user_id'], session['date']):
                 flash_notification('You have already submitted a diary entry for this date')
             else:
                 add_journal(content, session['user_id'], session['date'])
-                did_entry_save = check_entry_journal(session['user_id'], session['date'])
+                did_entry_save = check_journal_entry(session['user_id'], session['date'])
                 if did_entry_save:
                     flash_notification("Your entry has been saved.")
                     return redirect('/overview')
@@ -195,7 +197,7 @@ def user_login():
 
 @main.route('/login/google')
 def login_google():
-    return googleOauth.authorize_redirect(redirect_uri=url_for("authorize_google", _external=True))
+    return googleOauth.authorize_redirect(redirect_uri=url_for("main.authorize_google", _external=True))
 
 
 @main.route('/authorize/google')
