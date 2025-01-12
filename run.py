@@ -10,9 +10,9 @@ app = create_app()
 
 if __name__ == "__main__":
     os.environ['FLASK_ENV'] = 'development'
-
-    with app.app_context():
-        initialize_dummy_data()
+    #
+    # with app.app_context():
+    #     initialize_dummy_data()
 
     if 'liveconsole' not in gethostname():
         app.run(debug=True, ssl_context=('certs/certificate.pem', 'certs/private.pem'), host='0.0.0.0', port=443)
